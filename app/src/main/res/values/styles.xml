@@ -1,0 +1,33 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#333333</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="roundOutline" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <style name="roundOutline1" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <style name="roundOutline2" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">40dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/greyLight</item>
+        <item name="colorControlActivated">@color/duskYellow</item>
+    </style>
+</resources>

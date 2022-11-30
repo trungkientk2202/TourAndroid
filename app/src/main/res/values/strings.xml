@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">TourAndroid</string>
+
+    <string name="bg_login">Background LoginActivity</string>
+    <string name="prompt_phone">Phone</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_zalo">Connect with Zalo</string>
+    <string name="action_sign_up_underline"><u>Sign up</u></string>
+    <string name="welcome">Welcome back</string>
+    <string name="title_under_welcome">Sign in to continue</string>
+    <string name="dont_have_an_acc">Don\'t have an account?</string>
+    <string name="forgot_password"><i><u>Forgot your password?</u></i></string>
+    <string name="search">Search…</string>
+    <string name="popular">Popular this Week</string>
+    <string name="logo">Foody.vn logo</string>
+    <string name="cart">cart</string>
+    <string name="recommend">Recommend for You</string>
+    <string name="all_menu_items">All Menu Items</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="food_description">Nasi Padang is a Padang steamed rice served with various choices of pre-cooked dishes originated from West Sumatra, Indonesia. It is known across Indonesia as Nasi Padang, after the city of Padang the capital of West Sumatra province.</string>
+    <string name="home">Home</string>
+    <string name="invoice">Invoice</string>
+    <string name="account">Account</string>
+    <string name="favourite">Favourite</string>
+    <string name="register_policy">By press <b>Continue</b>, you agree to <a>Terms of Service</a> and <a>Private Policy</a> of <b>Foody</b></string>
+</resources>

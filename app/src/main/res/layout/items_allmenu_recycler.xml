@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginRight="8dp"
+    android:background="@drawable/recycler_bg2">
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/tour_image"
+        android:layout_width="86dp"
+        android:layout_height="95dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/popular1"
+        app:shapeAppearanceOverlay="@style/roundOutline"/>
+
+    <TextView
+        android:id="@+id/tour_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/tour_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tour_diemDi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tour_name"
+        app:layout_constraintTop_toBottomOf="@+id/tour_name" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/tour_diemDi"
+        app:layout_constraintTop_toBottomOf="@+id/tour_diemDi"
+        app:srcCompat="@drawable/ic_mdi_star_rate" />
+
+    <TextView
+        android:id="@+id/tour_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="3.9"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+    <TextView
+        android:id="@+id/tour_type"
+        android:layout_width="90dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/time_bg"
+        android:gravity="center"
+        android:text="Two days one night"
+        android:textAlignment="center"
+        android:textColor="#FB4E4E"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tour_rating"
+        app:layout_constraintStart_toEndOf="@+id/tour_rating"
+        app:layout_constraintTop_toTopOf="@+id/tour_rating" />
+
+
+    <TextView
+        android:id="@+id/tour_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="166"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

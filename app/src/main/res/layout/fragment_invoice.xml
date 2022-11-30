@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.InvoiceFragment">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/invoiceViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/invoiceTabLayout" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/invoiceTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabTextColor="@color/greyLight"
+        app:tabIndicatorColor="@color/white"
+        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+        app:tabSelectedTextColor="@color/white"
+        android:background="@color/colorPrimaryDark" />
+
+</RelativeLayout>

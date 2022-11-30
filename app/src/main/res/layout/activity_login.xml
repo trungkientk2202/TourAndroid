@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/bg_login"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/coverDark"
+        app:tintMode="src_over" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingHorizontal="30dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout_data"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/welcome"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_under_welcome"
+                android:textColor="#BFFFFFFF"
+                android:textSize="17sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/linearLayout_buttonSignIn"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_title">
+
+            <EditText
+                android:id="@+id/editText_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteDark"
+                android:hint="@string/prompt_phone"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/whiteDark"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editText_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteDark"
+                android:hint="@string/prompt_password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:paddingVertical="20dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/whiteDark"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_buttonSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_data">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1_bg"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/action_sign_in"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#03A9F4"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="@string/action_sign_in_zalo"
+                    android:textAllCaps="false"
+                    android:textColor="#5E35B1"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="30dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/zalo_logo"
+                    android:translationZ="90dp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/button_forgotPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/forgot_password"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_buttonSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_buttonSignIn"
+            app:layout_constraintVertical_bias="0.8">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dont_have_an_acc"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_signUp"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:background="@android:color/transparent"
+                android:text="@string/action_sign_up_underline"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
