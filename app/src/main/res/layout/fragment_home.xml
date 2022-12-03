@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/imageView_logo"
-            android:src="@drawable/tour_logo"
+            android:src="@drawable/travel_logo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/search_bg"
             android:drawableStart="@drawable/ic_search_black_24dp"

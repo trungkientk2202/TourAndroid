@@ -2,45 +2,26 @@ package com.da.tourandroid.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.da.tourandroid.LoginActivity;
-import com.da.tourandroid.MainActivity;
 import com.da.tourandroid.R;
 import com.da.tourandroid.SearchActivity;
-import com.da.tourandroid.adapter.TourAllAdapter;
-import com.da.tourandroid.model.LoaiTour;
+import com.da.tourandroid.adapter.AllTourAdapter;
 import com.da.tourandroid.model.Tour;
-import com.da.tourandroid.utils.Common;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,15 +30,11 @@ import java.util.Map;
  */
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recommendRecyclerView, allMenuRecyclerView;
-    private RecyclerView restaurantRecyclerView;
+    private RecyclerView allTourRecyclerView;
 
-    private TourAllAdapter allMenuAdapter;
-//    private FoodRecommendedAdapter recommendAdapter;
-//    private RestaurantAdapter resAdapter;
-//
+    private AllTourAdapter allTourAdapter;
+
     private List<Tour> tours;
-//    private ArrayList<Restaurant> restaurants;
 
     private View view;
 
@@ -177,14 +154,13 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void getAllMenu(List<Tour> allMenuList) {
-        Log.i("Size:",allMenuList.size()+"");
-        allMenuRecyclerView = view.findViewById(R.id.tour_recycler);
-        allMenuAdapter = new TourAllAdapter(view.getContext(), R.layout.items_allmenu_recycler, allMenuList);
+        allTourRecyclerView = view.findViewById(R.id.tour_recycler);
+        allTourAdapter = new AllTourAdapter(view.getContext(), R.layout.items_allmenu_recycler, allMenuList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
 
-        allMenuRecyclerView.setLayoutManager(layoutManager);
-        allMenuRecyclerView.setAdapter(allMenuAdapter);
-        allMenuAdapter.notifyDataSetChanged();
+        allTourRecyclerView.setLayoutManager(layoutManager);
+        allTourRecyclerView.setAdapter(allTourAdapter);
+        allTourAdapter.notifyDataSetChanged();
     }
 }

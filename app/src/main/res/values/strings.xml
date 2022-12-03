@@ -13,7 +13,7 @@
     <string name="forgot_password"><i><u>Forgot your password?</u></i></string>
     <string name="search">Search…</string>
     <string name="popular">Popular this Week</string>
-    <string name="logo">Foody.vn logo</string>
+    <string name="logo">Travel.vn logo</string>
     <string name="cart">cart</string>
     <string name="recommend">Recommend for You</string>
     <string name="all_menu_items">All Menu Items</string>
@@ -23,5 +23,5 @@
     <string name="invoice">Invoice</string>
     <string name="account">Account</string>
     <string name="favourite">Favourite</string>
-    <string name="register_policy">By press <b>Continue</b>, you agree to <a>Terms of Service</a> and <a>Private Policy</a> of <b>Foody</b></string>
+    <string name="register_policy">By press <b>Register</b>, you agree to <a>Terms of Service</a> and <a>Private Policy</a> of <b>Us</b>.</string>
 </resources>
