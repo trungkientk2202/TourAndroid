@@ -65,13 +65,13 @@ public class FeedbackAdapter extends BaseAdapter {
 
         PhanHoi feedback = feedbackList.get(position);
         if (feedback != null) {
-            viewHolder.textViewName.setText("name of tour");
+            viewHolder.textViewName.setText(feedback.getTour().getDiemDen());
             viewHolder.textViewDate.setText(feedback.getThoiGian());
             viewHolder.textViewDesc.setText(feedback.getNoiDung());
 
 //            viewHolder.imageView.setImageResource(feedback.getFood().getImage());
         Glide.with(context)
-                .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424275/samples/people/smiling-man.jpg")
+                .load(feedback.getTour().getImage())
                 .into(viewHolder.imageView);
         }
 

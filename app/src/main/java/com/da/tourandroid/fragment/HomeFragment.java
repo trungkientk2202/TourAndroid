@@ -21,7 +21,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.da.tourandroid.R;
 import com.da.tourandroid.SearchActivity;
-import com.da.tourandroid.adapter.AllTourAdapter;
+import com.da.tourandroid.adapter.TourAdapter;
 import com.da.tourandroid.model.LoaiTour;
 import com.da.tourandroid.model.Tour;
 import com.da.tourandroid.utils.Common;
@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView allTourRecyclerView;
 
-    private AllTourAdapter allTourAdapter;
+    private TourAdapter tourAdapter;
 
     private ArrayList<Tour> tours;
 
@@ -126,7 +126,6 @@ public class HomeFragment extends Fragment {
 
         tours = new ArrayList<>();
         String url =Common.getHost()+"tour/getAll";
-        Log.i("url",url);
         JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                         Log.i("response",response.toString());
@@ -135,23 +134,22 @@ public class HomeFragment extends Fragment {
                             Tour tour= new Tour();
                             try {
                                 JSONObject jsonObject=response.getJSONObject(i);
-                                Log.i("jsonObject",jsonObject.toString());
+//                                Log.i("jsonObject",jsonObject.toString());
                                 tour.setMaTour(jsonObject.getInt("maTour"));
                                 tour.setDiemDen(jsonObject.getString("diemDen"));
                                 tour.setMoTa(jsonObject.getString("moTa").equals("null")?null:jsonObject.getString("moTa"));
                                 tour.setDiemDi(jsonObject.getString("diemDi"));
                                 tour.setGia(jsonObject.getLong("gia"));
                                 tour.setTrangThai(jsonObject.getInt("trangThai"));
+                                tour.setImage(jsonObject.getString("image"));
                                 JSONObject object=jsonObject.getJSONObject("loaiTour");
                                 LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
-                                Log.i("tour",tour.getMaTour()+"");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             tours.add(tour);
                         }
-                        Log.i("tour",tours.size()+"");
                         getAllMenu(tours);
                 }, error -> Log.i("err:",error.toString())){
             /**
@@ -171,12 +169,12 @@ public class HomeFragment extends Fragment {
     @SuppressLint("NotifyDataSetChanged")
     private void getAllMenu(List<Tour> allMenuList) {
         allTourRecyclerView = view.findViewById(R.id.tour_recycler);
-        allTourAdapter = new AllTourAdapter(view.getContext(), R.layout.items_allmenu_recycler, allMenuList);
+        tourAdapter = new TourAdapter(view.getContext(), R.layout.items_allmenu_recycler, allMenuList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
 
         allTourRecyclerView.setLayoutManager(layoutManager);
-        allTourRecyclerView.setAdapter(allTourAdapter);
-        allTourAdapter.notifyDataSetChanged();
+        allTourRecyclerView.setAdapter(tourAdapter);
+        tourAdapter.notifyDataSetChanged();
     }
 }

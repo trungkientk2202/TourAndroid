@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.da.tourandroid.model.KhachHang;
 import com.da.tourandroid.model.TaiKhoan;
 import com.da.tourandroid.utils.Common;
 
@@ -91,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Common.setToken(response.getString("token"));
                                     JSONObject tk=response.getJSONObject("taiKhoan");
                                     Common.setTaiKhoan(new TaiKhoan(tk.getString("sdt"),tk.getString("ten"),tk.getString("matKhau"),tk.getBoolean("phai"), !tk.getString("ngaySinh").equals("null") ?new SimpleDateFormat("dd-MMM-yyyy").parse(tk.getString("ngaySinh")):null,tk.getString("zalo")));
+                                    Common.mode=1;
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 } catch (JSONException | ParseException e) {
@@ -98,8 +100,33 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }, error -> {
                                 Log.i("error",error.toString());
-                                Toast.makeText(LoginActivity.this,"Server error, please try again! "+ error,Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginActivity.this,"Server error 1, please try again! "+ error,Toast.LENGTH_LONG).show();
                             });
+                    requestQueue.add(request);
+                } catch (JSONException e) {
+//                    Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+                try {
+                    JSONObject req=new JSONObject(json);
+                    String url =Common.getHost()+"kh/login";
+                    JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, url, req,
+                            response -> {
+                                try {
+                                    Common.setToken(response.getString("token"));
+                                    JSONObject kh=response.getJSONObject("khachHang");
+                                    Log.i("ngaySinh: ",kh.getString("ngaySinh"));
+                                    Common.setKhachHang(new KhachHang(kh.getString("sdt"),kh.getString("ten"),kh.getString("matKhau"),kh.getBoolean("phai"),null,kh.getString("zalo")));
+                                    Common.mode=2;
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                } catch (JSONException  e) {
+                                    e.printStackTrace();
+                                }
+                            }, error -> {
+                        Log.i("error",error.toString());
+                        Toast.makeText(LoginActivity.this,"Server error, please try again! "+ error,Toast.LENGTH_LONG).show();
+                    });
                     requestQueue.add(request);
                 } catch (JSONException e) {
                     Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();

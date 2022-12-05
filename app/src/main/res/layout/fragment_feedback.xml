@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/greyLight"
-    tools:context=".fragment.FavouriteFragment">
+    tools:context=".fragment.FeedbackFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.da.tourandroid.fragment.AccountFragment;
-import com.da.tourandroid.fragment.FavouriteFragment;
+import com.da.tourandroid.fragment.FeedbackFragment;
 import com.da.tourandroid.fragment.HomeFragment;
 import com.da.tourandroid.fragment.InvoiceFragment;
 
@@ -22,7 +22,7 @@ public class ViewPageAdapter extends FragmentStatePagerAdapter {
         switch (position){
 
             case 1:
-                return new FavouriteFragment();
+                return new FeedbackFragment();
 
             case 2:
                 return new InvoiceFragment();

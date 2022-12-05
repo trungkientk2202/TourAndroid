@@ -13,8 +13,9 @@ public class Tour {
 
     public LoaiTour loaiTour;
     private int trangThai;
+    private String image;
 
-    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai) {
+    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai,String image) {
         this.maTour = maTour;
         this.diemDen = diemDen;
         this.moTa = moTa;
@@ -22,6 +23,7 @@ public class Tour {
         this.gia = gia;
         this.loaiTour = loaiTour;
         this.trangThai=trangThai;
+        this.image=image;
     }
 
     public Tour() {
@@ -81,5 +83,13 @@ public class Tour {
 
     public void setTrangThai(int trangThai) {
         this.trangThai = trangThai;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
