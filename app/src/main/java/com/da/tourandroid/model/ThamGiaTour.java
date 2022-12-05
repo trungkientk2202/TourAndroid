@@ -9,11 +9,14 @@ public class ThamGiaTour {
 
     private String diaDiemDon;
 
-    public ThamGiaTour(ThamGiaTourID id, boolean checkIn, String ghiChu, String diaDiemDon) {
+    private Tour tour;
+
+    public ThamGiaTour(ThamGiaTourID id, boolean checkIn, String ghiChu, String diaDiemDon,Tour tour) {
         this.id = id;
         this.checkIn = checkIn;
         this.ghiChu = ghiChu;
         this.diaDiemDon = diaDiemDon;
+        this.tour=tour;
     }
 
     public ThamGiaTour() {
@@ -49,5 +52,13 @@ public class ThamGiaTour {
 
     public void setDiaDiemDon(String diaDiemDon) {
         this.diaDiemDon = diaDiemDon;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
     }
 }

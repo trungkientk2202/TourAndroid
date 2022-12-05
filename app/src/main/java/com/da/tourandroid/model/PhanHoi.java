@@ -5,14 +5,16 @@ public class PhanHoi {
     private String noiDung;
 
     private String thoiGian;
+    private Tour tour;
 
     public PhanHoi() {
     }
 
-    public PhanHoi(PhanHoiID id, String noiDung, String thoiGian) {
+    public PhanHoi(PhanHoiID id, String noiDung, String thoiGian,Tour tour) {
         this.id = id;
         this.noiDung = noiDung;
         this.thoiGian = thoiGian;
+        this.tour=tour;
     }
 
     public PhanHoiID getId() {
@@ -37,5 +39,13 @@ public class PhanHoi {
 
     public void setThoiGian(String thoiGian) {
         this.thoiGian = thoiGian;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
     }
 }
