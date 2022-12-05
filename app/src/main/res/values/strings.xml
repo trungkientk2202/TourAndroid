@@ -23,5 +23,6 @@
     <string name="invoice">Invoice</string>
     <string name="account">Account</string>
     <string name="favourite">Favourite</string>
+    <string name="feedback">Feedback</string>
     <string name="register_policy">By press <b>Register</b>, you agree to <a>Terms of Service</a> and <a>Private Policy</a> of <b>Us</b>.</string>
 </resources>
