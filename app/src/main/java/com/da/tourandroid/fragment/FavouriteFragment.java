@@ -4,10 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import com.da.tourandroid.R;
+import com.da.tourandroid.adapter.FeedbackAdapter;
+import com.da.tourandroid.model.PhanHoi;
+import com.da.tourandroid.model.PhanHoiID;
+
+import java.util.ArrayList;
 
 
 /**
@@ -16,6 +22,14 @@ import com.da.tourandroid.R;
  * create an instance of this fragment.
  */
 public class FavouriteFragment extends Fragment {
+
+    private ListView listViewFeedback;
+
+    private FeedbackAdapter feedbackAdapter;
+    private ArrayList<PhanHoi> feedbacks;
+
+    private View view;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +75,23 @@ public class FavouriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourite, container, false);
+        view = inflater.inflate(R.layout.fragment_favourite, container, false);
+
+        listViewFeedback = view.findViewById(R.id.listView_feedback);
+        feedbacks = new ArrayList<>();
+
+        feedbackAdapter = new FeedbackAdapter(view.getContext(), R.layout.items_feedback, feedbacks);
+        getFeedbacks();
+        listViewFeedback.setAdapter(feedbackAdapter);
+
+        return view;
+    }
+
+    private void getFeedbacks() {
+        feedbacks.clear();
+        feedbacks.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "1. For using Glide in the android project, we have to add the dependency in gradle file. So, For adding dependency open app/build.gradle file in the app folder in your Android project and add the following lines inside it. ", "05/12/2022 03:10 PM"));
+        feedbacks.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "2. Now add InternetPermission inside the AndroidManifest.xml file. Open the manifest.xml file and add the following line. ", "30/11/2022 07:08 AM"));
+        feedbacks.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "3. Open the layout file for the main Activity. We need to add an ImageView to the layout. It doesn’t need to be fancy. The following code snippet shows you what I mean.", "03/12/2022 08:09 PM"));
+        feedbackAdapter.notifyDataSetChanged();
     }
 }

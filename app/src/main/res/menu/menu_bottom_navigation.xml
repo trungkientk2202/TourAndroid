@@ -5,8 +5,8 @@
      android:icon="@drawable/home"
      />
  <item android:id="@+id/menu_favourite"
-     android:title="@string/favourite"
-     android:icon="@drawable/favourite"
+     android:title="@string/feedback"
+     android:icon="@drawable/chat"
      />
  <item android:id="@+id/menu_invoice"
      android:title="@string/invoice"

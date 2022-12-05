@@ -2,7 +2,6 @@ package com.da.tourandroid.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.da.tourandroid.R;
 import com.da.tourandroid.model.Tour;
 
@@ -43,9 +43,10 @@ public class AllTourAdapter extends RecyclerView.Adapter<AllTourAdapter.TourView
         holder.tourDiemDi.setText(tourList.get(position).getDiemDi());
         holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10));
         holder.tourType.setText(tourList.get(position).getLoaiTour().getTenLoaiTour());
-        holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia())+"đ");
-        holder.tourImage.setImageURI(Uri.parse("./drawable/popular1.png"));
-        // Glide.with(context).load(foodList.get(position).getImageUrl()).into(holder.foodImage);
+        holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia()) + "đ");
+        Glide.with(context)
+                .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424284/samples/landscapes/nature-mountains.jpg")
+                .into(holder.tourImage);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
