@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -77,30 +78,33 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //
-                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent1);
+//                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent1);
                 //
-//                String json="{\"username\":\""+editTextPhone.getText().toString()+"\",\"password\":\""+editTextPassword.getText().toString()+"\"}";
-//                try {
-//                    JSONObject req=new JSONObject(json);
-//                    String url ="http://192.168.1.101:8080/login";
-//                    JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, url, req,
-//                            response -> {
-//                                try {
-//                                    Common.setToken(response.getString("token"));
-//                                    JSONObject tk=response.getJSONObject("taiKhoan");
-//                                    Common.setTaiKhoan(new TaiKhoan(tk.getString("sdt"),tk.getString("ten"),tk.getString("matKhau"),tk.getBoolean("phai"), !tk.getString("ngaySinh").equals("null") ?new SimpleDateFormat("dd-MMM-yyyy").parse(tk.getString("ngaySinh")):null,tk.getString("zalo")));
-//                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                                    startActivity(intent);
-//                                } catch (JSONException | ParseException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }, error -> Toast.makeText(LoginActivity.this,"Login information is incorrect, please try again!",Toast.LENGTH_LONG).show());
-//                    requestQueue.add(request);
-//                } catch (JSONException e) {
-//                    Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
-//                    e.printStackTrace();
-//                }
+                String json="{\"username\":\""+editTextPhone.getText().toString()+"\",\"password\":\""+editTextPassword.getText().toString()+"\"}";
+                try {
+                    JSONObject req=new JSONObject(json);
+                    String url =Common.getHost()+"login";
+                    JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, url, req,
+                            response -> {
+                                try {
+                                    Common.setToken(response.getString("token"));
+                                    JSONObject tk=response.getJSONObject("taiKhoan");
+                                    Common.setTaiKhoan(new TaiKhoan(tk.getString("sdt"),tk.getString("ten"),tk.getString("matKhau"),tk.getBoolean("phai"), !tk.getString("ngaySinh").equals("null") ?new SimpleDateFormat("dd-MMM-yyyy").parse(tk.getString("ngaySinh")):null,tk.getString("zalo")));
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                } catch (JSONException | ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }, error -> {
+                                Log.i("error",error.toString());
+                                Toast.makeText(LoginActivity.this,"Server error, please try again! "+ error,Toast.LENGTH_LONG).show();
+                            });
+                    requestQueue.add(request);
+                } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
         });
         buttonRegister.setOnClickListener(new View.OnClickListener() {

@@ -43,7 +43,7 @@ public class AllTourAdapter extends RecyclerView.Adapter<AllTourAdapter.TourView
         holder.tourDiemDi.setText(tourList.get(position).getDiemDi());
         holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10));
         holder.tourType.setText(tourList.get(position).getLoaiTour().getTenLoaiTour());
-        holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia()));
+        holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia())+"đ");
         holder.tourImage.setImageURI(Uri.parse("./drawable/popular1.png"));
         // Glide.with(context).load(foodList.get(position).getImageUrl()).into(holder.foodImage);
 

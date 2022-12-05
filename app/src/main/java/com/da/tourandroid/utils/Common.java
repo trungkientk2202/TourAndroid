@@ -6,6 +6,7 @@ public class Common {
 
     public static String token;
     public static TaiKhoan taiKhoan;
+    public static final String host="http://192.168.1.106:8080/";
 
     public Common() {
     }
@@ -25,4 +26,9 @@ public class Common {
     public static void setTaiKhoan(TaiKhoan taiKhoan) {
         Common.taiKhoan = taiKhoan;
     }
+
+    public static String getHost() {
+        return host;
+    }
+
 }

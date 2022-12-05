@@ -3,6 +3,7 @@ package com.da.tourandroid.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.da.tourandroid.R;
 import com.da.tourandroid.SearchActivity;
 import com.da.tourandroid.adapter.AllTourAdapter;
+import com.da.tourandroid.model.LoaiTour;
 import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +45,7 @@ public class HomeFragment extends Fragment {
 
     private AllTourAdapter allTourAdapter;
 
-    private List<Tour> tours;
+    private ArrayList<Tour> tours;
 
     private View view;
 
@@ -114,42 +125,47 @@ public class HomeFragment extends Fragment {
     private void initUI() {
 
         tours = new ArrayList<>();
-//        String url ="http://192.168.1.101:8080/tour/getAll";
-//        JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
-//                response -> {
-//                        for (int i =0;i<response.length();i++){
-//                            Tour tour= new Tour();
-//                            try {
-//                                JSONObject jsonObject=response.getJSONObject(i);
-//                                tour.setMaTour(jsonObject.getInt("maTour"));
-//                                tour.setDiemDen(jsonObject.getString("diemDen"));
-//                                tour.setMoTa(jsonObject.getString("moTa").equals("null")?null:jsonObject.getString("moTa"));
-//                                tour.setDiemDi(jsonObject.getString("diemDi"));
-//                                tour.setGia(jsonObject.getLong("gia"));
-//                                JSONObject object=jsonObject.getJSONObject("loaiTour");
-//                                LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
-//                                tour.setLoaiTour(loaiTour);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                            tours.add(tour);
-//                        }
-//
-//                }, error -> Log.i("err:",error.toString())){
-//            /**
-//             * Passing some request headers
-//             * */
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> headers = new HashMap<String, String>();
-//                headers.put("Authorization", "Bearer " + Common.getToken());
-//                return headers;
-//            }
-//
-//        };
-//        requestQueue.add(request);
+        String url =Common.getHost()+"tour/getAll";
+        Log.i("url",url);
+        JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                        Log.i("response",response.toString());
+                        Log.i("length",response.length()+"");
+                        for (int i =0;i<response.length();i++){
+                            Tour tour= new Tour();
+                            try {
+                                JSONObject jsonObject=response.getJSONObject(i);
+                                Log.i("jsonObject",jsonObject.toString());
+                                tour.setMaTour(jsonObject.getInt("maTour"));
+                                tour.setDiemDen(jsonObject.getString("diemDen"));
+                                tour.setMoTa(jsonObject.getString("moTa").equals("null")?null:jsonObject.getString("moTa"));
+                                tour.setDiemDi(jsonObject.getString("diemDi"));
+                                tour.setGia(jsonObject.getLong("gia"));
+                                tour.setTrangThai(jsonObject.getInt("trangThai"));
+                                JSONObject object=jsonObject.getJSONObject("loaiTour");
+                                LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
+                                tour.setLoaiTour(loaiTour);
+                                Log.i("tour",tour.getMaTour()+"");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            tours.add(tour);
+                        }
+                        Log.i("tour",tours.size()+"");
+                        getAllMenu(tours);
+                }, error -> Log.i("err:",error.toString())){
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
 
-        getAllMenu(tours);
+        };
+        requestQueue.add(request);
     }
 
     @SuppressLint("NotifyDataSetChanged")
