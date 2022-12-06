@@ -1,5 +1,7 @@
 package com.da.tourandroid.model;
 
+import java.util.Date;
+
 public class Tour {
     private long maTour;
 
@@ -14,8 +16,9 @@ public class Tour {
     public LoaiTour loaiTour;
     private int trangThai;
     private String image;
+    private Date ngayBatDau;
 
-    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai,String image) {
+    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai,String image,Date ngayBatDau) {
         this.maTour = maTour;
         this.diemDen = diemDen;
         this.moTa = moTa;
@@ -24,6 +27,7 @@ public class Tour {
         this.loaiTour = loaiTour;
         this.trangThai=trangThai;
         this.image=image;
+        this.ngayBatDau=ngayBatDau;
     }
 
     public Tour() {
@@ -91,5 +95,13 @@ public class Tour {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Date getNgayBatDau() {
+        return ngayBatDau;
+    }
+
+    public void setNgayBatDau(Date ngayBatDau) {
+        this.ngayBatDau = ngayBatDau;
     }
 }

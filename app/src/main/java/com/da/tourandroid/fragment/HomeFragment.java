@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,8 @@ import com.da.tourandroid.utils.Common;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,10 +145,13 @@ public class HomeFragment extends Fragment {
                                 tour.setGia(jsonObject.getLong("gia"));
                                 tour.setTrangThai(jsonObject.getInt("trangThai"));
                                 tour.setImage(jsonObject.getString("image"));
+                                tour.setNgayBatDau(!jsonObject.getString("ngayBatDau").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("ngaySinh")):null);
                                 JSONObject object=jsonObject.getJSONObject("loaiTour");
                                 LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
                             } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                             tours.add(tour);

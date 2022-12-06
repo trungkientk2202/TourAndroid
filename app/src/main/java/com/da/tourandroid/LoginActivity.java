@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.da.tourandroid.model.KhachHang;
 import com.da.tourandroid.model.TaiKhoan;
+import com.da.tourandroid.model.Token;
 import com.da.tourandroid.utils.Common;
 
 import org.json.JSONException;
@@ -34,7 +35,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,18 +47,44 @@ public class LoginActivity extends AppCompatActivity {
     private TextView buttonForgotPassword;
     private RequestQueue requestQueue;
     SharedPreferences sharedPreferences;
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sharedPreferences = getSharedPreferences("Account", MODE_PRIVATE);
-
+        sharedPreferences = getSharedPreferences("TaiKhoan", MODE_PRIVATE);
         // just check existing "phone" or "password"
-        if (sharedPreferences.contains("myAccount")) {
+        if (sharedPreferences.contains("myTaiKhoan")) {
+
+            TaiKhoan taiKhoan = gson.fromJson(
+                    sharedPreferences.getString("myTaiKhoan", ""),
+                    TaiKhoan.class);
+            Token token = gson.fromJson(
+                        sharedPreferences.getString("myToken", ""),
+                        Token.class);
+            Common.setToken(token.getStrtoken());
+            Common.setTaiKhoan(taiKhoan);
+            Common.setMode(1);
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+        }else{
+            sharedPreferences = getSharedPreferences("KhachHang", MODE_PRIVATE);
+            if (sharedPreferences.contains("myKhachHang")) {
+                KhachHang khachHang = gson.fromJson(
+                        sharedPreferences.getString("myKhachHang", ""),
+                        KhachHang.class);
+                Token token = gson.fromJson(
+                        sharedPreferences.getString("myToken", ""),
+                        Token.class);
+                Common.setToken(token.getStrtoken());
+//                Toast.makeText(LoginActivity.this,token.getStrtoken(),Toast.LENGTH_LONG).show();
+                Common.setKhachHang(khachHang);
+                Common.setMode(2);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
         }
 
         editTextPhone = findViewById(R.id.editText_phone);
@@ -78,10 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
-//                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent1);
-                //
                 String json="{\"username\":\""+editTextPhone.getText().toString()+"\",\"password\":\""+editTextPassword.getText().toString()+"\"}";
                 try {
                     JSONObject req=new JSONObject(json);
@@ -90,9 +113,21 @@ public class LoginActivity extends AppCompatActivity {
                             response -> {
                                 try {
                                     Common.setToken(response.getString("token"));
+                                    Token token= new Token(Common.getToken());
                                     JSONObject tk=response.getJSONObject("taiKhoan");
-                                    Common.setTaiKhoan(new TaiKhoan(tk.getString("sdt"),tk.getString("ten"),tk.getString("matKhau"),tk.getBoolean("phai"), !tk.getString("ngaySinh").equals("null") ?new SimpleDateFormat("dd-MMM-yyyy").parse(tk.getString("ngaySinh")):null,tk.getString("zalo")));
+                                    TaiKhoan taiKhoan=new TaiKhoan(tk.getString("sdt"),tk.getString("ten"),tk.getString("matKhau"),tk.getBoolean("phai"), !tk.getString("ngaySinh").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(tk.getString("ngaySinh")):null,tk.getString("zalo"));
+                                    Common.setTaiKhoan(taiKhoan);
                                     Common.mode=1;
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    Gson gson = new Gson();
+                                    String jsonToken=gson.toJson(token);
+                                    editor.putString("myToken", jsonToken);
+                                    editor.apply();
+                                    String jsonTK = gson.toJson(taiKhoan);
+                                    Log.i("tai khoan: ",jsonTK);
+                                    editor.putString("myTaiKhoan", jsonTK);
+                                    editor.apply();
+                                    Toast.makeText(LoginActivity.this,editor.toString(),Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 } catch (JSONException | ParseException e) {
@@ -100,8 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }, error -> {
                                 Log.i("error",error.toString());
-                                Toast.makeText(LoginActivity.this,"Server error 1, please try again! "+ error,Toast.LENGTH_LONG).show();
-                            });
+                                });
                     requestQueue.add(request);
                 } catch (JSONException e) {
 //                    Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
@@ -114,19 +148,29 @@ public class LoginActivity extends AppCompatActivity {
                             response -> {
                                 try {
                                     Common.setToken(response.getString("token"));
+                                    Token token= new Token(Common.getToken());
                                     JSONObject kh=response.getJSONObject("khachHang");
-                                    Log.i("ngaySinh: ",kh.getString("ngaySinh"));
-                                    Common.setKhachHang(new KhachHang(kh.getString("sdt"),kh.getString("ten"),kh.getString("matKhau"),kh.getBoolean("phai"),null,kh.getString("zalo")));
+                                    KhachHang khachHang=new KhachHang(kh.getString("sdt"),kh.getString("ten"),kh.getString("matKhau"),kh.getBoolean("phai"),!kh.getString("ngaySinh").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(kh.getString("ngaySinh")):null,kh.getString("zalo"));
+                                    Common.setKhachHang(khachHang);
                                     Common.mode=2;
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    Gson gson = new Gson();
+                                    String jsonToken=gson.toJson(token);
+                                    editor.putString("myToken", jsonToken);
+                                    editor.apply();
+                                    String jsonTK = gson.toJson(khachHang);
+                                    editor.putString("myKhachHang", jsonTK);
+                                    editor.apply();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 } catch (JSONException  e) {
                                     e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
                                 }
                             }, error -> {
                         Log.i("error",error.toString());
-                        Toast.makeText(LoginActivity.this,"Server error, please try again! "+ error,Toast.LENGTH_LONG).show();
-                    });
+                        });
                     requestQueue.add(request);
                 } catch (JSONException e) {
                     Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
