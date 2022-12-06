@@ -1,11 +1,7 @@
 package com.da.tourandroid.fragment;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -16,10 +12,10 @@ import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link InvoiceDraftFragment#newInstance} factory method to
+ * Use the {@link InvoiceOnPlanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InvoiceDraftFragment extends Fragment {
+public class InvoiceOnPlanFragment extends Fragment {
 
     View view;
 //    ArrayList<OrderFood> orders;
@@ -36,7 +32,7 @@ public class InvoiceDraftFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public InvoiceDraftFragment() {
+    public InvoiceOnPlanFragment() {
         // Required empty public constructor
     }
 
@@ -49,8 +45,8 @@ public class InvoiceDraftFragment extends Fragment {
      * @return A new instance of fragment InvoiceDraftFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InvoiceDraftFragment newInstance(String param1, String param2) {
-        InvoiceDraftFragment fragment = new InvoiceDraftFragment();
+    public static InvoiceOnPlanFragment newInstance(String param1, String param2) {
+        InvoiceOnPlanFragment fragment = new InvoiceOnPlanFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

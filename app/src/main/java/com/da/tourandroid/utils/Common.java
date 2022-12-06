@@ -6,7 +6,7 @@ public class Common {
 
     public static String token;
     public static TaiKhoan taiKhoan;
-    public static final String host="https://6d06-115-79-44-8.ap.ngrok.io/";
+    public static final String host="https://77e9-115-79-44-8.ap.ngrok.io/";
 
     public Common() {
     }

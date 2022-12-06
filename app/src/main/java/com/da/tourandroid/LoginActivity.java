@@ -77,10 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
-//                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent1);
-                //
                 String json="{\"username\":\""+editTextPhone.getText().toString()+"\",\"password\":\""+editTextPassword.getText().toString()+"\"}";
                 try {
                     JSONObject req=new JSONObject(json);

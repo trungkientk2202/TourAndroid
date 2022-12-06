@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.da.tourandroid.fragment.InvoiceDraftFragment;
+import com.da.tourandroid.fragment.InvoiceOnPlanFragment;
 import com.da.tourandroid.fragment.InvoiceHistoryFragment;
 import com.da.tourandroid.fragment.InvoiceOngoingFragment;
 
@@ -21,13 +21,13 @@ public class InvoiceViewPagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
 
             case 1:
-                return new InvoiceHistoryFragment();
+                return new InvoiceOngoingFragment();
 
             case 2:
-                return new InvoiceDraftFragment();
+                return new InvoiceHistoryFragment();
 
             default:
-                return new InvoiceOngoingFragment();
+                return new InvoiceOnPlanFragment();
         }
 
     }
@@ -43,13 +43,13 @@ public class InvoiceViewPagerAdapter extends FragmentStatePagerAdapter {
         String title = "";
         switch (position) {
             case 0:
-                title = "Ongoing";
+                title = "On Plan";
                 break;
             case 1:
-                title = "History";
+                title = "On going";
                 break;
             case 2:
-                title = "Draft";
+                title = "History";
                 break;
         }
 

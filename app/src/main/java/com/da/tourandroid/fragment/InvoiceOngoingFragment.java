@@ -25,7 +25,6 @@ public class InvoiceOngoingFragment extends Fragment {
     View view;
 //    ArrayList<OrderFood> orders;
 //    OrderAdapter adapter;
-//    Database database;
 
     private ListView listViewOngoing;
 
