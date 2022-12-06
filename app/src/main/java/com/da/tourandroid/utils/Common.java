@@ -6,6 +6,8 @@ import com.da.tourandroid.model.TaiKhoan;
 import com.da.tourandroid.model.Tour;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Common {
 
@@ -14,8 +16,8 @@ public class Common {
 
     public static KhachHang khachHang;
     public static int mode;
-    public static Tour tour;
-    public static LichTrinh lichTrinh;
+    public static Queue<LichTrinh>lichTrinhs = new LinkedList<>();
+    public static Queue<Tour> tours= new LinkedList<>();
 //    public static final String host="https://6d06-115-79-44-8.ap.ngrok.io/";
     public static final String host="http://192.168.1.106:8080/";
 
@@ -58,19 +60,19 @@ public class Common {
         Common.mode = mode;
     }
 
-    public static Tour getTour() {
-        return tour;
+    public static Queue<LichTrinh> getLichTrinhs() {
+        return lichTrinhs;
     }
 
-    public static void setTour(Tour tour) {
-        Common.tour = tour;
+    public static void setLichTrinhs(Queue<LichTrinh> lichTrinhs) {
+        Common.lichTrinhs = lichTrinhs;
     }
 
-    public static LichTrinh getLichTrinh() {
-        return lichTrinh;
+    public static Queue<Tour> getTours() {
+        return tours;
     }
 
-    public static void setLichTrinh(LichTrinh lichTrinh) {
-        Common.lichTrinh = lichTrinh;
+    public static void setTours(Queue<Tour> tours) {
+        Common.tours = tours;
     }
 }

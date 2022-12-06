@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,9 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.da.tourandroid.R;
+import com.da.tourandroid.adapter.TourAdapter;
 import com.da.tourandroid.adapter.TourAllAdapter;
 import com.da.tourandroid.model.LoaiTour;
 import com.da.tourandroid.model.ThamGiaTour;
@@ -43,7 +47,7 @@ public class InvoiceOngoingFragment extends Fragment {
 //    ArrayList<OrderFood> orders;
 //    OrderAdapter adapter;
     ArrayList<Tour> tours;
-    private TourAllAdapter tourAllAdapter;
+    private TourAdapter adapter;
     private RequestQueue requestQueue;
 
     private ListView listViewOngoing;
@@ -92,30 +96,27 @@ public class InvoiceOngoingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        view = inflater.inflate(R.layout.fragment_invoice_ongoing, container, false);
-//        requestQueue= Volley.newRequestQueue(view.getContext());
-//        listViewOngoing = view.findViewById(R.id.listView_ongoing);
-//        tours = new ArrayList<>();
-//
-//        tourAdapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
-//        getToursOngoing();
-//        listViewOngoing.setAdapter((ListAdapter) tourAdapter);
+        view = inflater.inflate(R.layout.fragment_invoice_ongoing, container, false);
+        requestQueue= Volley.newRequestQueue(view.getContext());
+        listViewOngoing = view.findViewById(R.id.listView_ongoing);
+        tours = new ArrayList<>();
+
+        adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
+        getToursOngoing();
+        listViewOngoing.setAdapter(adapter);
 
         return view;
     }
     private void getToursOngoing(){
         if(Common.mode==2) {
             String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
-            Log.i("url: ", url);
+            //Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
-                        Log.i("response", response.toString());
-                        Log.i("length", response.length() + "");
                         for (int i = 0; i < response.length(); i++) {
                             ThamGiaTour thamGiaTour=new ThamGiaTour();
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                Log.i("jsonObject", jsonObject.toString());
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
@@ -125,7 +126,6 @@ public class InvoiceOngoingFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                Log.i("Diem den: ", tour.getDiemDen());
                                 tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
@@ -140,11 +140,9 @@ public class InvoiceOngoingFragment extends Fragment {
                                 e.printStackTrace();
                             }
                         }
-//                        Log.i("feedbacks size: ", feedbacks.size() + "");
-//                        listViewFeedback = view.findViewById(R.id.listView_feedback);
-//                        feedbackAdapter = new FeedbackAdapter(view.getContext(), R.layout.items_feedback, feedbacks);
-//                        listViewFeedback.setAdapter(feedbackAdapter);
-//                        feedbackAdapter.notifyDataSetChanged();
+                        listViewOngoing = view.findViewById(R.id.listView_ongoing);
+                        adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
+                        listViewOngoing.setAdapter(adapter);
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -158,6 +156,6 @@ public class InvoiceOngoingFragment extends Fragment {
             };
             requestQueue.add(request);
         }
-        tourAllAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

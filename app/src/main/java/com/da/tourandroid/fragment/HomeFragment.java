@@ -131,8 +131,6 @@ public class HomeFragment extends Fragment {
         String url =Common.getHost()+"tour/getAll";
         @SuppressLint("SimpleDateFormat") JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
-                        Log.i("response",response.toString());
-                        Log.i("length",response.length()+"");
                         for (int i =0;i<response.length();i++){
                             Tour tour= new Tour();
                             try {
@@ -145,10 +143,7 @@ public class HomeFragment extends Fragment {
                                 tour.setGia(jsonObject.getLong("gia"));
                                 tour.setTrangThai(jsonObject.getInt("trangThai"));
                                 tour.setImage(jsonObject.getString("image"));
-                                Log.i("jsonObject",jsonObject.getString("ngayBatDau"));
-                                Toast.makeText(view.getContext(),jsonObject.getString("ngayBatDau"),Toast.LENGTH_LONG).show();
                                 tour.setNgayBatDau(jsonObject.getString("ngayBatDau"));
-                                Log.i("jsonObject",tour.getNgayBatDau().toString());
                                 JSONObject object=jsonObject.getJSONObject("loaiTour");
                                 LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);

@@ -103,16 +103,13 @@ public class FeedbackFragment extends Fragment {
     private void getFeedbacks() {
         if(Common.mode==2) {
             String url = Common.getHost() + "phanHoi/findBySdt/" + Common.getKhachHang().getSdt();
-            Log.i("url: ", url);
+            //Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
-                        Log.i("response", response.toString());
-                        Log.i("length", response.length() + "");
                         for (int i = 0; i < response.length(); i++) {
                             PhanHoi phanHoi = new PhanHoi();
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                Log.i("jsonObject", jsonObject.toString());
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 phanHoi.setId(new PhanHoiID(objID.getInt("maTour"), objID.getString("sdt")));
                                 phanHoi.setNoiDung(jsonObject.getString("noiDung"));
@@ -121,7 +118,6 @@ public class FeedbackFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                Log.i("Diem den: ", tour.getDiemDen());
                                 tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
@@ -136,7 +132,6 @@ public class FeedbackFragment extends Fragment {
                             }
                             feedbacks.add(phanHoi);
                         }
-                        Log.i("feedbacks size: ", feedbacks.size() + "");
                         listViewFeedback = view.findViewById(R.id.listView_feedback);
                         feedbackAdapter = new FeedbackAdapter(view.getContext(), R.layout.items_feedback, feedbacks);
                         listViewFeedback.setAdapter(feedbackAdapter);

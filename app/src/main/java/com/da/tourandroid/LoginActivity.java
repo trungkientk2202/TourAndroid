@@ -124,10 +124,9 @@ public class LoginActivity extends AppCompatActivity {
                                     editor.putString("myToken", jsonToken);
                                     editor.apply();
                                     String jsonTK = gson.toJson(taiKhoan);
-                                    Log.i("tai khoan: ",jsonTK);
+                                    //Log.i("tai khoan: ",jsonTK);
                                     editor.putString("myTaiKhoan", jsonTK);
                                     editor.apply();
-                                    Toast.makeText(LoginActivity.this,editor.toString(),Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 } catch (JSONException | ParseException e) {

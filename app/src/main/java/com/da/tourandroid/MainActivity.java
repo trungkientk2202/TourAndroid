@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         ViewPageAdapter viewPagerAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(viewPagerAdapter);
-        Log.i("mode: ", Common.getMode()+"");
+        //Log.i("mode: ", Common.getMode()+"");
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
@@ -116,17 +117,16 @@ public class MainActivity extends AppCompatActivity {
 
         //thông báo các tour sắp diễn ra
         if(Common.mode==2) {
-            String url = Common.getHost() + "tgtour/findBySdt/" + Common.getKhachHang().getSdt()+"/1";
+            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
             Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
-                        Log.i("response", response.toString());
-                        Log.i("length", response.length() + "");
+                        //Log.i("response", response.toString());
+                        //Log.i("length", response.length() + "");
                         for (int i = 0; i < response.length(); i++) {
                             ThamGiaTour thamGiaTour=new ThamGiaTour();
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                Log.i("jsonObject", jsonObject.toString());
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                Log.i("Diem den: ", tour.getDiemDen());
+                                //Log.i("Diem den: ", tour.getDiemDen());
                                 tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
@@ -152,13 +152,18 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        Log.i("tours size:",tours.size()+"");
+                        long i=0;
                         // gửi các thông báo
                         for (Tour tour:tours) {
-                            Common.setTour(tour);
-                            Common.setLichTrinh(null);
-                            if(tour.getNgayBatDau()!=null){
+                            i++;
+                            Log.i("Ma tour:",tour.getMaTour()+"");
+                            if(tour.getNgayBatDau().equals("null")){
+                                Log.i("Ma tour null:",tour.getMaTour()+"");
                                 break;
                             }
+                            Common.getTours().offer(tour);
+                            Log.i("ngay bat dau",tour.getNgayBatDau());
                             Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                             PendingIntent pendingIntent;
@@ -179,9 +184,14 @@ public class MainActivity extends AppCompatActivity {
                             }
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             //gửi trước 1 ngày
-                            long time= Date.valueOf(Common.getTour().getNgayBatDau()).getTime()*1000-24*3600*1000;
-                            Log.d("time send notify:",time+"");
-                            alarmManager.set(AlarmManager.RTC_WAKEUP,time,pendingIntent);
+                            long time= 0;
+                            try {
+                                time = new SimpleDateFormat("yyyy-MM-dd").parse(tour.getNgayBatDau()).getTime()*1000-24*3600*1000;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Log.i("time send notify:",time+" "+tour.getMaTour());
+                            alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),pendingIntent);
                         }
                     }, error -> Log.i("err:", error.toString())) {
                 /**
@@ -196,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             };
             requestQueue.add(request);
 
-            //list các tour đang tham ra
+//            list các tour đang tham ra
             tours=new ArrayList<>();
             url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/2";
             Log.i("url: ", url);
@@ -208,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                             ThamGiaTour thamGiaTour=new ThamGiaTour();
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                Log.i("jsonObject", jsonObject.toString());
+                                //Log.i("jsonObject", jsonObject.toString());
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
@@ -234,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        Log.i("Tours size:",tours.size()+"");
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -298,11 +309,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             // gửi thông báo theo từng lịch trình
                             for (LichTrinh lichTrinh:lichTrinhs) {
-                                Common.setTour(lichTrinh.getTour());
-                                Common.setLichTrinh(lichTrinh);
-                                if(lichTrinh.getThoiGianBatDau()!=null){
+                                if(lichTrinh.getThoiGianBatDau()==null){
                                     break;
                                 }
+                                Common.getLichTrinhs().offer(lichTrinh);
                                 Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                                 PendingIntent pendingIntent;
@@ -325,8 +335,8 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     //gửi thông báo trước 4h khởi hành
                                     long time=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(lichTrinh.getThoiGianBatDau()).getTime()*1000-4*3600*1000;
-                                    Log.d("time send notify:",time+"");
-                                    alarmManager.set(AlarmManager.RTC_WAKEUP, time,pendingIntent);
+                                    Log.i("lich trinh notify:",time+"");
+                                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pendingIntent);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -354,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "TourReminderChannel";
             String description = "Channel for Tour Reminder";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("notifyTour", name, importance);
             channel.setDescription(description);
 
