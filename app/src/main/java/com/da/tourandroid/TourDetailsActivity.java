@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.da.tourandroid.adapter.TimelineAdapter;
 import com.da.tourandroid.adapter.TourRecommendAdapter;
 import com.da.tourandroid.adapter.UserFeedbackAdapter;
+import com.da.tourandroid.model.DiaDiem;
 import com.da.tourandroid.model.LichTrinh;
 import com.da.tourandroid.model.LichTrinhID;
 import com.da.tourandroid.model.LoaiTour;
@@ -70,12 +71,12 @@ public class TourDetailsActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void getDataTimeline(int id_res) {
         listTimeline.clear();
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,0), "di so thu", "07:00 AM"));
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,1), "di ho boi", "09:00 AM"));
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,2), "tham gia hoat dong ngoai troi", "03:00 PM"));
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,3), "thuong thuc mon an tai nha hang", "07:30 PM"));
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,4), "di dao bo bien", "09:00 PM"));
-        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,5), "di ngu", "011:30 PM"));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,0), "di so thu", "07:00 AM",new Tour(),new DiaDiem()));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,1), "di ho boi", "09:00 AM",new Tour(),new DiaDiem()));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,2), "tham gia hoat dong ngoai troi", "03:00 PM",new Tour(),new DiaDiem()));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,3), "thuong thuc mon an tai nha hang", "07:30 PM",new Tour(),new DiaDiem()));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,4), "di dao bo bien", "09:00 PM",new Tour(),new DiaDiem()));
+        listTimeline.add(new LichTrinh(new LichTrinhID(0,0,5), "di ngu", "011:30 PM",new Tour(),new DiaDiem()));
         timelineAdapter.notifyDataSetChanged();
     }
 
@@ -122,9 +123,9 @@ public class TourDetailsActivity extends AppCompatActivity {
     private void getDataFeedbacks(int id_res) {
         listFeedback.clear();
 
-        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "1. For using Glide in the android project, we have to add the dependency in gradle file. So, For adding dependency open app/build.gradle file in the app folder in your Android project and add the following lines inside it. ", "05/12/2022 03:10 PM"));
-        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "2. Now add InternetPermission inside the AndroidManifest.xml file. Open the manifest.xml file and add the following line. ", "30/11/2022 07:08 AM"));
-        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "3. Open the layout file for the main Activity. We need to add an ImageView to the layout. It doesn’t need to be fancy. The following code snippet shows you what I mean.", "03/12/2022 08:09 PM"));
+        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "1. For using Glide in the android project, we have to add the dependency in gradle file. So, For adding dependency open app/build.gradle file in the app folder in your Android project and add the following lines inside it. ", "05/12/2022 03:10 PM",new Tour()));
+        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "2. Now add InternetPermission inside the AndroidManifest.xml file. Open the manifest.xml file and add the following line. ", "30/11/2022 07:08 AM",new Tour()));
+        listFeedback.add(new PhanHoi(new PhanHoiID(1, "0357499653"), "3. Open the layout file for the main Activity. We need to add an ImageView to the layout. It doesn’t need to be fancy. The following code snippet shows you what I mean.", "03/12/2022 08:09 PM",new Tour()));
 
         userFeedbackAdapter.notifyDataSetChanged();
     }
