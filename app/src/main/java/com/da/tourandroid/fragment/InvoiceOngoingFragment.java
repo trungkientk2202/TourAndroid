@@ -40,6 +40,8 @@ import java.util.Map;
 public class InvoiceOngoingFragment extends Fragment {
 
     View view;
+//    ArrayList<OrderFood> orders;
+//    OrderAdapter adapter;
     ArrayList<Tour> tours;
     private TourAllAdapter tourAllAdapter;
     private RequestQueue requestQueue;
