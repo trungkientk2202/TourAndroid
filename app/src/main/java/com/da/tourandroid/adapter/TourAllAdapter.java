@@ -17,13 +17,13 @@ import com.da.tourandroid.model.Tour;
 
 import java.util.List;
 
-public class TourAdapter extends RecyclerView.Adapter<TourAdapter.TourViewHolder> {
+public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.TourViewHolder> {
 
     private Context context;
     private int layout;
     private List<Tour> tourList;
 
-    public TourAdapter(Context context, int layout, List<Tour> tourList) {
+    public TourAllAdapter(Context context, int layout, List<Tour> tourList) {
         this.context = context;
         this.layout = layout;
         this.tourList = tourList;
@@ -31,13 +31,13 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.TourViewHolder
 
     @NonNull
     @Override
-    public TourAdapter.TourViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TourAllAdapter.TourViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(layout, parent, false);
-        return new TourAdapter.TourViewHolder(view);
+        return new TourAllAdapter.TourViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TourAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull TourAllAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         holder.tourName.setText(tourList.get(position).getDiemDen());
         holder.tourDiemDi.setText(tourList.get(position).getDiemDi());

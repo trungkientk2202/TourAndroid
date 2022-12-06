@@ -16,9 +16,9 @@ public class Tour {
     public LoaiTour loaiTour;
     private int trangThai;
     private String image;
-    private Date ngayBatDau;
+    private String ngayBatDau;
 
-    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai,String image,Date ngayBatDau) {
+    public Tour(long maTour, String diemDen, String moTa, String diemDi, Long gia, LoaiTour loaiTour,int trangThai,String image,String ngayBatDau) {
         this.maTour = maTour;
         this.diemDen = diemDen;
         this.moTa = moTa;
@@ -97,11 +97,11 @@ public class Tour {
         this.image = image;
     }
 
-    public Date getNgayBatDau() {
+    public String getNgayBatDau() {
         return ngayBatDau;
     }
 
-    public void setNgayBatDau(Date ngayBatDau) {
+    public void setNgayBatDau(String ngayBatDau) {
         this.ngayBatDau = ngayBatDau;
     }
 }

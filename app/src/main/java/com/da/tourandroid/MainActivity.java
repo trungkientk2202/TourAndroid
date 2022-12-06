@@ -37,6 +37,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -141,15 +142,13 @@ public class MainActivity extends AppCompatActivity {
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
                                 tour.setImage(objTour.getString("image"));
-                                tour.setNgayBatDau(!objTour.getString("ngayBatDau").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("ngaySinh")):null);
+                                tour.setNgayBatDau(objTour.getString("ngayBatDau"));
                                 JSONObject object = objTour.getJSONObject("loaiTour");
                                 LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
                                 tours.add(tour);
                                 thamGiaTour.setTour(tour);
                             } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -180,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             //gửi trước 1 ngày
-                            long time= Common.getTour().getNgayBatDau().getTime()*1000-24*3600*1000;
+                            long time= Date.valueOf(Common.getTour().getNgayBatDau()).getTime()*1000-24*3600*1000;
                             Log.d("time send notify:",time+"");
                             alarmManager.set(AlarmManager.RTC_WAKEUP,time,pendingIntent);
                         }
@@ -225,15 +224,13 @@ public class MainActivity extends AppCompatActivity {
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
                                 tour.setImage(objTour.getString("image"));
-                                tour.setNgayBatDau(!objTour.getString("ngayBatDau").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("ngaySinh")):null);
+                                tour.setNgayBatDau(objTour.getString("ngayBatDau"));
                                 JSONObject object = objTour.getJSONObject("loaiTour");
                                 LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
                                 tours.add(tour);
                                 thamGiaTour.setTour(tour);
                             } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (ParseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -279,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                                     tour.setGia(objTour.getLong("gia"));
                                     tour.setTrangThai(objTour.getInt("trangThai"));
                                     tour.setImage(objTour.getString("image"));
-                                    tour.setNgayBatDau(!objTour.getString("ngayBatDau").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(jsonObject.getString("ngaySinh")):null);
+                                    tour.setNgayBatDau(objTour.getString("ngayBatDau"));
                                     JSONObject object = objTour.getJSONObject("loaiTour");
                                     LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                     tour.setLoaiTour(loaiTour);
@@ -295,8 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     lichTrinhs.add(lichTrinh);
                                 } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
 

@@ -1,13 +1,10 @@
 package com.da.tourandroid.fragment;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -16,13 +13,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
-import com.da.tourandroid.R;
-import com.da.tourandroid.adapter.FeedbackAdapter;
-import com.da.tourandroid.adapter.TourAdapter;
+import com.da.tourandroid.adapter.TourAllAdapter;
 import com.da.tourandroid.model.LoaiTour;
-import com.da.tourandroid.model.PhanHoi;
-import com.da.tourandroid.model.PhanHoiID;
 import com.da.tourandroid.model.ThamGiaTour;
 import com.da.tourandroid.model.ThamGiaTourID;
 import com.da.tourandroid.model.Tour;
@@ -49,7 +41,7 @@ public class InvoiceOngoingFragment extends Fragment {
 
     View view;
     ArrayList<Tour> tours;
-    private TourAdapter tourAdapter;
+    private TourAllAdapter tourAllAdapter;
     private RequestQueue requestQueue;
 
     private ListView listViewOngoing;
@@ -164,6 +156,6 @@ public class InvoiceOngoingFragment extends Fragment {
             };
             requestQueue.add(request);
         }
-        tourAdapter.notifyDataSetChanged();
+        tourAllAdapter.notifyDataSetChanged();
     }
 }
