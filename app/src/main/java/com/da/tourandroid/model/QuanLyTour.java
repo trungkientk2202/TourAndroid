@@ -6,11 +6,12 @@ public class QuanLyTour {
 
     private String ghiChu;
 
-    public QuanLyTour(QuanLyTourID id, String ghiChu) {
+    private Tour tour;
+
+    public QuanLyTour(QuanLyTourID id, String ghiChu,Tour tour) {
         this.id = id;
         this.ghiChu = ghiChu;
     }
-
     public QuanLyTour() {
     }
 
@@ -28,5 +29,13 @@ public class QuanLyTour {
 
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
+    }
+
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
     }
 }

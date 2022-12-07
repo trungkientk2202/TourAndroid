@@ -48,7 +48,7 @@ public class TourAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView img_tour;
         TextView txt_diemDen_tour, txtNgayBatDau, txt_diemDi_tour, txt_gia;
-        Button btn_feedback, btn_join, btn_cancel,btn_preview;
+        Button btn_feedback, btn_join,btn_preview,btn_setTT;
     }
 
     @Override
@@ -72,41 +72,63 @@ public class TourAdapter extends BaseAdapter {
             switch (layout) {
                 case R.layout.items_history:
                     viewHolder.btn_feedback = view.findViewById(R.id.btn_feedback);
-                    viewHolder.btn_feedback.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Common.setTour(tour);
-                            Intent i = new Intent(context, TourDetailsActivity.class);
-                            context.startActivity(i);
-                        }
-                    });
+                    if(Common.getMode()==2){
+                        viewHolder.btn_feedback.setText("Feebback");
+                        viewHolder.btn_feedback.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // page feedback
+//                                Intent i = new Intent(context, TourDetailsActivity.class);
+//                                context.startActivity(i);
+                            }
+                        });
+                    }else{
+                        viewHolder.btn_feedback.setText("Preview");
+                        viewHolder.btn_feedback.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Common.setTour(tour);
+                                Common.setDetailMode(4);
+                                Intent i = new Intent(context, TourDetailsActivity.class);
+                                context.startActivity(i);
+                            }
+                        });
+                    }
+
+
                     break;
                 case R.layout.items_onplan:
                     viewHolder.btn_preview = view.findViewById(R.id.btn_preview);
+                    viewHolder.btn_setTT= view.findViewById(R.id.btn_setTT);
+                    if(Common.getMode()==2){
+                        viewHolder.btn_setTT.setVisibility(View.INVISIBLE);
+                    }else{
+                        viewHolder.btn_setTT.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // đổi trạng thái tour
+                            }
+                        });
+                    }
                     viewHolder.btn_preview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Common.setTour(tour);
-                            Intent i = new Intent(context, TourDetailsActivity.class);
-                            context.startActivity(i);
+                                Common.setTour(tour);
+                                Common.setDetailMode(2);
+                                Intent i = new Intent(context, TourDetailsActivity.class);
+                                context.startActivity(i);
                         }
                     });
                     break;
                 case R.layout.items_ongoing:
                     viewHolder.btn_join = view.findViewById(R.id.btn_join);
-                    viewHolder.btn_cancel = view.findViewById(R.id.btn_cancel);
                     viewHolder.btn_join.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Common.setTour(tour);
+                            Common.setDetailMode(3);
                             Intent i = new Intent(context, TourDetailsActivity.class);
                             context.startActivity(i);
-                        }
-                    });
-                    viewHolder.btn_cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
                         }
                     });
             }

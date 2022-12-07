@@ -67,7 +67,6 @@ public class TourDetailsActivity extends AppCompatActivity {
         requestQueue= Volley.newRequestQueue(TourDetailsActivity.this);
         map();
         dataInit();
-
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,7 +195,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     private void getDataFeedbacks(int id_res) {
         listFeedback.clear();
         String url = Common.getHost() + "phanHoi/findByMaTour/" + id_res;
-        Toast.makeText(TourDetailsActivity.this,url,Toast.LENGTH_LONG).show();
+//        Toast.makeText(TourDetailsActivity.this,url,Toast.LENGTH_LONG).show();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     Log.i("response phan hoi:",response.toString());
@@ -264,7 +263,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         listTimeline = new ArrayList<>();
         listRelatedTour = new ArrayList<>();
         listFeedback = new ArrayList<>();
-
+        Toast.makeText(TourDetailsActivity.this,Common.getDetailMode()+"",Toast.LENGTH_LONG).show();
         //Get restaurant info
         Intent intent = getIntent();
         float rating = intent.getFloatExtra("rating", 4);

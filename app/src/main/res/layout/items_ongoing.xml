@@ -39,7 +39,7 @@
         android:layout_toEndOf="@+id/img_tour"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="@+id/txt_diemDi_tour"
-        app:layout_constraintEnd_toStartOf="@+id/btn_cancel"
+        app:layout_constraintEnd_toStartOf="@+id/btn_join"
         app:layout_constraintTop_toTopOf="@+id/txt_diemDi_tour"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -64,23 +64,6 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/txt_diemDi_tour"
         android:text="Join"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:lines="2"
-        android:background="@drawable/button2_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-    <Button
-        android:id="@+id/btn_cancel"
-        android:layout_width="85dp"
-        android:layout_height="35dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/txt_diemDi_tour"
-        android:text="Cancel"
         android:textStyle="bold"
         android:textAllCaps="false"
         android:textColor="@color/white"

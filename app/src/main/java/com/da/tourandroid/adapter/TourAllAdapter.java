@@ -57,6 +57,7 @@ public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.TourView
             public void onClick(View view) {
                 try {
                 Common.setTour(tourList.get(position));
+                Common.setDetailMode(1);
                 Intent i = new Intent(context, TourDetailsActivity.class);
                 context.startActivity(i);
                 } catch (Exception ex) {

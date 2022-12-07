@@ -91,7 +91,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestQueue= Volley.newRequestQueue(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -129,7 +128,7 @@ public class HomeFragment extends Fragment {
 
         tours = new ArrayList<>();
         String url =Common.getHost()+"tour/getAll";
-        @SuppressLint("SimpleDateFormat") JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                         for (int i =0;i<response.length();i++){
                             Tour tour= new Tour();

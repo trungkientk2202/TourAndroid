@@ -148,6 +148,53 @@ public class FeedbackFragment extends Fragment {
                 }
             };
             requestQueue.add(request);
+        }else{
+            String url = Common.getHost() + "phanHoi/getAll";
+            //Log.i("url: ", url);
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                    response -> {
+                        for (int i = 0; i < response.length(); i++) {
+                            PhanHoi phanHoi = new PhanHoi();
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                JSONObject objID = jsonObject.getJSONObject("id");
+                                phanHoi.setId(new PhanHoiID(objID.getInt("maTour"), objID.getString("sdt")));
+                                phanHoi.setNoiDung(jsonObject.getString("noiDung"));
+                                phanHoi.setThoiGian(jsonObject.getString("thoiGian"));
+                                JSONObject objTour = jsonObject.getJSONObject("tour");
+                                Tour tour = new Tour();
+                                tour.setMaTour(objTour.getInt("maTour"));
+                                tour.setDiemDen(objTour.getString("diemDen"));
+                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setDiemDi(objTour.getString("diemDi"));
+                                tour.setGia(objTour.getLong("gia"));
+                                tour.setTrangThai(objTour.getInt("trangThai"));
+                                tour.setImage(objTour.getString("image"));
+                                JSONObject object = objTour.getJSONObject("loaiTour");
+                                LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
+                                tour.setLoaiTour(loaiTour);
+                                phanHoi.setTour(tour);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            feedbacks.add(phanHoi);
+                        }
+                        listViewFeedback = view.findViewById(R.id.listView_feedback);
+                        feedbackAdapter = new FeedbackAdapter(view.getContext(), R.layout.items_feedback, feedbacks);
+                        listViewFeedback.setAdapter(feedbackAdapter);
+                        feedbackAdapter.notifyDataSetChanged();
+                    }, error -> Log.i("err:", error.toString())) {
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Authorization", "Bearer " + Common.getToken());
+                    return headers;
+                }
+            };
+            requestQueue.add(request);
         }
     }
 }

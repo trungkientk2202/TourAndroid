@@ -88,6 +88,24 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_setTT"
+            android:layout_width="85dp"
+            android:layout_marginRight="12px"
+            android:layout_height="35dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/txt_from"
+            android:background="@drawable/button2_bg"
+            android:lines="2"
+            android:text="Start"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_diemDi_tour"
+            app:layout_constraintEnd_toStartOf="@id/btn_preview"
+            app:layout_constraintTop_toTopOf="@+id/txt_diemDi_tour"/>
+
         <TextView
             android:id="@+id/txtNgayBatDau"
             android:layout_width="wrap_content"
