@@ -1,17 +1,22 @@
 package com.da.tourandroid;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +43,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     TourRecommendAdapter tourRecommendAdapter;
     TimelineAdapter timelineAdapter;
     UserFeedbackAdapter userFeedbackAdapter;
+    AppCompatButton btnFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         txt_price = findViewById(R.id.txt_restaurant_address);
         relatedTourRecycle = findViewById(R.id.related_tour_recycler);
         imageViewBack = findViewById(R.id.imageView_back);
+        btnFeedback = findViewById(R.id.btn_feedback);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -220,6 +227,37 @@ public class TourDetailsActivity extends AppCompatActivity {
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        btnFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.dialog_feedback);
+
+                EditText editTextName = dialog.findViewById(R.id.editText_addTask);
+                Button buttonAdd = dialog.findViewById(R.id.button_addTask);
+                Button buttonCancel = dialog.findViewById(R.id.button_cancel);
+
+                buttonAdd.setOnClickListener(view -> {
+                    String name = editTextName.getText().toString();
+
+                    if (name.equals(""))
+                        Toast.makeText(getApplicationContext(), "This field is require!", Toast.LENGTH_SHORT).show();
+                    else {
+                        // TODO: save data
+                        Toast.makeText(getApplicationContext(), "Added a feedback", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        // TODO: request data again
+                    }
+                });
+
+                buttonCancel.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+
+                dialog.show();
             }
         });
     }
