@@ -41,7 +41,7 @@ public class UserFeedbackAdapter extends RecyclerView.Adapter<UserFeedbackAdapte
 
     @Override
     public void onBindViewHolder(@NonNull UserFeedbackAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.feedbackUsername.setText("user");
+        holder.feedbackUsername.setText(feedbackList.get(position).getKhachHang().getTen());
         holder.feedbackContent.setText(feedbackList.get(position).getNoiDung());
         holder.feedbackDate.setText(feedbackList.get(position).getThoiGian());
     }

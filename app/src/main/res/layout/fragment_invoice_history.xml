@@ -7,7 +7,7 @@
     tools:context=".fragment.InvoiceHistoryFragment">
 
     <ListView
-        android:id="@+id/listView_tour"
+        android:id="@+id/listView_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"

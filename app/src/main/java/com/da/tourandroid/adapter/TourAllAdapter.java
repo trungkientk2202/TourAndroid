@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.da.tourandroid.R;
 import com.da.tourandroid.TourDetailsActivity;
 import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
 
 import java.util.List;
 
@@ -44,24 +45,19 @@ public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.TourView
 
         holder.tourName.setText(tourList.get(position).getDiemDen());
         holder.tourDiemDi.setText(tourList.get(position).getDiemDi());
-        holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10));
+        holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10.0));
         holder.tourType.setText(tourList.get(position).getLoaiTour().getTenLoaiTour());
         holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia()) + "đ");
         Glide.with(context)
-                .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424284/samples/landscapes/nature-mountains.jpg")
+                .load(tourList.get(position).getImage())
                 .into(holder.tourImage);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-
+                Common.setTour(tourList.get(position));
                 Intent i = new Intent(context, TourDetailsActivity.class);
-////                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////
-////                i.putExtra("id", tourList.get(position).getMaTour());
-////                i.putExtra("rating", "4.7");
-//
                 context.startActivity(i);
                 } catch (Exception ex) {
                     Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();

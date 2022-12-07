@@ -109,7 +109,7 @@ public class InvoiceOngoingFragment extends Fragment {
     }
     private void getToursOngoing(){
         if(Common.mode==2) {
-            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
+            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/2";
             //Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
@@ -131,6 +131,7 @@ public class InvoiceOngoingFragment extends Fragment {
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
                                 tour.setImage(objTour.getString("image"));
+                                tour.setNgayBatDau(objTour.getString("ngayBatDau"));
                                 JSONObject object = objTour.getJSONObject("loaiTour");
                                 LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);

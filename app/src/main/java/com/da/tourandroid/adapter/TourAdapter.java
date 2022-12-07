@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.da.tourandroid.R;
+import com.da.tourandroid.TourDetailsActivity;
 import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
 
 import java.util.List;
 
@@ -45,8 +47,8 @@ public class TourAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView img_tour;
-        TextView txt_name, txt_date, txt_to, txt_price;
-        Button btn_order, btn_received, btn_cancel;
+        TextView txt_diemDen_tour, txtNgayBatDau, txt_diemDi_tour, txt_gia;
+        Button btn_feedback, btn_join, btn_cancel,btn_preview;
     }
 
     @Override
@@ -61,69 +63,65 @@ public class TourAdapter extends BaseAdapter {
 
             viewHolder = new TourAdapter.ViewHolder();
 
-            viewHolder.img_tour = view.findViewById(R.id.img_ordered_food);
-            viewHolder.txt_name = view.findViewById(R.id.txt_ordered_food);
-            viewHolder.txt_date = view.findViewById(R.id.txtDate);
-            viewHolder.txt_to = view.findViewById(R.id.txt_ordered_quantity);
-            viewHolder.txt_price = view.findViewById(R.id.txtRes);
+            viewHolder.img_tour = view.findViewById(R.id.img_tour);
+            viewHolder.txt_diemDen_tour = view.findViewById(R.id.txt_diemDen_tour);
+            viewHolder.txtNgayBatDau = view.findViewById(R.id.txtNgayBatDau);
+            viewHolder.txt_diemDi_tour = view.findViewById(R.id.txt_diemDi_tour);
+            viewHolder.txt_gia = view.findViewById(R.id.txt_gia);
             
             switch (layout) {
                 case R.layout.items_history:
-                    viewHolder.btn_order = view.findViewById(R.id.btn_reorder);
-                    viewHolder.btn_order.setOnClickListener(new View.OnClickListener() {
+                    viewHolder.btn_feedback = view.findViewById(R.id.btn_feedback);
+                    viewHolder.btn_feedback.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-//                            Food food = order.getFood();
-//                            Intent i = new Intent(context, FoodDetailsActivity.class);
-//
-//                            i.putExtra("id", food.getId());
-//                            i.putExtra("name", food.getName());
-//                            i.putExtra("name_res", food.getRestaurant().getName());
-//                            i.putExtra("address_res", food.getRestaurant().getAddress());
-//                            i.putExtra("price", food.getPrice());
-//                            i.putExtra("rating", "4.7");
-//                            i.putExtra("image", food.getImage());
-//                            i.putExtra("image_res", food.getRestaurant().getImage());
-//
-//                            context.startActivity(i);
+                            Common.setTour(tour);
+                            Intent i = new Intent(context, TourDetailsActivity.class);
+                            context.startActivity(i);
                         }
                     });
                     break;
                 case R.layout.items_onplan:
-//                    viewHolder.btn_received = view.findViewById(R.id.btn_receiver);
-//                    viewHolder.btn_cancel = view.findViewById(R.id.btn_cancel);
-//                    viewHolder.btn_received.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            tourList.remove(i);
-//                            notifyDataSetChanged();
-//                            database.QueryData("UPDATE OrderFood SET Status=" + 2 + " WHERE Id=" + order.getId());
-//                            Toast.makeText(context, "Thank you!!!\nEnjoy your meal!", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                    viewHolder.btn_cancel.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            tourList.remove(i);
-//                            notifyDataSetChanged();
-//                            database.QueryData("UPDATE OrderFood SET Status=" + 3 + " WHERE Id=" + order.getId());
-//                            Toast.makeText(context, "Deleted this order(" + order.getFood().getName() + ")", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+                    viewHolder.btn_preview = view.findViewById(R.id.btn_preview);
+                    viewHolder.btn_preview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Common.setTour(tour);
+                            Intent i = new Intent(context, TourDetailsActivity.class);
+                            context.startActivity(i);
+                        }
+                    });
                     break;
+                case R.layout.items_ongoing:
+                    viewHolder.btn_join = view.findViewById(R.id.btn_join);
+                    viewHolder.btn_cancel = view.findViewById(R.id.btn_cancel);
+                    viewHolder.btn_join.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Common.setTour(tour);
+                            Intent i = new Intent(context, TourDetailsActivity.class);
+                            context.startActivity(i);
+                        }
+                    });
+                    viewHolder.btn_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
             }
 
             view.setTag(viewHolder);
         } else {
             viewHolder = (TourAdapter.ViewHolder) view.getTag();
         }
-//
-//        viewHolder.txt_name.setText(order.getFood().getName());
-//        viewHolder.txt_price.setText(String.valueOf(order.getPrice_total()));
-//        viewHolder.txt_date.setText(order.getFood().getRestaurant().getName());
-//        viewHolder.txt_price.setText(String.valueOf(order.getQuantity()));
+
+        viewHolder.txt_diemDen_tour.setText(tour.getDiemDen());
+        viewHolder.txtNgayBatDau.setText(tour.getNgayBatDau());
+        viewHolder.txt_diemDi_tour.setText(tour.getDiemDi());
+        viewHolder.txt_gia.setText(String.valueOf(tour.getGia()));
         Glide.with(context)
-                .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424284/samples/landscapes/nature-mountains.jpg")
+                .load(tour.getImage())
                 .into(viewHolder.img_tour);
         return view;
     }

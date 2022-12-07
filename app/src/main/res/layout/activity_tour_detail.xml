@@ -21,7 +21,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
         <ImageView
-            android:id="@+id/img_foody"
+            android:id="@+id/img_tour"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
@@ -41,10 +41,10 @@
             app:srcCompat="@drawable/ic_arrow_white_white_24dp" />
 
         <TextView
-            android:id="@+id/txt_name_restaurant"
+            android:id="@+id/txt_name_tour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/img_foody"
+            android:layout_below="@+id/img_tour"
             android:layout_alignParentStart="true"
             android:layout_marginStart="7dp"
             android:layout_marginTop="10dp"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_foody" />
+            app:layout_constraintTop_toBottomOf="@+id/img_tour" />
 
         <ScrollView
             android:id="@+id/scv_mon"
@@ -85,7 +85,7 @@
 
 
         <TextView
-            android:id="@+id/txt_restaurant_address"
+            android:id="@+id/txt_tour_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
@@ -93,7 +93,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_name_restaurant" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_name_tour" />
 
         <View
             android:id="@+id/divider5"
@@ -103,10 +103,10 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_restaurant_address" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_tour_price" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/thoiGianBatDau"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="02/12/2022 4:00 PM"
@@ -214,9 +214,9 @@
             android:layout_width="30dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_restaurant_address"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_tour_price"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txt_name_restaurant"
+            app:layout_constraintTop_toTopOf="@+id/txt_name_tour"
             app:srcCompat="@drawable/favourite" />
 
         <TextView

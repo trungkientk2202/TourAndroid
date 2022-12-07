@@ -7,6 +7,7 @@ public class LichTrinh {
     private String noiDungLichTrinh;
 
     private String thoiGianBatDau;
+    private int trangThai;
 
     private Tour tour;
 
@@ -15,12 +16,13 @@ public class LichTrinh {
     public LichTrinh() {
     }
 
-    public LichTrinh(LichTrinhID id, String noiDungLichTrinh, String thoiGianBatDau,Tour tour,DiaDiem diaDiem) {
+    public LichTrinh(LichTrinhID id, String noiDungLichTrinh, String thoiGianBatDau,int trangThai,Tour tour,DiaDiem diaDiem) {
         this.id = id;
         this.noiDungLichTrinh = noiDungLichTrinh;
         this.thoiGianBatDau = thoiGianBatDau;
         this.tour=tour;
         this.diaDiem=diaDiem;
+        this.trangThai=trangThai;
     }
 
     public LichTrinhID getId() {
@@ -61,5 +63,13 @@ public class LichTrinh {
 
     public void setDiaDiem(DiaDiem diaDiem) {
         this.diaDiem = diaDiem;
+    }
+
+    public int getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        this.trangThai = trangThai;
     }
 }

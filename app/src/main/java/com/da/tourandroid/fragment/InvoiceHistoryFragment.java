@@ -89,9 +89,9 @@ public class InvoiceHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_invoice_tour, container, false);
+        view = inflater.inflate(R.layout.fragment_invoice_history, container, false);
         requestQueue= Volley.newRequestQueue(view.getContext());
-        listViewHistory = view.findViewById(R.id.listView_tour);
+        listViewHistory = view.findViewById(R.id.listView_history);
         tours = new ArrayList<>();
 
         adapter = new TourAdapter(view.getContext(), R.layout.items_history, tours);
@@ -103,7 +103,7 @@ public class InvoiceHistoryFragment extends Fragment {
 
     private void getOrdersHistory(){
         if(Common.mode==2) {
-            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/2";
+            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/3";
             //Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
@@ -125,6 +125,7 @@ public class InvoiceHistoryFragment extends Fragment {
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
                                 tour.setImage(objTour.getString("image"));
+                                tour.setNgayBatDau(objTour.getString("ngayBatDau"));
                                 JSONObject object = objTour.getJSONObject("loaiTour");
                                 LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
@@ -134,7 +135,7 @@ public class InvoiceHistoryFragment extends Fragment {
                                 e.printStackTrace();
                             }
                         }
-                        listViewHistory = view.findViewById(R.id.listView_tour);
+                        listViewHistory = view.findViewById(R.id.listView_history);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_history, tours);
                         listViewHistory.setAdapter(adapter);
                     }, error -> Log.i("err:", error.toString())) {

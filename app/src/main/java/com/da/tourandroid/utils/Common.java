@@ -18,6 +18,7 @@ public class Common {
     public static int mode;
     public static Queue<LichTrinh>lichTrinhs = new LinkedList<>();
     public static Queue<Tour> tours= new LinkedList<>();
+    public static Tour tour;
 //    public static final String host="https://6d06-115-79-44-8.ap.ngrok.io/";
     public static final String host="http://192.168.1.106:8080/";
 
@@ -74,5 +75,13 @@ public class Common {
 
     public static void setTours(Queue<Tour> tours) {
         Common.tours = tours;
+    }
+
+    public static Tour getTour() {
+        return tour;
+    }
+
+    public static void setTour(Tour tour) {
+        Common.tour = tour;
     }
 }

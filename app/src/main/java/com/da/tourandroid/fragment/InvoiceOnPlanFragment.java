@@ -1,10 +1,33 @@
 package com.da.tourandroid.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.da.tourandroid.R;
+import com.da.tourandroid.adapter.TourAdapter;
+import com.da.tourandroid.model.LoaiTour;
+import com.da.tourandroid.model.ThamGiaTour;
+import com.da.tourandroid.model.ThamGiaTourID;
+import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //import com.google.gson.Gson;
 //
@@ -18,10 +41,12 @@ import androidx.fragment.app.Fragment;
 public class InvoiceOnPlanFragment extends Fragment {
 
     View view;
-//    ArrayList<OrderFood> orders;
-//    OrderAdapter adapter;
+    ArrayList<Tour> tours;
+    private TourAdapter adapter;
+    private RequestQueue requestQueue;
 
-    private ListView listViewDraft;
+    private ListView listViewOnPlan;
+    
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,59 +88,71 @@ public class InvoiceOnPlanFragment extends Fragment {
         }
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        view = inflater.inflate(R.layout.fragment_invoice_draft, container, false);
-//
-//        database = new Database(view.getContext(), "foody.sqlite", null, 1);
-//        listViewDraft = view.findViewById(R.id.listView_draft);
-//        orders = new ArrayList<>();
-//
-//        adapter = new OrderAdapter(view.getContext(), R.layout.items_history, orders);
-//        getOrdersDraft();
-//        listViewDraft.setAdapter(adapter);
-//
-//        return view;
-//    }
-//
-//    private void getOrdersDraft(){
-//        Gson gson = new Gson();
-//        String json = view.getContext().getSharedPreferences("Account", Context.MODE_PRIVATE).getString("myAccount", "");
-//        Account account = gson.fromJson(json, Account.class);
-//
-//        Cursor dataOrderFoods = database.GetData("SELECT * FROM OrderFood WHERE Status=3");
-//        orders.clear();
-//        while (dataOrderFoods.moveToNext()) {
-//            int id = dataOrderFoods.getInt(0);
-//
-//            Cursor foodObj = database.GetData("SELECT * FROM Food WHERE Id=" + dataOrderFoods.getInt(1));
-//            Food food = null;
-//            while (foodObj.moveToNext()) {
-//                Cursor restaurantObj = database.GetData("SELECT * FROM Restaurant WHERE Id=" + foodObj.getInt(1));
-//                Restaurant restaurant = null;
-//                while (restaurantObj.moveToNext()) {
-//                    restaurant = new Restaurant(
-//                            restaurantObj.getInt(0),
-//                            restaurantObj.getString(1),
-//                            restaurantObj.getString(2),
-//                            restaurantObj.getInt(3));
-//                }
-//                food = new Food(
-//                        foodObj.getInt(0),
-//                        restaurant,
-//                        foodObj.getString(2),
-//                        foodObj.getInt(3),
-//                        foodObj.getInt(4));
-//            }
-//
-//            int quantity = dataOrderFoods.getInt(2);
-//            int price = dataOrderFoods.getInt(3);
-//            int status = dataOrderFoods.getInt(4);
-//
-//            orders.add(new OrderFood(id, food, quantity, price, status, account));
-//        }
-//        adapter.notifyDataSetChanged();
-//    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_invoice_onplan, container, false);
+        requestQueue= Volley.newRequestQueue(view.getContext());
+        listViewOnPlan = view.findViewById(R.id.listView_onPlan);
+        tours = new ArrayList<>();
+
+        adapter = new TourAdapter(view.getContext(), R.layout.items_onplan, tours);
+        getToursOnPlan();
+        listViewOnPlan.setAdapter(adapter);
+
+        return view;
+    }
+    private void getToursOnPlan(){
+        if(Common.mode==2) {
+            String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
+            //Log.i("url: ", url);
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                    response -> {
+                        for (int i = 0; i < response.length(); i++) {
+                            ThamGiaTour thamGiaTour=new ThamGiaTour();
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                JSONObject objID = jsonObject.getJSONObject("id");
+                                thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
+                                thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                                thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
+                                thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                                JSONObject objTour = jsonObject.getJSONObject("tour");
+                                Tour tour = new Tour();
+                                tour.setMaTour(objTour.getInt("maTour"));
+                                tour.setDiemDen(objTour.getString("diemDen"));
+                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setDiemDi(objTour.getString("diemDi"));
+                                tour.setGia(objTour.getLong("gia"));
+                                tour.setTrangThai(objTour.getInt("trangThai"));
+                                tour.setImage(objTour.getString("image"));
+                                tour.setNgayBatDau(objTour.getString("ngayBatDau"));
+                                JSONObject object = objTour.getJSONObject("loaiTour");
+                                LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
+                                tour.setLoaiTour(loaiTour);
+                                tours.add(tour);
+                                thamGiaTour.setTour(tour);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        listViewOnPlan = view.findViewById(R.id.listView_onPlan);
+                        adapter = new TourAdapter(view.getContext(), R.layout.items_onplan, tours);
+                        listViewOnPlan.setAdapter(adapter);
+                    }, error -> Log.i("err:", error.toString())) {
+                /**
+                 * Passing some request headers
+                 */
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Authorization", "Bearer " + Common.getToken());
+                    return headers;
+                }
+            };
+            requestQueue.add(request);
+        }
+        adapter.notifyDataSetChanged();
+    }
 }
