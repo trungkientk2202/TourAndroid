@@ -8,6 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.da.tourandroid.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.Objects;
+
 //import com.google.gson.Gson;
 //
 //import java.util.ArrayList;
@@ -43,9 +54,10 @@ import java.util.Map;
  * Use the {@link InvoiceOngoingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InvoiceOngoingFragment extends Fragment {
+public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
+    private GoogleMap mMap;
 //    ArrayList<OrderFood> orders;
 //    OrderAdapter adapter;
     ArrayList<Tour> tours;
@@ -92,6 +104,22 @@ public class InvoiceOngoingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions()
+                .position(sydney)
+                .title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override

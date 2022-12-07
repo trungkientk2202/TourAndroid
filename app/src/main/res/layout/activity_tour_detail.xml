@@ -209,6 +209,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scv_mon" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_feedback"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button3_bg"
+            android:lines="2"
+            android:text="Feedback"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+
         <ImageView
             android:id="@+id/img_save_location"
             android:layout_width="30dp"
