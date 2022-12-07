@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.da.tourandroid.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -58,6 +60,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
 
     View view;
     private GoogleMap mMap;
+    private MapView mapView;
 //    ArrayList<OrderFood> orders;
 //    OrderAdapter adapter;
     ArrayList<Tour> tours;
@@ -104,10 +107,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) requireActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -127,13 +127,25 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_invoice_ongoing, container, false);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        mapView = (MapView) view.findViewById(R.id.map);
+//        mapView.onCreate(savedInstanceState);
+//        mapView.onResume();
+//        mapView.getMapAsync(this);
+
+        SupportMapFragment mMapFragment = SupportMapFragment.newInstance();
+        FragmentTransaction fragmentTransaction =
+                getChildFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.map, mMapFragment);
+        fragmentTransaction.commit();
+        mMapFragment.getMapAsync(this);
         requestQueue= Volley.newRequestQueue(view.getContext());
-        listViewOngoing = view.findViewById(R.id.listView_ongoing);
+//        listViewOngoing = view.findViewById(R.id.map);
         tours = new ArrayList<>();
 
-        adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
-        getToursOngoing();
-        listViewOngoing.setAdapter(adapter);
+//        adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
+//        getToursOngoing();
+//        listViewOngoing.setAdapter(adapter);
 
         return view;
     }
@@ -171,7 +183,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                 e.printStackTrace();
                             }
                         }
-                        listViewOngoing = view.findViewById(R.id.listView_ongoing);
+                        listViewOngoing = view.findViewById(R.id.map);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
                         listViewOngoing.setAdapter(adapter);
                     }, error -> Log.i("err:", error.toString())) {
@@ -219,7 +231,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                 e.printStackTrace();
                             }
                         }
-                        listViewOngoing = view.findViewById(R.id.listView_ongoing);
+                        listViewOngoing = view.findViewById(R.id.map);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_ongoing, tours);
                         listViewOngoing.setAdapter(adapter);
                     }, error -> Log.i("err:", error.toString())) {
