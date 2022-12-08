@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.da.tourandroid.R;
+import com.da.tourandroid.TourDetailsActivity;
 import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +42,9 @@ public class TourRecommendAdapter extends RecyclerView.Adapter<TourRecommendAdap
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TourRecommendAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-
-        holder.tourName.setText(tourList.get(position).getDiemDen());
+        holder.tourName.setText("Hạ Long");
         holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10));
-        holder.tourPrice.setText(String.format("%s", tourList.get(position).getGia()) + "đ");
+        holder.tourPrice.setText(String.format("%s", 10000000 + "đ"));
         Glide.with(context)
                 .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424284/samples/landscapes/nature-mountains.jpg")
                 .into(holder.tourImage);

@@ -82,7 +82,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     }
 
     private void map() {
-        img_tour = findViewById(R.id.img_tour);
+        img_tour = findViewById(R.id.imgView_tour);
         txt_name = findViewById(R.id.txt_name_tour);
         timelineRecycleView = findViewById(R.id.lv_comment);
         feedbackRecycleView = findViewById(R.id.feedback_tour_recycler);
@@ -280,12 +280,11 @@ public class TourDetailsActivity extends AppCompatActivity {
 
         //Set tour info
         txt_name.setText(Common.getTour().getDiemDen());
-        Glide.with(this)
-                .load(Common.getTour().getImage())
-                .into(img_tour);
-        txt_price.setText(Common.getTour().getGia()+"");
+
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
+
+        txt_price.setText(Common.getTour().getGia()+"");
 
         //Set timeline info
         timelineAdapter = new TimelineAdapter(this, R.layout.items_timeline, listTimeline);
@@ -357,7 +356,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(getApplicationContext());
+                Dialog dialog = new Dialog(TourDetailsActivity.this);
                 dialog.setContentView(R.layout.dialog_feedback);
 
                 EditText editTextName = dialog.findViewById(R.id.editText_addTask);
