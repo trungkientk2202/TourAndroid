@@ -26,6 +26,12 @@
         <item name="color">@color/white</item>
     </style>
 
+    <style name="roundOutline3" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/greyLight</item>
         <item name="colorControlActivated">@color/duskYellow</item>

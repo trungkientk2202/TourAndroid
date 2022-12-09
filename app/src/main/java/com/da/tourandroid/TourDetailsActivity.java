@@ -29,7 +29,9 @@ import com.bumptech.glide.Glide;
 import com.da.tourandroid.adapter.TimelineAdapter;
 import com.da.tourandroid.adapter.TourAdapter;
 import com.da.tourandroid.adapter.TourRecommendAdapter;
+import com.da.tourandroid.adapter.UserAdapter;
 import com.da.tourandroid.adapter.UserFeedbackAdapter;
+import com.da.tourandroid.adapter.UserSearchAdapter;
 import com.da.tourandroid.model.DiaDiem;
 import com.da.tourandroid.model.KhachHang;
 import com.da.tourandroid.model.LichTrinh;
@@ -59,10 +61,14 @@ public class TourDetailsActivity extends AppCompatActivity {
     ArrayList<LichTrinh> listTimeline;
     ArrayList<Tour> listRelatedTour;
     ArrayList<PhanHoi> listFeedback;
-    RecyclerView relatedTourRecycle, timelineRecycleView, feedbackRecycleView;
+    ArrayList<KhachHang> listUser;
+    ArrayList<KhachHang> listUserSearch;
+    RecyclerView relatedTourRecycle, timelineRecycleView, feedbackRecycleView, userRecycleView;
     TourRecommendAdapter tourRecommendAdapter;
     TimelineAdapter timelineAdapter;
     UserFeedbackAdapter userFeedbackAdapter;
+    UserAdapter userAdapter;
+    AppCompatButton btnAddUser;
     AppCompatButton btnFeedback;
 
     private RequestQueue requestQueue;
@@ -82,7 +88,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     }
 
     private void map() {
-        img_tour = findViewById(R.id.img_tour);
+        img_tour = findViewById(R.id.imgView_tour);
         txt_name = findViewById(R.id.txt_name_tour);
         timelineRecycleView = findViewById(R.id.lv_comment);
         feedbackRecycleView = findViewById(R.id.feedback_tour_recycler);
@@ -94,6 +100,8 @@ public class TourDetailsActivity extends AppCompatActivity {
         thoiGianBatDau=findViewById(R.id.thoiGianBatDau);
         textView_descDetails=findViewById(R.id.textView_descDetails);
         btnFeedback = findViewById(R.id.btn_feedback);
+        btnAddUser = findViewById(R.id.btn_add_user);
+        userRecycleView = findViewById(R.id.user_tour_recycler);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -266,10 +274,36 @@ public class TourDetailsActivity extends AppCompatActivity {
         userFeedbackAdapter.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private void getDataUsers(int id) {
+        listUser.clear();
+
+        KhachHang kh = new KhachHang();
+        kh.setTen("Van Tuan");
+        listUser.add(kh);
+
+        userAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void getDataUsersSearch(int id) {
+        listUserSearch.clear();
+
+        KhachHang kh = new KhachHang();
+        kh.setTen("Van Tuan");
+        kh.setSdt("0357499653");
+        listUserSearch.add(kh);
+
+        userAdapter.notifyDataSetChanged();
+    }
+
     private void dataInit() {
         listTimeline = new ArrayList<>();
         listRelatedTour = new ArrayList<>();
         listFeedback = new ArrayList<>();
+        listUser = new ArrayList<>();
+        listUserSearch = new ArrayList<>();
+
         Toast.makeText(TourDetailsActivity.this,Common.getDetailMode()+"",Toast.LENGTH_LONG).show();
         //Get restaurant info
         Intent intent = getIntent();
@@ -280,12 +314,11 @@ public class TourDetailsActivity extends AppCompatActivity {
 
         //Set tour info
         txt_name.setText(Common.getTour().getDiemDen());
-        Glide.with(this)
-                .load(Common.getTour().getImage())
-                .into(img_tour);
-        txt_price.setText(Common.getTour().getGia()+"");
+
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
+
+        txt_price.setText(Common.getTour().getGia()+"");
 
         //Set timeline info
         timelineAdapter = new TimelineAdapter(this, R.layout.items_timeline, listTimeline);
@@ -307,6 +340,13 @@ public class TourDetailsActivity extends AppCompatActivity {
         userFeedbackAdapter = new UserFeedbackAdapter(this, R.layout.items_user_feedback, listFeedback);
         getDataFeedbacks((int) Common.getTour().getMaTour());
         feedbackRecycleView.setAdapter(userFeedbackAdapter);
+
+        //Set users info
+        RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        userRecycleView.setLayoutManager(layoutManager3);
+        userAdapter = new UserAdapter(this, R.layout.items_restaurant_recycler, listUser);
+        getDataUsers((int) Common.getTour().getMaTour());
+        userRecycleView.setAdapter(userAdapter);
 
         timelineRecycleView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -357,7 +397,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         btnFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(getApplicationContext());
+                Dialog dialog = new Dialog(TourDetailsActivity.this);
                 dialog.setContentView(R.layout.dialog_feedback);
 
                 EditText editTextName = dialog.findViewById(R.id.editText_addTask);
@@ -375,6 +415,36 @@ public class TourDetailsActivity extends AppCompatActivity {
                         dialog.dismiss();
                         // TODO: request data again
                     }
+                });
+
+                buttonCancel.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+
+                dialog.show();
+            }
+        });
+
+        btnAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(TourDetailsActivity.this);
+                dialog.setContentView(R.layout.dialog_user);
+
+                EditText editTextName = dialog.findViewById(R.id.editText_phone);
+                AppCompatButton buttonAdd = dialog.findViewById(R.id.button_addUser);
+                AppCompatButton buttonCancel = dialog.findViewById(R.id.button_cancel);
+                ImageView imageViewSearch = dialog.findViewById(R.id.imageView_search);
+                RecyclerView userSearchRecycleView = dialog.findViewById(R.id.user_recycler);
+
+                RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.VERTICAL, false);
+                userSearchRecycleView.setLayoutManager(layoutManager4);
+                UserSearchAdapter userSearchAdapter = new UserSearchAdapter(dialog.getContext(), R.layout.items_search, listUserSearch);
+                getDataUsersSearch((int) Common.getTour().getMaTour());
+                userSearchRecycleView.setAdapter(userSearchAdapter);
+
+                buttonAdd.setOnClickListener(view -> {
+                   // TODO: add user
                 });
 
                 buttonCancel.setOnClickListener(view -> {

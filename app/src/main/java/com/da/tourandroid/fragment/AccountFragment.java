@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.da.tourandroid.R;
+import com.da.tourandroid.adapter.AccountOptionAdapter;
 import com.da.tourandroid.utils.AccountOption;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -31,8 +32,8 @@ public class AccountFragment extends Fragment {
             new AccountOption("History", R.drawable.outline_history_24),
             new AccountOption("Invoice", R.drawable.outline_receipt_24),
             new AccountOption("Reward Credits", R.drawable.outline_card_giftcard_24),
-            new AccountOption("My Vouchers", R.drawable.outline_sell_24),
-            new AccountOption("For Shop Owners", R.drawable.shoppee_food_logo)));
+            new AccountOption("My Vouchers", R.drawable.outline_sell_24)));
+            // new AccountOption("For Shop Owners", R.drawable.shoppee_food_logo)));
 
     private final ArrayList<AccountOption> opts2 = new ArrayList<>(Arrays.asList(
             new AccountOption("Invite Friends", R.drawable.outline_person_add_24),
@@ -108,10 +109,11 @@ public class AccountFragment extends Fragment {
         shapeableImageViewAvatar = view.findViewById(R.id.shapeableImageView_avatar);
         textViewAccountName = view.findViewById(R.id.textView_accountName);
 
+         // TODO: set user's name and avatar
 //        Gson gson = new Gson();
 //        String json = sharedPreferences.getString("myAccount", "");
 //        Account account = gson.fromJson(json, Account.class);
-//
+
 //        textViewAccountName.setText(account.getName());
 //        Glide.with(view.getContext()).load(account.getAvatar()).into(shapeableImageViewAvatar);
 
@@ -119,8 +121,8 @@ public class AccountFragment extends Fragment {
         listViewOpts2 = view.findViewById(R.id.listView_opt2);
         listViewOpts3 = view.findViewById(R.id.listView_opt3);
 
-//        listViewOpts1.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts1));
-//        listViewOpts2.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts2));
-//        listViewOpts3.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts3));
+        listViewOpts1.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts1));
+        listViewOpts2.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts2));
+        listViewOpts3.setAdapter(new AccountOptionAdapter(view.getContext(), R.layout.items_account_option, opts3));
     }
 }

@@ -94,9 +94,8 @@ public class FeedbackFragment extends Fragment {
         listViewFeedback = view.findViewById(R.id.listView_feedback);
         feedbacks = new ArrayList<>();
 
-        feedbackAdapter = new FeedbackAdapter(view.getContext(), R.layout.items_feedback, feedbacks);
-        listViewFeedback.setAdapter(feedbackAdapter);
         getFeedbacks();
+
         return view;
     }
 
@@ -118,7 +117,7 @@ public class FeedbackFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -165,7 +164,7 @@ public class FeedbackFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));

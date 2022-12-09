@@ -20,8 +20,8 @@ public class Common {
     public static Queue<Tour> tours= new LinkedList<>();
     public static Tour tour;
     public static int detailMode;
-//    public static final String host="https://6d06-115-79-44-8.ap.ngrok.io/";
-    public static final String host="http://192.168.1.106:8080/";
+    public static final String host="https://c0ab-115-79-44-8.ap.ngrok.io/";
+//    public static final String host="http://192.168.1.106:8080/";
 
     public Common() {
     }

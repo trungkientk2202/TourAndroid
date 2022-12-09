@@ -12,12 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="Content:"
+        android:text="Phone number:"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editText_addTask"
+        app:layout_constraintBottom_toTopOf="@+id/editText_phone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
     <TextView
         android:id="@+id/textView_title"
@@ -25,38 +25,21 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Add Feedback"
+        android:text="Add User"
         android:textColor="#919191"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ratingBar3"/>
-
-    <RatingBar
-        android:id="@+id/ratingBar3"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="-60dp"
-        android:rating="3.5"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_title"
-        app:layout_constraintBottom_toTopOf="@id/txt_ordered_price2"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_addTask"
+        android:id="@+id/editText_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textView_title"
-        android:hint="Leave a comment..."
+        android:hint="Enter user's phone"
         android:textSize="16sp"
-        android:maxLines="4"
-        android:lines="4"
         android:gravity="start|start"
         android:padding="5dp"
         android:background="@drawable/border"
@@ -65,28 +48,49 @@
         app:layout_constraintTop_toBottomOf="@id/txt_ordered_price2"
         tools:layout_editor_absoluteY="115dp" />
 
+    <ImageView
+        android:id="@+id/imageView_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="@id/editText_phone"
+        app:layout_constraintTop_toTopOf="@id/editText_phone"
+        app:layout_constraintBottom_toBottomOf="@id/editText_phone"
+        app:srcCompat="?android:attr/actionModeWebSearchDrawable"
+        android:contentDescription="@string/cart"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_recycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_phone" />
+
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_addTask"
+        android:id="@+id/button_addUser"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_below="@id/editText_addTask"
+        android:layout_below="@id/editText_phone"
         android:layout_marginTop="5dp"
         android:text="Add"
         android:background="@drawable/button2_bg"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_addTask" />
+        app:layout_constraintTop_toBottomOf="@+id/user_recycler" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_cancel"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_below="@id/editText_addTask"
+        android:layout_below="@id/editText_phone"
         android:text="Cancel"
         android:layout_marginEnd="10dp"
         android:background="@drawable/button3_bg"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/button_addTask"
-        app:layout_constraintEnd_toStartOf="@+id/button_addTask"
-        app:layout_constraintTop_toTopOf="@+id/button_addTask" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_addUser"
+        app:layout_constraintEnd_toStartOf="@+id/button_addUser"
+        app:layout_constraintTop_toTopOf="@+id/button_addUser" />
 </androidx.constraintlayout.widget.ConstraintLayout>

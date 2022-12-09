@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.da.tourandroid.R;
 import com.da.tourandroid.model.LichTrinh;
 import com.da.tourandroid.model.Tour;
+import com.da.tourandroid.utils.Common;
 import com.github.vipulasri.timelineview.TimelineView;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TourVi
 
     @Override
     public void onBindViewHolder(@NonNull TimelineAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.timelineTitle.setText(timelineList.get(position).getNoiDungLichTrinh());
+        holder.timelineTitle.setText(timelineList.get(position).getDiaDiem().getTenDiaDiem());
         holder.timelineDate.setText(timelineList.get(position).getThoiGianBatDau());
     }
 

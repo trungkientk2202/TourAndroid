@@ -204,7 +204,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         }
 
         // Construct a PlacesClient
-        Places.initialize(requireActivity().getApplicationContext(), BuildConfig.MAPS_API_KEY);
+        Places.initialize(requireContext().getApplicationContext(), BuildConfig.MAPS_API_KEY);
         placesClient = Places.createClient(requireContext());
 
         // Construct a FusedLocationProviderClient.
@@ -347,8 +347,8 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
          */
         try {
             if (locationPermissionGranted) {
-                @SuppressLint("MissingPermission") Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener((Executor) this, new OnCompleteListener<Location>() {
+                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(requireActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
@@ -380,7 +380,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(requireContext().getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;

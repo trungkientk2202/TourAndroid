@@ -114,8 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void setNotification() {
         lichTrinhs=new ArrayList<>();
         tours=new ArrayList<>();
-
-        //thông báo các tour sắp diễn ra
+        //thông báo các khách hàng tour sắp diễn ra
         if(Common.mode==2) {
             String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
             Log.i("url: ", url);
@@ -128,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 JSONObject objID = jsonObject.getJSONObject("id");
-                                thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
+                                thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
+                                        objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                                 thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
                                 thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
                                 //Log.i("Diem den: ", tour.getDiemDen());
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -152,11 +152,11 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        Log.i("tours size:",tours.size()+"");
-                        long i=0;
+//                        Log.i("tours size:",tours.size()+"");
+//                        long i=0;
                         // gửi các thông báo
                         for (Tour tour:tours) {
-                            i++;
+//                            i++;
                             Log.i("Ma tour:",tour.getMaTour()+"");
                             if(tour.getNgayBatDau().equals("null")){
                                 Log.i("Ma tour null:",tour.getMaTour()+"");

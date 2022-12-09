@@ -123,12 +123,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="409dp"
-        android:layout_height="1dp"
-        android:layout_margin="3dp"
-        android:background="?android:attr/listDivider"/>
+<!--    <View-->
+<!--        android:id="@+id/divider5"-->
+<!--        android:layout_width="409dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_margin="3dp"-->
+<!--        android:background="?android:attr/listDivider"/>-->
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="match_parent"-->

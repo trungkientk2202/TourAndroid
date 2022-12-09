@@ -33,7 +33,7 @@
             android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:paddingVertical="10dp"
-            android:text="Login by email"
+            android:text="Login by phone"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
     </RelativeLayout>
@@ -61,7 +61,7 @@
             android:textSize="16sp"
             android:maxLines="1"
             android:paddingVertical="20dp"
-            android:hint="Your Name" />
+            android:hint="Your Phone" />
 
         <EditText
             android:layout_marginTop="10dp"
@@ -70,7 +70,7 @@
             android:textSize="16sp"
             android:maxLines="1"
             android:paddingVertical="20dp"
-            android:hint="Your Email" />
+            android:hint="Your Name" />
 
         <EditText
             android:layout_marginTop="10dp"

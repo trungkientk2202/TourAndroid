@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        sharedPreferences = getSharedPreferences("TaiKhoan", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("Account", MODE_PRIVATE);
         // just check existing "phone" or "password"
         if (sharedPreferences.contains("myTaiKhoan")) {
 
@@ -70,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }else{
-            sharedPreferences = getSharedPreferences("KhachHang", MODE_PRIVATE);
             if (sharedPreferences.contains("myKhachHang")) {
                 KhachHang khachHang = gson.fromJson(
                         sharedPreferences.getString("myKhachHang", ""),
