@@ -55,42 +55,101 @@
             android:layout_height="60dp"/>
 
         <EditText
+            android:id="@+id/register_sdt"
             android:layout_marginTop="20dp"
+            android:phoneNumber="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:maxLines="1"
             android:paddingVertical="20dp"
             android:hint="Your Phone" />
-
         <EditText
-            android:layout_marginTop="10dp"
+            android:id="@+id/register_name"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:maxLines="1"
             android:paddingVertical="20dp"
             android:hint="Your Name" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="100dp"
+                android:text="Giới tính:"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_height="60dp" />
+            <RadioGroup
+                android:id="@+id/register_sex"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="60dp">
+                <RadioButton
+                    android:id="@+id/register_male"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:textSize="12sp"
+                    android:text="Male"
+                    android:maxLines="1"
+                    android:paddingVertical="20dp" />
+                <RadioButton
+                    android:id="@+id/register_female"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:text="Female"
+                    android:maxLines="1"
+                    android:paddingVertical="20dp" />
+            </RadioGroup>
+
+        </LinearLayout>
 
         <EditText
+            android:id="@+id/register_birthday"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:maxLines="1"
+            android:paddingVertical="20dp"
+            android:hint="Your Birthday" />
+
+        <EditText
+            android:id="@+id/register_password"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:password="true"
             android:paddingVertical="20dp"
             android:hint="Password" />
 
         <EditText
+            android:id="@+id/register_confirm_password"
             android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:password="true"
+            android:maxLines="1"
+            android:paddingVertical="20dp"
+            android:hint="Confirm Password" />
+        <EditText
+            android:id="@+id/register_zalo"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:maxLines="1"
             android:paddingVertical="20dp"
-            android:hint="Confirm Password" />
+            android:hint="Your Zalo" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_register"
             android:text="Register"
             android:textAllCaps="false"
             android:textColor="@android:color/white"

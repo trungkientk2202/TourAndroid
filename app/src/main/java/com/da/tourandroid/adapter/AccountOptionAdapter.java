@@ -21,6 +21,7 @@ import com.da.tourandroid.utils.Common;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class AccountOptionAdapter extends BaseAdapter {
     private Context context;
@@ -119,8 +120,8 @@ public class AccountOptionAdapter extends BaseAdapter {
                         editor.remove("myKhachHang");
                         editor.apply();
                         //-----------------
-                        Common.lichTrinhs = null;
-                        Common.tours = null;
+                        Common.setLichTrinhs(new LinkedList<>());
+                        Common.setTours(new LinkedList<>());
                         //--------------
                         Intent intent = new Intent(context.getApplicationContext(), LoginActivity.class);
                         context.startActivity(intent);

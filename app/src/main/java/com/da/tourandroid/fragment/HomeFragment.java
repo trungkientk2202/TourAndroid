@@ -1,7 +1,9 @@
 package com.da.tourandroid.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.da.tourandroid.LoginActivity;
+import com.da.tourandroid.MainActivity;
 import com.da.tourandroid.R;
 import com.da.tourandroid.SearchActivity;
 import com.da.tourandroid.adapter.TourAllAdapter;
@@ -51,6 +55,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<Tour> tours;
 
     private View view;
+    SharedPreferences sharedPreferences;
 
     private RequestQueue requestQueue;
     private EditText editTextSearch;
@@ -137,7 +142,7 @@ public class HomeFragment extends Fragment {
 //                                Log.i("jsonObject",jsonObject.toString());
                                 tour.setMaTour(jsonObject.getInt("maTour"));
                                 tour.setDiemDen(jsonObject.getString("diemDen"));
-                                tour.setMoTa(jsonObject.getString("moTa").equals("null")?null:jsonObject.getString("moTa"));
+                                tour.setMoTa(jsonObject.getString("moTa"));
                                 tour.setDiemDi(jsonObject.getString("diemDi"));
                                 tour.setGia(jsonObject.getLong("gia"));
                                 tour.setTrangThai(jsonObject.getInt("trangThai"));
@@ -152,7 +157,20 @@ public class HomeFragment extends Fragment {
                             tours.add(tour);
                         }
                         getAllMenu(tours);
-                }, error -> Log.i("err:",error.toString())){
+                }, error -> {
+                        Log.i("err:",error.toString());
+                        SharedPreferences.Editor editor = getContext().getSharedPreferences("Account", Context.MODE_PRIVATE).edit();
+                        editor.remove("myTaiKhoan");
+                        editor.remove("myToken");
+                        editor.remove("myKhachHang");
+                        editor.apply();
+                        //-----------------
+                        Common.lichTrinhs = null;
+                        Common.tours = null;
+                        //--------------
+                        Intent intent = new Intent(getContext().getApplicationContext(), LoginActivity.class);
+                        getContext().startActivity(intent);
+                }){
             /**
              * Passing some request headers
              * */
@@ -169,6 +187,7 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("NotifyDataSetChanged")
     private void getAllMenu(List<Tour> allMenuList) {
+
         allTourRecyclerView = view.findViewById(R.id.tour_recycler);
         tourAllAdapter = new TourAllAdapter(view.getContext(), R.layout.items_allmenu_recycler, allMenuList);
 

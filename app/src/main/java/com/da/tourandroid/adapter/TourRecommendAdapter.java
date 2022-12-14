@@ -42,11 +42,11 @@ public class TourRecommendAdapter extends RecyclerView.Adapter<TourRecommendAdap
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TourRecommendAdapter.TourViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.tourName.setText("Hạ Long");
+        holder.tourName.setText(Common.getTour().getDiemDen());
         holder.tourRating.setText(String.format("%s", Math.round((Math.random() + 4) * 10) / 10));
-        holder.tourPrice.setText(String.format("%s", 10000000 + "đ"));
+        holder.tourPrice.setText(Common.getTour().getGia()+"đ");
         Glide.with(context)
-                .load("https://res.cloudinary.com/dtsahwrtk/image/upload/v1635424284/samples/landscapes/nature-mountains.jpg")
+                .load(Common.getTour().getImage())
                 .into(holder.tourImage);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +57,12 @@ public class TourRecommendAdapter extends RecyclerView.Adapter<TourRecommendAdap
 //
 //                i.putExtra("id", foodList.get(position).getId());
 //                i.putExtra("name", foodList.get(position).getName());
-//                i.putExtra("name_res", foodList.get(position).getRestaurant().getName());
-//                i.putExtra("address_res", foodList.get(position).getRestaurant().getAddress());
+//                i.putExtra("name_res", foodList.get(position).gettour().getName());
+//                i.putExtra("address_res", foodList.get(position).gettour().getAddress());
 //                i.putExtra("price", foodList.get(position).getPrice());
 //                i.putExtra("rating", "4.7");
 //                i.putExtra("image", foodList.get(position).getImage());
-//                i.putExtra("image_res", foodList.get(position).getRestaurant().getImage());
+//                i.putExtra("image_res", foodList.get(position).gettour().getImage());
 //
 //                context.startActivity(i);
             }

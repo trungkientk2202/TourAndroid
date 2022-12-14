@@ -66,7 +66,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/restaurant_image"
+            android:id="@+id/tour_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="10dp"
@@ -80,7 +80,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:shapeAppearanceOverlay="@style/roundOutline3"
-            app:srcCompat="@drawable/restaurant2" />
+            app:srcCompat="@drawable/tour2" />
 
         <LinearLayout
             android:layout_width="match_parent"

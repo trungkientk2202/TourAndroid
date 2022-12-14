@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -95,16 +96,15 @@ public class InvoiceHistoryFragment extends Fragment {
         requestQueue= Volley.newRequestQueue(view.getContext());
         listViewHistory = view.findViewById(R.id.listView_history);
         tours = new ArrayList<>();
-
         adapter = new TourAdapter(view.getContext(), R.layout.items_history, tours);
-        getOrdersHistory();
+        getToursHistory();
         listViewHistory.setAdapter(adapter);
 
         return view;
     }
 
-    private void getOrdersHistory(){
-        if(Common.mode==2) {
+    private void getToursHistory(){
+        if(Common.getMode()==2) {
             tours = new ArrayList<>();
             String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/3";
             //Log.i("url: ", url);
@@ -140,6 +140,7 @@ public class InvoiceHistoryFragment extends Fragment {
                         }
                         listViewHistory = view.findViewById(R.id.listView_history);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_history, tours);
+                        adapter.notifyDataSetChanged();
                         listViewHistory.setAdapter(adapter);
                     }, error -> Log.i("err:", error.toString())) {
                 /**
@@ -171,7 +172,8 @@ public class InvoiceHistoryFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+//                                Toast.makeText(view.getContext(),objTour.getString("moTa").equals("null") ? "null" : jsonObject.getString("moTa"),Toast.LENGTH_LONG).show();
+//                                tour.setMoTa(objTour.getString("moTa")==null ? null : jsonObject.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -189,6 +191,7 @@ public class InvoiceHistoryFragment extends Fragment {
                         listViewHistory = view.findViewById(R.id.listView_history);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_history, tours);
                         listViewHistory.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -202,6 +205,6 @@ public class InvoiceHistoryFragment extends Fragment {
             };
             requestQueue.add(request);
         }
-        adapter.notifyDataSetChanged();
+
     }
 }

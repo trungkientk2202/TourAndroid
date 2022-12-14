@@ -52,8 +52,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewH
         public KhachHangViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            resImage = itemView.findViewById(R.id.restaurant_image);
-            resName = itemView.findViewById(R.id.restaurant_name);
+            resImage = itemView.findViewById(R.id.tour_image);
+            resName = itemView.findViewById(R.id.tour_name);
         }
     }
 }

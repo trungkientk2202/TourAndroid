@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                         sharedPreferences.getString("myToken", ""),
                         Token.class);
                 Common.setToken(token.getStrtoken());
-//                Toast.makeText(LoginActivity.this,token.getStrtoken(),Toast.LENGTH_LONG).show();
                 Common.setKhachHang(khachHang);
                 Common.setMode(2);
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -136,7 +135,6 @@ public class LoginActivity extends AppCompatActivity {
                                 });
                     requestQueue.add(request);
                 } catch (JSONException e) {
-//                    Toast.makeText(LoginActivity.this,"error",Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
                 try {

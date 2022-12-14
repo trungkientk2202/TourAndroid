@@ -79,12 +79,12 @@ public class SearchAdapter extends BaseAdapter {
 //
 //                i.putExtra("id", food.getId());
 //                i.putExtra("name", food.getName());
-//                i.putExtra("name_res", food.getRestaurant().getName());
-//                i.putExtra("address_res", food.getRestaurant().getAddress());
+//                i.putExtra("name_res", food.gettour().getName());
+//                i.putExtra("address_res", food.gettour().getAddress());
 //                i.putExtra("price", food.getPrice());
 //                i.putExtra("rating", "4.7");
 //                i.putExtra("image", food.getImage());
-//                i.putExtra("image_res", food.getRestaurant().getImage());
+//                i.putExtra("image_res", food.gettour().getImage());
 //
 //                context.startActivity(i);
             }

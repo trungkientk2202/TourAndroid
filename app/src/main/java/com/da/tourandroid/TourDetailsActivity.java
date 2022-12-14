@@ -3,6 +3,7 @@ package com.da.tourandroid;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,10 +25,10 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.da.tourandroid.adapter.TimelineAdapter;
-import com.da.tourandroid.adapter.TourAdapter;
 import com.da.tourandroid.adapter.TourRecommendAdapter;
 import com.da.tourandroid.adapter.UserAdapter;
 import com.da.tourandroid.adapter.UserFeedbackAdapter;
@@ -50,12 +51,12 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TourDetailsActivity extends AppCompatActivity {
-    ImageView img_tour, img_saved, imageViewBack;
+    ImageView img_tour, imageViewBack;
     TextView txt_name, txt_price,thoiGianBatDau,textView_descDetails;
     RatingBar rb;
     ArrayList<LichTrinh> listTimeline;
@@ -70,6 +71,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     UserAdapter userAdapter;
     AppCompatButton btnAddUser;
     AppCompatButton btnFeedback;
+    AppCompatButton btnAction;
 
     private RequestQueue requestQueue;
     @Override
@@ -93,7 +95,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         timelineRecycleView = findViewById(R.id.lv_comment);
         feedbackRecycleView = findViewById(R.id.feedback_tour_recycler);
         rb = findViewById(R.id.ratingBar3);
-        img_saved = findViewById(R.id.img_save_location);
+        btnAction = findViewById(R.id.btnAction);
         txt_price = findViewById(R.id.txt_tour_price);
         relatedTourRecycle = findViewById(R.id.related_tour_recycler);
         imageViewBack = findViewById(R.id.imageView_back);
@@ -124,7 +126,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                             Tour tour = new Tour();
                             tour.setMaTour(objTour.getInt("maTour"));
                             tour.setDiemDen(objTour.getString("diemDen"));
-                            tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                            tour.setMoTa(objTour.getString("moTa"));
                             tour.setDiemDi(objTour.getString("diemDi"));
                             tour.setGia(objTour.getLong("gia"));
                             tour.setTrangThai(objTour.getInt("trangThai"));
@@ -139,7 +141,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                             DiaDiem diaDiem=new DiaDiem();
                             diaDiem.setMaDiaDiem(objDiaDiem.getInt("maDiaDiem"));
                             diaDiem.setTenDiaDiem(objDiaDiem.getString("tenDiaDiem"));
-                            diaDiem.setMoTa(objDiaDiem.getString("moTa"));
+                            diaDiem.setMoTa( objDiaDiem.getString("moTa"));
                             diaDiem.setTinhThanh(objDiaDiem.getString("tinhThanh"));
                             lichTrinh.setDiaDiem(diaDiem);
 
@@ -170,39 +172,6 @@ public class TourDetailsActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void getDataRelatedTours(int id_res) {
         listRelatedTour.clear();
-
-        Tour tour = new Tour();
-        tour.setMaTour(0);
-        tour.setDiemDen("diemDen");
-        tour.setMoTa("moTa");
-        tour.setDiemDi("diemDi");
-        tour.setGia(99000L);
-        tour.setTrangThai(1);
-        LoaiTour loaiTour= new LoaiTour(0, "tenLoaiTour","moTa");
-        tour.setLoaiTour(loaiTour);
-        Tour tour1 = new Tour();
-        tour.setMaTour(1);
-        tour.setDiemDen("diemDen");
-        tour.setMoTa("moTa");
-        tour.setDiemDi("diemDi");
-        tour.setGia(99000L);
-        tour.setTrangThai(1);
-        LoaiTour loaiTour1= new LoaiTour(1, "tenLoaiTour","moTa");
-        tour.setLoaiTour(loaiTour1);
-        Tour tour2 = new Tour();
-        tour.setMaTour(2);
-        tour.setDiemDen("diemDen");
-        tour.setMoTa("moTa");
-        tour.setDiemDi("diemDi");
-        tour.setGia(99000L);
-        tour.setTrangThai(1);
-        LoaiTour loaiTour2= new LoaiTour(2, "tenLoaiTour","moTa");
-        tour.setLoaiTour(loaiTour2);
-
-        listRelatedTour.add(tour);
-        listRelatedTour.add(tour1);
-        listRelatedTour.add(tour2);
-
         tourRecommendAdapter.notifyDataSetChanged();
     }
 
@@ -210,7 +179,6 @@ public class TourDetailsActivity extends AppCompatActivity {
     private void getDataFeedbacks(int id_res) {
         listFeedback.clear();
         String url = Common.getHost() + "phanHoi/findByMaTour/" + id_res;
-//        Toast.makeText(TourDetailsActivity.this,url,Toast.LENGTH_LONG).show();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     Log.i("response phan hoi:",response.toString());
@@ -227,7 +195,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                             Tour tour = new Tour();
                             tour.setMaTour(objTour.getInt("maTour"));
                             tour.setDiemDen(objTour.getString("diemDen"));
-                            tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                            tour.setMoTa( objTour.getString("moTa"));
                             tour.setDiemDi(objTour.getString("diemDi"));
                             tour.setGia(objTour.getLong("gia"));
                             tour.setTrangThai(objTour.getInt("trangThai"));
@@ -277,22 +245,56 @@ public class TourDetailsActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void getDataUsers(int id) {
         listUser.clear();
+        String url = Common.getHost() + "tgtour/findByMaTour/" + id;
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        ThamGiaTour thamGiaTour=new ThamGiaTour();
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
 
-        KhachHang kh = new KhachHang();
-        kh.setTen("Van Tuan");
-        listUser.add(kh);
+                            JSONObject objKhachHang = jsonObject.getJSONObject("khachHang");
+                            KhachHang khachHang=new KhachHang();
+                            khachHang.setSdt(objKhachHang.getString("sdt"));
+                            khachHang.setTen(objKhachHang.getString("ten"));
+                            khachHang.setMatKhau(objKhachHang.getString("matKhau"));
+                            khachHang.setPhai(objKhachHang.getBoolean("phai"));
+                            khachHang.setNgaySinh( !objKhachHang.getString("ngaySinh").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(objKhachHang.getString("ngaySinh")):null);
+                            khachHang.setZalo(objKhachHang.getString("zalo"));
+                            thamGiaTour.setKhachHang(khachHang);
+
+                            listUser.add(khachHang);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    userRecycleView.setLayoutManager(layoutManager2);
+                    userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, listUser);
+                    userRecycleView.setAdapter(userAdapter);
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
 
         userAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void getDataUsersSearch(int id) {
+    private void getDataUsersSearch(KhachHang khachHang) {
         listUserSearch.clear();
 
-        KhachHang kh = new KhachHang();
-        kh.setTen("Van Tuan");
-        kh.setSdt("0357499653");
-        listUserSearch.add(kh);
+        listUserSearch.add(khachHang);
 
         userAdapter.notifyDataSetChanged();
     }
@@ -303,21 +305,144 @@ public class TourDetailsActivity extends AppCompatActivity {
         listFeedback = new ArrayList<>();
         listUser = new ArrayList<>();
         listUserSearch = new ArrayList<>();
-
-        Toast.makeText(TourDetailsActivity.this,Common.getDetailMode()+"",Toast.LENGTH_LONG).show();
-        //Get restaurant info
+        KhachHang khachHang=new KhachHang();
+        //Get tour info
         Intent intent = getIntent();
         float rating = intent.getFloatExtra("rating", 4);
 
         rb.setRating(rating);
 
+        switch (Common.getDetailMode()){
+            case 1:
+                btnAction.setVisibility(View.INVISIBLE);
+                btnAddUser.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                btnAction.setVisibility(View.VISIBLE);
+                btnAddUser.setVisibility(View.VISIBLE);
+                btnAction.setText("Start tour");
+                btnAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String url = Common.getHost() + "tour/changeStatus/"+Common.getTour().getMaTour();
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                response -> {
+                                    try {
+                                        JSONObject objID = response.getJSONObject("maTour");
+                                        btnAction.setVisibility(View.GONE);
+                                        Toast.makeText(view.getContext(),"Start tour successfully!",Toast.LENGTH_LONG).show();
 
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }, error -> Log.i("err:", error.toString())) {
+                            /**
+                             * Passing some request headers
+                             */
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                HashMap<String, String> headers = new HashMap<String, String>();
+                                headers.put("Authorization", "Bearer " + Common.getToken());
+                                return headers;
+                            }
+                        };
+                        requestQueue.add(request);
+                    }
+                });
+                break;
+            case 3:
+                btnAddUser.setVisibility(View.VISIBLE);
+                btnAction.setVisibility(View.VISIBLE);
+                if(Common.getMode()==1) {
+                    btnAction.setText("Finish tour");
+                    btnAction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String url = Common.getHost() + "tour/changeStatus/"+Common.getTour().getMaTour();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            JSONObject objID = response.getJSONObject("maTour");
+                                            btnAction.setVisibility(View.GONE);
+                                            Toast.makeText(view.getContext(),"Finish tour successfully!",Toast.LENGTH_LONG).show();
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Log.i("err:", error.toString())) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                        }
+                    });
+                }else{
+                    btnAction.setText("Check in");
+                    if(Common.getThamGiaTour().isCheckIn()){
+                        btnAction.setVisibility(View.INVISIBLE);
+                    }
+                    btnAction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String url = Common.getHost() + "tgtour/checkIn/"+Common.getThamGiaTour().getTour().getMaTour()+"/" + Common.getThamGiaTour().getKhachHang().getSdt();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            JSONObject objID = response.getJSONObject("id");
+                                            btnAction.setVisibility(View.GONE);
+                                            Toast.makeText(view.getContext(),"Check in successfully!",Toast.LENGTH_LONG).show();
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Log.i("err:", error.toString())) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                        }
+                    });
+                }
+                break;
+            case 4:
+                btnAddUser.setVisibility(View.INVISIBLE);
+                btnAction.setVisibility(View.INVISIBLE);
+                break;
+        }
+        if(Common.getMode()==1){
+            btnFeedback.setVisibility(View.INVISIBLE);
+            btnAddUser.setVisibility(View.VISIBLE);
+        }else{
+            btnFeedback.setVisibility(View.VISIBLE);
+            btnAddUser.setVisibility(View.INVISIBLE);
+            if(Common.getTour().getTrangThai()==1){
+                // tour chua bat dau, an button feedback
+                btnFeedback.setVisibility(View.INVISIBLE);
+            }
+        }
         //Set tour info
         txt_name.setText(Common.getTour().getDiemDen());
 
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
-
+        Glide.with(this)
+                .load(Common.getTour().getImage())
+                .into(img_tour);
+        img_tour.setImageURI(Uri.parse(Common.getTour().getImage()));
         txt_price.setText(Common.getTour().getGia()+"");
 
         //Set timeline info
@@ -344,7 +469,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         //Set users info
         RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         userRecycleView.setLayoutManager(layoutManager3);
-        userAdapter = new UserAdapter(this, R.layout.items_restaurant_recycler, listUser);
+        userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, listUser);
         getDataUsers((int) Common.getTour().getMaTour());
         userRecycleView.setAdapter(userAdapter);
 
@@ -410,10 +535,38 @@ public class TourDetailsActivity extends AppCompatActivity {
                     if (name.equals(""))
                         Toast.makeText(getApplicationContext(), "This field is require!", Toast.LENGTH_SHORT).show();
                     else {
-                        // TODO: save data
-                        Toast.makeText(getApplicationContext(), "Added a feedback", Toast.LENGTH_SHORT).show();
+                        String json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
+                                +"\"sdt\":\""+Common.getKhachHang().getSdt()+"\","
+                                +"\"noiDung\":\""+name+"\","
+                                +"\"thoiGian\":\""+new SimpleDateFormat("dd-MM-yyyy").format(new Date())+"\"}";
+                        String url = Common.getHost() + "phanHoi/add";
+                        try {
+                            JSONObject req=new JSONObject(json);
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
+                                    response -> {
+                                        //add thành công
+                                        Toast.makeText(view.getContext(), "Add feedback successfully", Toast.LENGTH_LONG).show();
+                                        khachHang.setSdt(null);
+                                        //reset value search
+                                        editTextName.setText("");
+                                    }, error -> Toast.makeText(view.getContext(), "The member is available in this tour", Toast.LENGTH_LONG).show()) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         dialog.dismiss();
-                        // TODO: request data again
+                        getDataFeedbacks((int) Common.getTour().getMaTour());
                     }
                 });
 
@@ -437,16 +590,92 @@ public class TourDetailsActivity extends AppCompatActivity {
                 ImageView imageViewSearch = dialog.findViewById(R.id.imageView_search);
                 RecyclerView userSearchRecycleView = dialog.findViewById(R.id.user_recycler);
 
+
+
                 RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.VERTICAL, false);
                 userSearchRecycleView.setLayoutManager(layoutManager4);
-                UserSearchAdapter userSearchAdapter = new UserSearchAdapter(dialog.getContext(), R.layout.items_search, listUserSearch);
-                getDataUsersSearch((int) Common.getTour().getMaTour());
-                userSearchRecycleView.setAdapter(userSearchAdapter);
+                //sear member
+                imageViewSearch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        userSearchRecycleView.setAdapter(null);
+                        khachHang.setSdt(null);
+                        if (!editTextName.getText().equals("")) {
+                            String url = Common.getHost() + "khachHang/find/" + editTextName.getText();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            khachHang.setSdt(response.getString("sdt"));
+                                            khachHang.setTen(response.getString("ten"));
+                                            khachHang.setMatKhau(response.getString("matKhau"));
+                                            khachHang.setPhai(response.getBoolean("phai"));
+                                            khachHang.setNgaySinh(!response.getString("ngaySinh").equals("null") ?new SimpleDateFormat("yyyy-MM-dd").parse(response.getString("ngaySinh")):null);
+                                            khachHang.setZalo(response.getString("zalo"));
 
-                buttonAdd.setOnClickListener(view -> {
-                   // TODO: add user
+                                            //display khach hang
+                                            UserSearchAdapter userSearchAdapter = new UserSearchAdapter(dialog.getContext(), R.layout.items_search, listUserSearch);
+                                            getDataUsersSearch(khachHang);
+                                            userSearchRecycleView.setAdapter(userSearchAdapter);
+                                        } catch (JSONException | ParseException e) {
+                                            Toast.makeText(TourDetailsActivity.this,e.toString(),Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Log.i("err:", error.toString())) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                        }
+                    }
                 });
 
+
+                buttonAdd.setOnClickListener(view -> {
+                    if(khachHang.getSdt()==null){
+                        return;
+                    }
+                   String json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
+                           +"\"sdt\":\""+khachHang.getSdt()+"\","
+                           +"\"checkIn\":false,"
+                           +"\"ghiChu\":\"add new member\","
+                           +"\"diaDiemDon\":\"\","
+                           +"\"vitri\":\"\"}";
+                   String url = Common.getHost() + "tgtour/add";
+                    try {
+                        JSONObject req=new JSONObject(json);
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
+                                response -> {
+                                    //add thành công
+                                    Toast.makeText(view.getContext(), "Add member successfully", Toast.LENGTH_LONG).show();
+                                    khachHang.setSdt(null);
+                                    //reset value search
+                                    userSearchRecycleView.setAdapter(null);
+
+                                }, error -> Toast.makeText(view.getContext(), "The member is available in this tour", Toast.LENGTH_LONG).show()) {
+                            /**
+                             * Passing some request headers
+                             */
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                HashMap<String, String> headers = new HashMap<String, String>();
+                                headers.put("Authorization", "Bearer " + Common.getToken());
+                                return headers;
+                            }
+                        };
+                        requestQueue.add(request);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+                getDataUsers((int) Common.getTour().getMaTour());
                 buttonCancel.setOnClickListener(view -> {
                     dialog.dismiss();
                 });

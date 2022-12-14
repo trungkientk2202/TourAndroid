@@ -123,43 +123,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--    <View-->
-<!--        android:id="@+id/divider5"-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="1dp"-->
-<!--        android:layout_margin="3dp"-->
-<!--        android:background="?android:attr/listDivider"/>-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="3dp"-->
-<!--        android:paddingEnd="10dp"-->
-<!--        >-->
-<!--        <TextView-->
-<!--            android:id="@+id/txt_pickup_title"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Pick up at:"-->
-<!--            android:textStyle="bold" />-->
-<!--        <TextView-->
-<!--            android:id="@+id/txt_pickup_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:text="Suoi Tien - 04/12/2020 03:30PM" />-->
-
-<!--        <View-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_weight="1" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView_edit"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:textAlignment="textEnd"-->
-<!--            app:srcCompat="@drawable/outline_editing_24" />-->
-<!--    </LinearLayout>-->
 </LinearLayout>

@@ -6,7 +6,7 @@
     android:layout_marginStart="16dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/restaurant_image"
+        android:id="@+id/tour_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_weight="1"
@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/popular1" />
 
     <TextView
-        android:id="@+id/restaurant_name"
+        android:id="@+id/tour_name"
         android:layout_width="80dp"
         android:layout_height="0dp"
         android:fontFamily="@font/open_sans_bold"
@@ -29,7 +29,7 @@
         android:text="Nasi Padang"
         android:textColor="#333333"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/restaurant_image"
-        app:layout_constraintStart_toStartOf="@+id/restaurant_image"
-        app:layout_constraintTop_toBottomOf="@+id/restaurant_image" />
+        app:layout_constraintEnd_toEndOf="@+id/tour_image"
+        app:layout_constraintStart_toStartOf="@+id/tour_image"
+        app:layout_constraintTop_toBottomOf="@+id/tour_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>

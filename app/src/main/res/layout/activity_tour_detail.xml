@@ -115,6 +115,7 @@
             app:layout_constraintStart_toEndOf="@+id/ratingBar3"
             app:layout_constraintTop_toTopOf="@+id/ratingBar3" />
 
+
         <View
             android:id="@+id/divider6"
             android:layout_width="409dp"
@@ -252,7 +253,7 @@
             android:layout_alignParentEnd="true"
             android:background="@drawable/button3_bg"
             android:lines="2"
-            android:text="Feedback"
+            android:text="Add Feedback"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -268,7 +269,7 @@
             android:layout_alignParentEnd="true"
             android:background="@drawable/button2_bg"
             android:lines="2"
-            android:text="Add"
+            android:text="Add Member"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -276,11 +277,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView10" />
 
-        <ImageView
-            android:id="@+id/img_save_location"
-            android:layout_width="30dp"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAction"
+            android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
+            android:text="Check In"
+            android:background="@drawable/button2_bg"
             app:layout_constraintBottom_toBottomOf="@+id/txt_tour_price"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/txt_name_tour"

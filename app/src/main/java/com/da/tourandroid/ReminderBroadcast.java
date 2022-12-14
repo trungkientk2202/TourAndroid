@@ -17,18 +17,21 @@ import java.util.Random;
 public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Tour tour=Common.getTours().poll();
+        int a=new Random().nextInt();
+        Log.i("id",a+",size: "+Common.getLichTrinhs().size());
+        Tour tour;
         LichTrinh lichTrinh=Common.getLichTrinhs().poll();
         String content="";
         if(lichTrinh!=null){
+            tour=lichTrinh.getTour();
             content+="Ngày bắt đầu:"+lichTrinh.getThoiGianBatDau()+"\r\n"
                     +"Địa điểm:"+lichTrinh.getDiaDiem().getTenDiaDiem()
                     +"\r\n"+lichTrinh.getDiaDiem().getMoTa();
         }else{
+            tour=Common.getTours().poll();
             content+="Ngày bắt đầu:"+tour.getNgayBatDau()+"\r\n"+tour.getMoTa();
         }
         Log.i("Content:",content);
-        Log.i("Mã tour:",tour.getMaTour()+"");
         NotificationCompat.Builder builder= new NotificationCompat.Builder(context,"notifyTour")
                 .setSmallIcon(R.drawable.icon_notify)
                 .setContentTitle("Tour của bạn: "+tour.getDiemDi()+" đến "+ tour.getDiemDen())
@@ -36,6 +39,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(new Random().nextInt(),builder.build());
+        notificationManagerCompat.notify(a,builder.build());
+        Log.i("done","");
    }
 }

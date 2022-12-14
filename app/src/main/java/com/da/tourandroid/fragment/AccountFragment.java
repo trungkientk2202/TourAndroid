@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.da.tourandroid.R;
 import com.da.tourandroid.adapter.AccountOptionAdapter;
 import com.da.tourandroid.utils.AccountOption;
+import com.da.tourandroid.utils.Common;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
@@ -108,7 +109,11 @@ public class AccountFragment extends Fragment {
     private void initUI() {
         shapeableImageViewAvatar = view.findViewById(R.id.shapeableImageView_avatar);
         textViewAccountName = view.findViewById(R.id.textView_accountName);
-
+        if(Common.getMode()==1) {
+            textViewAccountName.setText(Common.getTaiKhoan().getTen());
+        }else{
+            textViewAccountName.setText(Common.getKhachHang().getTen());
+        }
          // TODO: set user's name and avatar
 //        Gson gson = new Gson();
 //        String json = sharedPreferences.getString("myAccount", "");

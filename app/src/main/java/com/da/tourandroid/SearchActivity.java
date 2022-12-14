@@ -80,7 +80,7 @@ public class SearchActivity extends AppCompatActivity {
                                             JSONObject jsonObject=response.getJSONObject(j);
                                             tour.setMaTour(jsonObject.getInt("maTour"));
                                             tour.setDiemDen(jsonObject.getString("diemDen"));
-                                            tour.setMoTa(jsonObject.getString("moTa").equals("null")?null:jsonObject.getString("moTa"));
+                                            tour.setMoTa(jsonObject.getString("moTa"));
                                             tour.setDiemDi(jsonObject.getString("diemDi"));
                                             tour.setGia(jsonObject.getLong("gia"));
                                             tour.setTrangThai(jsonObject.getInt("trangThai"));

@@ -1,5 +1,7 @@
 package com.da.tourandroid;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -120,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
-                        //Log.i("response", response.toString());
-                        //Log.i("length", response.length() + "");
                         for (int i = 0; i < response.length(); i++) {
                             ThamGiaTour thamGiaTour=new ThamGiaTour();
                             try {
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 //                        Log.i("tours size:",tours.size()+"");
 //                        long i=0;
+                        Log.i("Number time notify::",tours.size()+"");
                         // gửi các thông báo
                         for (Tour tour:tours) {
 //                            i++;
@@ -165,21 +166,21 @@ public class MainActivity extends AppCompatActivity {
                             Common.getTours().offer(tour);
                             Log.i("ngay bat dau",tour.getNgayBatDau());
                             Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             PendingIntent pendingIntent;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                 pendingIntent = PendingIntent.getBroadcast(
                                         getApplication(),
                                         0,
                                         intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+                                        FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
                                 );
                             } else {
                                 pendingIntent = PendingIntent.getBroadcast(
                                         getApplication(),
                                         0,
                                         intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT
+                                        FLAG_UPDATE_CURRENT
                                 );
                             }
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -191,8 +192,10 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Log.i("time send notify:",time+" "+tour.getMaTour());
-                            alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),pendingIntent);
+                            alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+10000,pendingIntent);
                         }
+                        //thong bao cho tung lich trinh
+                        guiThongBaoCacLichTrinh();
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -206,30 +209,92 @@ public class MainActivity extends AppCompatActivity {
             };
             requestQueue.add(request);
 
-//            list các tour đang tham ra
-            tours=new ArrayList<>();
-            url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/2";
-            Log.i("url: ", url);
-            request = new JsonArrayRequest(Request.Method.GET, url, null,
+        }
+
+    }
+
+    public void guiThongBaoCacLichTrinh(){
+        //list các tour đang tham ra
+        tours=new ArrayList<>();
+        String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/2";
+        Log.i("url: ", url);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    Log.i("response", response.toString());
+                    Log.i("length", response.length() + "");
+                    for (int i = 0; i < response.length(); i++) {
+                        ThamGiaTour thamGiaTour=new ThamGiaTour();
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            //Log.i("jsonObject", jsonObject.toString());
+                            JSONObject objID = jsonObject.getJSONObject("id");
+                            thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
+                            thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                            thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
+                            thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                            JSONObject objTour = jsonObject.getJSONObject("tour");
+                            Tour tour = new Tour();
+                            tour.setMaTour(objTour.getInt("maTour"));
+                            tour.setDiemDen(objTour.getString("diemDen"));
+                            Log.i("Diem den: ", tour.getDiemDen());
+                            tour.setMoTa(objTour.getString("moTa"));
+                            tour.setDiemDi(objTour.getString("diemDi"));
+                            tour.setGia(objTour.getLong("gia"));
+                            tour.setTrangThai(objTour.getInt("trangThai"));
+                            tour.setImage(objTour.getString("image"));
+                            tour.setNgayBatDau(objTour.getString("ngayBatDau"));
+                            JSONObject object = objTour.getJSONObject("loaiTour");
+                            LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
+                            tour.setLoaiTour(loaiTour);
+                            tours.add(tour);
+                            thamGiaTour.setTour(tour);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.i("Tours size:",tours.size()+"");
+                    thongBaoCacLichTrinhTheoTours();
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+
+    }
+
+    public void thongBaoCacLichTrinhTheoTours(){
+        //list lịch trình đang tham gia
+        lichTrinhs=new ArrayList<>();
+        Log.i("size tours send notify:",tours.size()+"");
+        for (Tour t:tours) {
+            String url = Common.getHost() + "lichTrinh/findByMaTour/" + t.getMaTour();
+            @SuppressLint("UnspecifiedImmutableFlag") JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     response -> {
                         Log.i("response", response.toString());
                         Log.i("length", response.length() + "");
                         for (int i = 0; i < response.length(); i++) {
-                            ThamGiaTour thamGiaTour=new ThamGiaTour();
+                            LichTrinh lichTrinh=new LichTrinh();
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                //Log.i("jsonObject", jsonObject.toString());
+                                Log.i("jsonObject", jsonObject.toString());
                                 JSONObject objID = jsonObject.getJSONObject("id");
-                                thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
-                                thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
-                                thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                                thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                                lichTrinh.setId(new LichTrinhID(objID.getInt("maTour"), objID.getInt("maDiaDiem"),objID.getInt("sttLichTrinh")));
+                                lichTrinh.setNoiDungLichTrinh(jsonObject.getString("noiDungLichTrinh"));
+                                lichTrinh.setThoiGianBatDau(jsonObject.getString("thoiGianBatDau"));
+
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
                                 Log.i("Diem den: ", tour.getDiemDen());
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -238,13 +303,52 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject object = objTour.getJSONObject("loaiTour");
                                 LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
                                 tour.setLoaiTour(loaiTour);
-                                tours.add(tour);
-                                thamGiaTour.setTour(tour);
+                                lichTrinh.setTour(tour);
+
+                                JSONObject objDiaDiem = jsonObject.getJSONObject("diaDiem");
+                                DiaDiem diaDiem=new DiaDiem();
+                                diaDiem.setMaDiaDiem(objDiaDiem.getInt("maDiaDiem"));
+                                diaDiem.setTenDiaDiem(objDiaDiem.getString("tenDiaDiem"));
+                                diaDiem.setMoTa(objDiaDiem.getString("moTa"));
+                                diaDiem.setTinhThanh(objDiaDiem.getString("tinhThanh"));
+                                lichTrinh.setDiaDiem(diaDiem);
+
+                                lichTrinhs.add(lichTrinh);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
                         }
-                        Log.i("Tours size:",tours.size()+"");
+                        Common.getLichTrinhs().clear();
+                        long staticTime=System.currentTimeMillis();
+                        int i=0;
+                        // gửi thông báo theo từng lịch trình
+                        for (LichTrinh lichTrinh:lichTrinhs) {
+                            if(lichTrinh.getThoiGianBatDau()==null){
+                                break;
+                            }
+                            Common.getLichTrinhs().offer(lichTrinh);
+                            Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            PendingIntent pendingIntent;
+                                pendingIntent = PendingIntent.getBroadcast(
+                                        getApplication(),
+                                        0,
+                                        intent,
+                                         PendingIntent.FLAG_IMMUTABLE
+                                );
+                            try {
+                                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                //gửi thông báo trước 4h khởi hành
+                                long time=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(lichTrinh.getThoiGianBatDau()).getTime()*1000-4*3600*1000;
+                                Log.i("lich trinh notify:",time+", size:"+Common.getLichTrinhs().size());
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, staticTime,pendingIntent);
+                                Log.i("set success:",""+i);
+                                i++;
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -257,107 +361,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
             requestQueue.add(request);
-
-            //list lịch trình đang tham gia
-            lichTrinhs=new ArrayList<>();
-            for (Tour t:tours) {
-                url = Common.getHost() + "lichTrinh/findByMaTour/" + t.getMaTour();
-                Log.i("url: ", url);
-                request = new JsonArrayRequest(Request.Method.GET, url, null,
-                        response -> {
-                            Log.i("response", response.toString());
-                            Log.i("length", response.length() + "");
-                            for (int i = 0; i < response.length(); i++) {
-                                LichTrinh lichTrinh=new LichTrinh();
-                                try {
-                                    JSONObject jsonObject = response.getJSONObject(i);
-                                    Log.i("jsonObject", jsonObject.toString());
-                                    JSONObject objID = jsonObject.getJSONObject("id");
-                                    lichTrinh.setId(new LichTrinhID(objID.getInt("maTour"), objID.getInt("maDiaDiem"),objID.getInt("sttLichTrinh")));
-                                    lichTrinh.setNoiDungLichTrinh(jsonObject.getString("noiDungLichTrinh"));
-                                    lichTrinh.setThoiGianBatDau(jsonObject.getString("thoiGianBatDau"));
-
-                                    JSONObject objTour = jsonObject.getJSONObject("tour");
-                                    Tour tour = new Tour();
-                                    tour.setMaTour(objTour.getInt("maTour"));
-                                    tour.setDiemDen(objTour.getString("diemDen"));
-                                    Log.i("Diem den: ", tour.getDiemDen());
-                                    tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
-                                    tour.setDiemDi(objTour.getString("diemDi"));
-                                    tour.setGia(objTour.getLong("gia"));
-                                    tour.setTrangThai(objTour.getInt("trangThai"));
-                                    tour.setImage(objTour.getString("image"));
-                                    tour.setNgayBatDau(objTour.getString("ngayBatDau"));
-                                    JSONObject object = objTour.getJSONObject("loaiTour");
-                                    LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
-                                    tour.setLoaiTour(loaiTour);
-                                    lichTrinh.setTour(tour);
-
-                                    JSONObject objDiaDiem = jsonObject.getJSONObject("diaDiem");
-                                    DiaDiem diaDiem=new DiaDiem();
-                                    diaDiem.setMaDiaDiem(objDiaDiem.getInt("maDiaDiem"));
-                                    diaDiem.setTenDiaDiem(objDiaDiem.getString("tenDiaDiem"));
-                                    diaDiem.setMoTa(objDiaDiem.getString("moTa"));
-                                    diaDiem.setTinhThanh(objDiaDiem.getString("tinhThanh"));
-                                    lichTrinh.setDiaDiem(diaDiem);
-
-                                    lichTrinhs.add(lichTrinh);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                            // gửi thông báo theo từng lịch trình
-                            for (LichTrinh lichTrinh:lichTrinhs) {
-                                if(lichTrinh.getThoiGianBatDau()==null){
-                                    break;
-                                }
-                                Common.getLichTrinhs().offer(lichTrinh);
-                                Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
-                                PendingIntent pendingIntent;
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                    pendingIntent = PendingIntent.getBroadcast(
-                                            getApplication(),
-                                            0,
-                                            intent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-                                    );
-                                } else {
-                                    pendingIntent = PendingIntent.getBroadcast(
-                                            getApplication(),
-                                            0,
-                                            intent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT
-                                    );
-                                }
-                                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                                try {
-                                    //gửi thông báo trước 4h khởi hành
-                                    long time=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(lichTrinh.getThoiGianBatDau()).getTime()*1000-4*3600*1000;
-                                    Log.i("lich trinh notify:",time+"");
-                                    alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pendingIntent);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, error -> Log.i("err:", error.toString())) {
-                    /**
-                     * Passing some request headers
-                     */
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Authorization", "Bearer " + Common.getToken());
-                        return headers;
-                    }
-                };
-                requestQueue.add(request);
-            }
         }
-
-        //
-
     }
 
     public void createNotificationChannel(){

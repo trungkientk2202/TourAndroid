@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -14,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.da.tourandroid.LoginActivity;
 import com.da.tourandroid.R;
 import com.da.tourandroid.adapter.TourAdapter;
 import com.da.tourandroid.model.LoaiTour;
@@ -98,7 +100,6 @@ public class InvoiceOnPlanFragment extends Fragment {
         requestQueue= Volley.newRequestQueue(view.getContext());
         listViewOnPlan = view.findViewById(R.id.listView_onPlan);
         tours = new ArrayList<>();
-
         adapter = new TourAdapter(view.getContext(), R.layout.items_onplan, tours);
         getToursOnPlan();
         listViewOnPlan.setAdapter(adapter);
@@ -106,7 +107,7 @@ public class InvoiceOnPlanFragment extends Fragment {
         return view;
     }
     private void getToursOnPlan(){
-        if(Common.mode==2) {
+        if(Common.getMode()==2) {
             String url = Common.getHost() + "tgtour/findList/" + Common.getKhachHang().getSdt()+"/1";
             //Log.i("url: ", url);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -124,7 +125,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -142,6 +143,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                         listViewOnPlan = view.findViewById(R.id.listView_onPlan);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_onplan, tours);
                         listViewOnPlan.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -172,7 +174,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
                                 tour.setDiemDen(objTour.getString("diemDen"));
-                                tour.setMoTa(objTour.getString("moTa").equals("null") ? null : jsonObject.getString("moTa"));
+                                tour.setMoTa(objTour.getString("moTa"));
                                 tour.setDiemDi(objTour.getString("diemDi"));
                                 tour.setGia(objTour.getLong("gia"));
                                 tour.setTrangThai(objTour.getInt("trangThai"));
@@ -190,6 +192,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                         listViewOnPlan = view.findViewById(R.id.listView_onPlan);
                         adapter = new TourAdapter(view.getContext(), R.layout.items_onplan, tours);
                         listViewOnPlan.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }, error -> Log.i("err:", error.toString())) {
                 /**
                  * Passing some request headers
@@ -203,6 +206,5 @@ public class InvoiceOnPlanFragment extends Fragment {
             };
             requestQueue.add(request);
         }
-        adapter.notifyDataSetChanged();
     }
 }

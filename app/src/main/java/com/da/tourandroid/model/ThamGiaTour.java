@@ -10,13 +10,17 @@ public class ThamGiaTour {
     private String diaDiemDon;
 
     private Tour tour;
+    private KhachHang khachHang;
+    private String vitri;
 
-    public ThamGiaTour(ThamGiaTourID id, boolean checkIn, String ghiChu, String diaDiemDon,Tour tour) {
+    public ThamGiaTour(ThamGiaTourID id, boolean checkIn, String ghiChu, String diaDiemDon,Tour tour,KhachHang khachHang,String vitri) {
         this.id = id;
         this.checkIn = checkIn;
         this.ghiChu = ghiChu;
         this.diaDiemDon = diaDiemDon;
         this.tour=tour;
+        this.vitri=vitri;
+        this.khachHang=khachHang;
     }
 
     public ThamGiaTour() {
@@ -60,5 +64,21 @@ public class ThamGiaTour {
 
     public void setTour(Tour tour) {
         this.tour = tour;
+    }
+
+    public String getVitri() {
+        return vitri;
+    }
+
+    public void setVitri(String vitri) {
+        this.vitri = vitri;
+    }
+
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
     }
 }
