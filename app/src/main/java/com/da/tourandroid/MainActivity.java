@@ -45,6 +45,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -153,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 //                        Log.i("tours size:",tours.size()+"");
-//                        long i=0;
+                        int i=0;
                         Log.i("Number time notify::",tours.size()+"");
                         // gửi các thông báo
+                        Common.setTours(new LinkedList<>());
                         for (Tour tour:tours) {
-//                            i++;
                             Log.i("Ma tour:",tour.getMaTour()+"");
                             if(tour.getNgayBatDau().equals("null")){
                                 Log.i("Ma tour null:",tour.getMaTour()+"");
@@ -166,23 +167,14 @@ public class MainActivity extends AppCompatActivity {
                             Common.getTours().offer(tour);
                             Log.i("ngay bat dau",tour.getNgayBatDau());
                             Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                             PendingIntent pendingIntent;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                pendingIntent = PendingIntent.getBroadcast(
-                                        getApplication(),
-                                        0,
-                                        intent,
-                                        FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-                                );
-                            } else {
-                                pendingIntent = PendingIntent.getBroadcast(
-                                        getApplication(),
-                                        0,
-                                        intent,
-                                        FLAG_UPDATE_CURRENT
-                                );
-                            }
+                            pendingIntent = PendingIntent.getBroadcast(
+                                    getApplication(),
+                                    i,
+                                    intent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+                            );
                             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                             //gửi trước 1 ngày
                             long time= 0;
@@ -192,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Log.i("time send notify:",time+" "+tour.getMaTour());
+                            i++;
                             alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+10000,pendingIntent);
                         }
                         //thong bao cho tung lich trinh
@@ -321,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         Common.getLichTrinhs().clear();
                         long staticTime=System.currentTimeMillis();
-                        int i=0;
+                        int i=10;
                         // gửi thông báo theo từng lịch trình
                         for (LichTrinh lichTrinh:lichTrinhs) {
                             if(lichTrinh.getThoiGianBatDau()==null){
@@ -329,13 +322,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                             Common.getLichTrinhs().offer(lichTrinh);
                             Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                             PendingIntent pendingIntent;
                                 pendingIntent = PendingIntent.getBroadcast(
                                         getApplication(),
-                                        0,
+                                        i,
                                         intent,
-                                         PendingIntent.FLAG_IMMUTABLE
+                                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
                                 );
                             try {
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

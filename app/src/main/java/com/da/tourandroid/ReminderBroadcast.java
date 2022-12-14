@@ -18,17 +18,17 @@ public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int a=new Random().nextInt();
-        Log.i("id",a+",size: "+Common.getLichTrinhs().size());
-        Tour tour;
-        LichTrinh lichTrinh=Common.getLichTrinhs().poll();
+        Log.i("id",a+",size: "+Common.getLichTrinhs().size()+","+Common.getTours().size());
+        Tour tour=Common.getTours().poll();
+
         String content="";
-        if(lichTrinh!=null){
+        if(tour==null){
+            LichTrinh lichTrinh=Common.getLichTrinhs().poll();
             tour=lichTrinh.getTour();
             content+="Ngày bắt đầu:"+lichTrinh.getThoiGianBatDau()+"\r\n"
                     +"Địa điểm:"+lichTrinh.getDiaDiem().getTenDiaDiem()
                     +"\r\n"+lichTrinh.getDiaDiem().getMoTa();
         }else{
-            tour=Common.getTours().poll();
             content+="Ngày bắt đầu:"+tour.getNgayBatDau()+"\r\n"+tour.getMoTa();
         }
         Log.i("Content:",content);

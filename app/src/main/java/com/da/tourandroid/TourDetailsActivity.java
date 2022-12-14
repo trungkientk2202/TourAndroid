@@ -320,35 +320,39 @@ public class TourDetailsActivity extends AppCompatActivity {
             case 2:
                 btnAction.setVisibility(View.VISIBLE);
                 btnAddUser.setVisibility(View.VISIBLE);
-                btnAction.setText("Start tour");
-                btnAction.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String url = Common.getHost() + "tour/changeStatus/"+Common.getTour().getMaTour();
-                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                response -> {
-                                    try {
-                                        JSONObject objID = response.getJSONObject("maTour");
-                                        btnAction.setVisibility(View.GONE);
-                                        Toast.makeText(view.getContext(),"Start tour successfully!",Toast.LENGTH_LONG).show();
+                if(Common.getMode()==1) {
+                    btnAction.setText("Start tour");
+                    btnAction.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String url = Common.getHost() + "tour/changeStatus/" + Common.getTour().getMaTour();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            JSONObject objID = response.getJSONObject("maTour");
+                                            btnAction.setVisibility(View.GONE);
+                                            Toast.makeText(view.getContext(), "Start tour successfully!", Toast.LENGTH_LONG).show();
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }, error -> Log.i("err:", error.toString())) {
-                            /**
-                             * Passing some request headers
-                             */
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                HashMap<String, String> headers = new HashMap<String, String>();
-                                headers.put("Authorization", "Bearer " + Common.getToken());
-                                return headers;
-                            }
-                        };
-                        requestQueue.add(request);
-                    }
-                });
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Log.i("err:", error.toString())) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                        }
+                    });
+                }else{
+                    btnAction.setVisibility(View.INVISIBLE);
+                }
                 break;
             case 3:
                 btnAddUser.setVisibility(View.VISIBLE);

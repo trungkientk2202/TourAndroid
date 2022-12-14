@@ -3,13 +3,14 @@ package com.da.tourandroid.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -58,6 +60,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -108,7 +111,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
 
     ArrayList<ThamGiaTour> thamGiaTours;
     private RequestQueue requestQueue;
-
+    SearchView searchView;
     private ListView listViewOngoing;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -119,7 +122,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    AppCompatButton btnDetail;
+    AppCompatButton btnDetail,btnDiemHen;
     public InvoiceOngoingFragment() {
         // Required empty public constructor
     }
@@ -233,7 +236,11 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_invoice_ongoing, container, false);
         // Inflate the layout for this fragment
+        searchView = view.findViewById(R.id.idSearchView);
+
         btnDetail=(AppCompatButton) view.findViewById(R.id.detail_tour);
+        btnDiemHen=(AppCompatButton) view.findViewById(R.id.diemHen);
+        btnDiemHen.setVisibility(View.INVISIBLE);
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -263,7 +270,62 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         fragmentTransaction.add(R.id.map, mMapFragment);
         fragmentTransaction.commit();
         mMapFragment.getMapAsync(this);
+        // adding on query listener for our search view.
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // on below line we are getting the
+                // location name from search view.
+                String location = searchView.getQuery().toString();
 
+                // below line is to create a list of address
+                // where we will store the list of all address.
+                List<Address> addressList = null;
+                // checking if the entered location is null or not.
+                if (location != null || location.equals("")) {
+                    // on below line we are creating and initializing a geo coder.
+                    Geocoder geocoder = new Geocoder(view.getContext());
+                    try {
+                        // on below line we are getting location from the
+                        // location name and adding that location to address list.
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(addressList.size()==0){
+                        return false;
+                    }
+                    btnDiemHen.setVisibility(View.VISIBLE);
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    Address address = addressList.get(0);
+
+                    // on below line we are creating a variable for our location
+                    // where we will add our locations latitude and longitude.
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    // on below line we are adding marker to that position.
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+
+                    // below line is to animate camera to that position.
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    btnDiemHen.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(view.getContext(),"Tạo điểm hẹn "+location+" thành công!",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        // at last we calling our map fragment to update.
+        mMapFragment.getMapAsync(this);
         return view;
     }
 
@@ -400,7 +462,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     for (int i = 0; i < response.length(); i++) {
                         ThamGiaTour thamGiaTour = new ThamGiaTour();
                         try {
-                            JSONObject jsonObject = response.getJSONObject(0);
+                            JSONObject jsonObject = response.getJSONObject(i);
                             JSONObject objID = jsonObject.getJSONObject("id");
                             thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
                                     objID.getString("sdt")));
