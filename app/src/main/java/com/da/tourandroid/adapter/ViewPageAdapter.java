@@ -1,10 +1,14 @@
 package com.da.tourandroid.adapter;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.da.tourandroid.LoginActivity;
 import com.da.tourandroid.fragment.AccountFragment;
 import com.da.tourandroid.fragment.FeedbackFragment;
 import com.da.tourandroid.fragment.HomeFragment;

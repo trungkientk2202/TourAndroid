@@ -66,54 +66,45 @@ public class SearchActivity extends AppCompatActivity {
                 tours.clear();
                 if (!editTextSearch.getText().toString().equals("")) {
                     tours = new ArrayList<>();
-                    String url = Common.getHost()+"tour/search";
-                    String json="[\""+editTextSearch.getText()+"\"]";
-                    try {
-                        JSONArray req= new JSONArray(json);
-                        Log.i("req: ",req.toString());
-                        JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, req,
-                                response -> {
-                                    Log.i("response: ",response.toString());
-                                    for (int j =0;j<response.length();j++){
-                                        Tour tour= new Tour();
-                                        try {
-                                            JSONObject jsonObject=response.getJSONObject(j);
-                                            tour.setMaTour(jsonObject.getInt("maTour"));
-                                            tour.setDiemDen(jsonObject.getString("diemDen"));
-                                            tour.setMoTa(jsonObject.getString("moTa"));
-                                            tour.setDiemDi(jsonObject.getString("diemDi"));
-                                            tour.setGia(jsonObject.getLong("gia"));
-                                            tour.setTrangThai(jsonObject.getInt("trangThai"));
-                                            tour.setImage(jsonObject.getString("image"));
-                                            tour.setNgayBatDau(jsonObject.getString("ngayBatDau"));
-                                            JSONObject object=jsonObject.getJSONObject("loaiTour");
-                                            LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
-                                            tour.setLoaiTour(loaiTour);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        tours.add(tour);
+                    String url = Common.getHost()+"tour/search/"+editTextSearch.getText();
+                    JsonArrayRequest request=new JsonArrayRequest(Request.Method.GET, url, null,
+                            response -> {
+                                for (int j =0;j<response.length();j++){
+                                    Tour tour= new Tour();
+                                    try {
+                                        JSONObject jsonObject=response.getJSONObject(j);
+                                        tour.setMaTour(jsonObject.getInt("maTour"));
+                                        tour.setDiemDen(jsonObject.getString("diemDen"));
+                                        tour.setMoTa(jsonObject.getString("moTa"));
+                                        tour.setDiemDi(jsonObject.getString("diemDi"));
+                                        tour.setGia(jsonObject.getLong("gia"));
+                                        tour.setTrangThai(jsonObject.getInt("trangThai"));
+                                        tour.setImage(jsonObject.getString("image"));
+                                        tour.setNgayBatDau(jsonObject.getString("ngayBatDau"));
+                                        JSONObject object=jsonObject.getJSONObject("loaiTour");
+                                        LoaiTour loaiTour= new LoaiTour(object.getInt("maLoaiTour"),object.getString("tenLoaiTour"),object.getString("moTa").equals("null")?null:object.getString("moTa"));
+                                        tour.setLoaiTour(loaiTour);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                    adapter = new SearchAdapter(SearchActivity.this, R.layout.items_search, tours);
-                                    listViewSearch.setAdapter(adapter);
-                                }, error -> Log.i("err:",error.toString())){
-                            /**
-                             * Passing some request headers
-                             * */
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                HashMap<String, String> headers = new HashMap<String, String>();
-                                headers.put("Content-Type", "application/json; charset=utf-8");
-                                headers.put("Authorization", "Bearer " + Common.getToken());
-                                return headers;
-                            }
+                                    tours.add(tour);
+                                }
+                                adapter = new SearchAdapter(SearchActivity.this, R.layout.items_search, tours);
+                                listViewSearch.setAdapter(adapter);
+                            }, error -> Log.i("err:",error.toString())){
+                        /**
+                         * Passing some request headers
+                         * */
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("Content-Type", "application/json; charset=utf-8");
+                            headers.put("Authorization", "Bearer " + Common.getToken());
+                            return headers;
+                        }
 
-                        };
-                        requestQueue.add(request);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    };
+                    requestQueue.add(request);
                 }
                 adapter.notifyDataSetChanged();
             }

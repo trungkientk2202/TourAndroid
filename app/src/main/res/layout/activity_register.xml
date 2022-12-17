@@ -78,7 +78,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_width="100dp"
-                android:text="Giới tính:"
+                android:text="Sex:"
                 android:textSize="16sp"
                 android:gravity="center"
                 android:layout_height="60dp" />
@@ -91,7 +91,7 @@
                     android:id="@+id/register_male"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:text="Male"
                     android:maxLines="1"
                     android:paddingVertical="20dp" />
@@ -141,6 +141,7 @@
         <EditText
             android:id="@+id/register_zalo"
             android:layout_marginTop="20dp"
+            android:phoneNumber="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"

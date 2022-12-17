@@ -2,6 +2,7 @@ package com.da.tourandroid.utils;
 
 import com.da.tourandroid.model.KhachHang;
 import com.da.tourandroid.model.LichTrinh;
+import com.da.tourandroid.model.QuanLyTour;
 import com.da.tourandroid.model.TaiKhoan;
 import com.da.tourandroid.model.ThamGiaTour;
 import com.da.tourandroid.model.Tour;
@@ -21,6 +22,7 @@ public class Common {
     public static Queue<Tour> tours= new LinkedList<>();
     public static Tour tour;
     public static ThamGiaTour thamGiaTour;
+    public static QuanLyTour quanLyTour;
     public static int detailMode;
 //    public static final String host="https://7a5c-115-79-44-8.ap.ngrok.io";
     public static final String host="http://192.168.1.105:8080/";
@@ -102,5 +104,13 @@ public class Common {
 
     public static void setThamGiaTour(ThamGiaTour thamGiaTour) {
         Common.thamGiaTour = thamGiaTour;
+    }
+
+    public static QuanLyTour getQuanLyTour() {
+        return quanLyTour;
+    }
+
+    public static void setQuanLyTour(QuanLyTour quanLyTour) {
+        Common.quanLyTour = quanLyTour;
     }
 }

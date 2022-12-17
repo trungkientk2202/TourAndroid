@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             Log.i("time send notify:",time+" "+tour.getMaTour());
                             i++;
+                            //set gửi thông báo ngay hiện tại để test
                             alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+10000,pendingIntent);
                         }
                         //thong bao cho tung lich trinh
@@ -312,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         }
-                        Common.getLichTrinhs().clear();
+                        if (Common.getLichTrinhs().size()>0)Common.getLichTrinhs().clear();
                         long staticTime=System.currentTimeMillis();
                         int i=10;
                         // gửi thông báo theo từng lịch trình

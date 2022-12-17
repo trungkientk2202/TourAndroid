@@ -3,6 +3,7 @@ package com.da.tourandroid;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +82,11 @@ public class TourDetailsActivity extends AppCompatActivity {
         requestQueue= Volley.newRequestQueue(TourDetailsActivity.this);
         map();
         dataInit();
+        Glide.with(TourDetailsActivity.this)
+                .load(Common.getTour().getImage())
+                .into(img_tour);
+
+        img_tour.setImageResource(R.drawable.da_nang);
         imageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -316,6 +322,7 @@ public class TourDetailsActivity extends AppCompatActivity {
             case 1:
                 btnAction.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.INVISIBLE);
+                btnFeedback.setVisibility(View.INVISIBLE);
                 break;
             case 2:
                 btnAction.setVisibility(View.VISIBLE);
@@ -325,29 +332,33 @@ public class TourDetailsActivity extends AppCompatActivity {
                     btnAction.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String url = Common.getHost() + "tour/changeStatus/" + Common.getTour().getMaTour();
-                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                    response -> {
-                                        try {
-                                            JSONObject objID = response.getJSONObject("maTour");
-                                            btnAction.setVisibility(View.GONE);
-                                            Toast.makeText(view.getContext(), "Start tour successfully!", Toast.LENGTH_LONG).show();
+                            if(Common.getQuanLyTour().getTour()!=null){
+                                Toast.makeText(view.getContext(), "You are on another tour, can't start a new tour!", Toast.LENGTH_LONG).show();
+                            }else{
+                                String url = Common.getHost() + "tour/changeStatus/" + Common.getTour().getMaTour();
+                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                        response -> {
+                                            try {
+                                                JSONObject objID = response.getJSONObject("maTour");
+                                                btnAction.setVisibility(View.GONE);
+                                                Toast.makeText(view.getContext(), "Start tour successfully!", Toast.LENGTH_LONG).show();
 
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }, error -> Log.i("err:", error.toString())) {
-                                /**
-                                 * Passing some request headers
-                                 */
-                                @Override
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    HashMap<String, String> headers = new HashMap<String, String>();
-                                    headers.put("Authorization", "Bearer " + Common.getToken());
-                                    return headers;
-                                }
-                            };
-                            requestQueue.add(request);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                    /**
+                                     * Passing some request headers
+                                     */
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        HashMap<String, String> headers = new HashMap<String, String>();
+                                        headers.put("Authorization", "Bearer " + Common.getToken());
+                                        return headers;
+                                    }
+                                };
+                                requestQueue.add(request);
+                            }
                         }
                     });
                 }else{
@@ -366,9 +377,10 @@ public class TourDetailsActivity extends AppCompatActivity {
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                                     response -> {
                                         try {
-                                            JSONObject objID = response.getJSONObject("maTour");
+
                                             btnAction.setVisibility(View.GONE);
                                             Toast.makeText(view.getContext(),"Finish tour successfully!",Toast.LENGTH_LONG).show();
+                                            JSONObject objID = response.getJSONObject("maTour");
 
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -388,38 +400,44 @@ public class TourDetailsActivity extends AppCompatActivity {
                         }
                     });
                 }else{
-                    btnAction.setText("Check in");
-                    if(Common.getThamGiaTour().isCheckIn()){
-                        btnAction.setVisibility(View.INVISIBLE);
-                    }
-                    btnAction.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            String url = Common.getHost() + "tgtour/checkIn/"+Common.getThamGiaTour().getTour().getMaTour()+"/" + Common.getThamGiaTour().getKhachHang().getSdt();
-                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                    response -> {
-                                        try {
-                                            JSONObject objID = response.getJSONObject("id");
-                                            btnAction.setVisibility(View.GONE);
-                                            Toast.makeText(view.getContext(),"Check in successfully!",Toast.LENGTH_LONG).show();
 
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }, error -> Log.i("err:", error.toString())) {
-                                /**
-                                 * Passing some request headers
-                                 */
-                                @Override
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    HashMap<String, String> headers = new HashMap<String, String>();
-                                    headers.put("Authorization", "Bearer " + Common.getToken());
-                                    return headers;
-                                }
-                            };
-                            requestQueue.add(request);
-                        }
-                    });
+                    if(Common.getThamGiaTour().isCheckIn()){
+                        btnAction.setText("Checked in");
+                        btnAction.setBackgroundColor(Color.GRAY);
+                    }else {
+                        btnAction.setBackgroundColor(Color.rgb(26,115,232));
+                        btnAction.setText("Check in");
+                        btnAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String url = Common.getHost() + "tgtour/checkIn/" + Common.getThamGiaTour().getTour().getMaTour() + "/" + Common.getThamGiaTour().getKhachHang().getSdt();
+                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                        response -> {
+                                            try {
+                                                JSONObject objID = response.getJSONObject("id");
+                                                btnAction.setBackgroundColor(Color.GRAY);
+                                                Common.getThamGiaTour().setCheckIn(true);
+                                                btnAction.setText("Checked in");
+                                                Toast.makeText(view.getContext(), "Check in successfully!", Toast.LENGTH_LONG).show();
+
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }, error -> Log.i("err:", error.toString())) {
+                                    /**
+                                     * Passing some request headers
+                                     */
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                        HashMap<String, String> headers = new HashMap<String, String>();
+                                        headers.put("Authorization", "Bearer " + Common.getToken());
+                                        return headers;
+                                    }
+                                };
+                                requestQueue.add(request);
+                            }
+                        });
+                    }
                 }
                 break;
             case 4:
@@ -428,6 +446,11 @@ public class TourDetailsActivity extends AppCompatActivity {
                 break;
         }
         if(Common.getMode()==1){
+            if(Common.getDetailMode()==1){
+                btnAddUser.setVisibility(View.INVISIBLE);
+            }else{
+                btnAddUser.setVisibility(View.VISIBLE);
+            }
             btnFeedback.setVisibility(View.INVISIBLE);
             btnAddUser.setVisibility(View.VISIBLE);
         }else{
@@ -443,10 +466,6 @@ public class TourDetailsActivity extends AppCompatActivity {
 
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
-        Glide.with(this)
-                .load(Common.getTour().getImage())
-                .into(img_tour);
-        img_tour.setImageURI(Uri.parse(Common.getTour().getImage()));
         txt_price.setText(Common.getTour().getGia()+"");
 
         //Set timeline info
@@ -476,6 +495,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, listUser);
         getDataUsers((int) Common.getTour().getMaTour());
         userRecycleView.setAdapter(userAdapter);
+
 
         timelineRecycleView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -548,12 +568,23 @@ public class TourDetailsActivity extends AppCompatActivity {
                             JSONObject req=new JSONObject(json);
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
                                     response -> {
-                                        //add thành công
-                                        Toast.makeText(view.getContext(), "Add feedback successfully", Toast.LENGTH_LONG).show();
-                                        khachHang.setSdt(null);
-                                        //reset value search
-                                        editTextName.setText("");
-                                    }, error -> Toast.makeText(view.getContext(), "The member is available in this tour", Toast.LENGTH_LONG).show()) {
+                                        try {
+                                            if(!response.get("noiDung").equals(null)){
+                                                //add thành công
+                                                Toast.makeText(view.getContext(), "Add feedback successfully", Toast.LENGTH_LONG).show();
+                                                khachHang.setSdt(null);
+                                                //reset value search
+                                                editTextName.setText("");
+                                                //get feedback
+                                                getDataFeedbacks((int) Common.getTour().getMaTour());
+                                            }else{
+                                                Toast.makeText(view.getContext(), "You already added a feedback!", Toast.LENGTH_LONG).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.i("e:",e.toString());
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
                                 /**
                                  * Passing some request headers
                                  */
@@ -598,7 +629,7 @@ public class TourDetailsActivity extends AppCompatActivity {
 
                 RecyclerView.LayoutManager layoutManager4 = new LinearLayoutManager(dialog.getContext(), LinearLayoutManager.VERTICAL, false);
                 userSearchRecycleView.setLayoutManager(layoutManager4);
-                //sear member
+                //search member
                 imageViewSearch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -656,13 +687,23 @@ public class TourDetailsActivity extends AppCompatActivity {
                         JSONObject req=new JSONObject(json);
                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
                                 response -> {
-                                    //add thành công
-                                    Toast.makeText(view.getContext(), "Add member successfully", Toast.LENGTH_LONG).show();
-                                    khachHang.setSdt(null);
-                                    //reset value search
-                                    userSearchRecycleView.setAdapter(null);
-
-                                }, error -> Toast.makeText(view.getContext(), "The member is available in this tour", Toast.LENGTH_LONG).show()) {
+                                    try {
+                                        if(!response.get("id").equals(null)){
+                                            //add thành công
+                                            Toast.makeText(view.getContext(), "Add user successfully", Toast.LENGTH_LONG).show();
+                                            khachHang.setSdt(null);
+                                            //reset value search
+                                            editTextName.setText("");
+                                            //get list user
+                                            getDataUsers((int) Common.getTour().getMaTour());
+                                        }else{
+                                            Toast.makeText(view.getContext(), "Account is available in the tour!", Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.i("e:",e.toString());
+                                        e.printStackTrace();
+                                    }
+                                }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
                             /**
                              * Passing some request headers
                              */

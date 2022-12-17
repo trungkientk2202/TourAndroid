@@ -111,14 +111,11 @@ public class HomeFragment extends Fragment {
         mapping();
         initUI();
 
-        editTextSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        editTextSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    Intent i = new Intent(view.getContext(), SearchActivity.class);
-                    startActivity(i);
-//                    editTextSearch.clearFocus();
-                }
+            public void onClick(View view) {
+                Intent i = new Intent(view.getContext(), SearchActivity.class);
+                startActivity(i);
             }
         });
 
