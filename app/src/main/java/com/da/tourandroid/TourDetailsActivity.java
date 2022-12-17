@@ -63,7 +63,7 @@ public class TourDetailsActivity extends AppCompatActivity {
     ArrayList<LichTrinh> listTimeline;
     ArrayList<Tour> listRelatedTour;
     ArrayList<PhanHoi> listFeedback;
-    ArrayList<KhachHang> listUser;
+    ArrayList<ThamGiaTour> thamGiaTours;
     ArrayList<KhachHang> listUserSearch;
     RecyclerView relatedTourRecycle, timelineRecycleView, feedbackRecycleView, userRecycleView;
     TourRecommendAdapter tourRecommendAdapter;
@@ -250,7 +250,7 @@ public class TourDetailsActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void getDataUsers(int id) {
-        listUser.clear();
+        thamGiaTours.clear();
         String url = Common.getHost() + "tgtour/findByMaTour/" + id;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
@@ -258,6 +258,13 @@ public class TourDetailsActivity extends AppCompatActivity {
                         ThamGiaTour thamGiaTour=new ThamGiaTour();
                         try {
                             JSONObject jsonObject = response.getJSONObject(i);
+
+                            JSONObject objID = jsonObject.getJSONObject("id");
+                            thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
+                                    objID.getString("sdt")));
+                            thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                            thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
+                            thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
 
                             JSONObject objKhachHang = jsonObject.getJSONObject("khachHang");
                             KhachHang khachHang=new KhachHang();
@@ -269,7 +276,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                             khachHang.setZalo(objKhachHang.getString("zalo"));
                             thamGiaTour.setKhachHang(khachHang);
 
-                            listUser.add(khachHang);
+                            thamGiaTours.add(thamGiaTour);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (ParseException e) {
@@ -278,7 +285,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                     }
                     RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     userRecycleView.setLayoutManager(layoutManager2);
-                    userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, listUser);
+                    userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, thamGiaTours);
                     userRecycleView.setAdapter(userAdapter);
                 }, error -> Log.i("err:", error.toString())) {
             /**
@@ -309,7 +316,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         listTimeline = new ArrayList<>();
         listRelatedTour = new ArrayList<>();
         listFeedback = new ArrayList<>();
-        listUser = new ArrayList<>();
+        thamGiaTours = new ArrayList<>();
         listUserSearch = new ArrayList<>();
         KhachHang khachHang=new KhachHang();
         //Get tour info
@@ -492,7 +499,7 @@ public class TourDetailsActivity extends AppCompatActivity {
         //Set users info
         RecyclerView.LayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         userRecycleView.setLayoutManager(layoutManager3);
-        userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, listUser);
+        userAdapter = new UserAdapter(this, R.layout.items_tour_recycler, thamGiaTours);
         getDataUsers((int) Common.getTour().getMaTour());
         userRecycleView.setAdapter(userAdapter);
 

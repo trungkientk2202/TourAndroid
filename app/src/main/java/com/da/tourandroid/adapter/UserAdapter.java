@@ -13,15 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.da.tourandroid.R;
 import com.da.tourandroid.model.KhachHang;
+import com.da.tourandroid.model.ThamGiaTour;
+import com.da.tourandroid.utils.Common;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewHolder> {
     private Context context;
     private int layout;
-    private List<KhachHang> resList;
+    private List<ThamGiaTour> resList;
 
-    public UserAdapter(Context context, int layout, List<KhachHang> resList) {
+    public UserAdapter(Context context, int layout, List<ThamGiaTour> resList) {
         this.context = context;
         this.layout = layout;
         this.resList = resList;
@@ -37,7 +40,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewH
     @Override
     public void onBindViewHolder(@NonNull KhachHangViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.resImage.setImageResource(R.drawable.avatar);
-        holder.resName.setText(resList.get(position).getTen());
+        holder.resName.setText(resList.get(position).getKhachHang().getTen());
+        holder.resNgaySinh.setText(resList.get(position).getKhachHang().getNgaySinh()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(resList.get(position).getKhachHang().getNgaySinh()));
+        if(Common.getDetailMode()==3)holder.resCheckIn.setText("Check in: "+resList.get(position).isCheckIn());
     }
 
     @Override
@@ -47,13 +52,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewH
 
     public static class KhachHangViewHolder extends RecyclerView.ViewHolder {
         ImageView resImage;
-        TextView resName;
+        TextView resName,resNgaySinh,resCheckIn;
 
         public KhachHangViewHolder(@NonNull View itemView) {
             super(itemView);
 
             resImage = itemView.findViewById(R.id.tour_image);
             resName = itemView.findViewById(R.id.tour_name);
+            resNgaySinh = itemView.findViewById(R.id.ngaySinh);
+            resCheckIn = itemView.findViewById(R.id.checkIn);
+
         }
     }
 }
