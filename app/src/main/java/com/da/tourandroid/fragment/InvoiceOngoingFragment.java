@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,9 @@ import com.da.tourandroid.R;
 import com.da.tourandroid.TourDetailsActivity;
 import com.da.tourandroid.model.KhachHang;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,7 +83,7 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallback {
-
+    LocationRequest mLocationRequest;
     View view;
 
     private static final String TAG = InvoiceOngoingFragment.class.getSimpleName();
@@ -220,6 +224,49 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
             });
         }
         //Get all localtion
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(300*1000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        LocationCallback mLocationCallback = null;
+        if (mLocationCallback == null)
+            mLocationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (locationResult == null) {
+                        return;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null&&Common.getMode()==2&&Common.getTour()!=null) {
+                            String json="{\"vitri\":\""+location.getLatitude()+";"+location.getLongitude()+"\"}";
+                            Log.i("Localtion: ",json);
+                            String url = Common.getHost() + "tgtour/changeVitri/" + Common.getTour().getMaTour()+"/"+Common.getKhachHang().getSdt()
+                                    +"/"+location.getLatitude()+"/"+location.getLongitude();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        Log.i("Localtion: ","Save location successfully!");
+                                    }, error -> Log.i("Error: ",error.toString())) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Content-Type", "application/json; charset=utf-8");
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
+                            break;
+
+                        }
+                    }
+                }
+            };
+
+
+        fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(getContext());
+        fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
     }
     private Bitmap getBitmap(int drawableRes) {
         Drawable drawable = getResources().getDrawable(drawableRes);
@@ -355,7 +402,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                                     mMap.clear();
                                                     getLocationOngoing();
                                                 }else{
-                                                    Toast.makeText(view.getContext(), "Account is available in the tour!", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(view.getContext(), "Member is available in the tour!", Toast.LENGTH_LONG).show();
                                                 }
                                             } catch (JSONException e) {
                                                 Log.i("e:",e.toString());

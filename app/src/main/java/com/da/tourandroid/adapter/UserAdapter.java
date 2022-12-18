@@ -42,7 +42,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewH
         holder.resImage.setImageResource(R.drawable.avatar);
         holder.resName.setText(resList.get(position).getKhachHang().getTen());
         holder.resNgaySinh.setText(resList.get(position).getKhachHang().getNgaySinh()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(resList.get(position).getKhachHang().getNgaySinh()));
-        if(Common.getDetailMode()==3)holder.resCheckIn.setText("Check in: "+resList.get(position).isCheckIn());
+        if(Common.getDetailMode()==3){
+            holder.resCheckIn.setVisibility(View.VISIBLE);
+            holder.resCheckIn.setText("Check in: "+resList.get(position).isCheckIn());
+        }else{
+            holder.resCheckIn.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

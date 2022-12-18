@@ -450,16 +450,16 @@ public class TourDetailsActivity extends AppCompatActivity {
             case 4:
                 btnAddUser.setVisibility(View.INVISIBLE);
                 btnAction.setVisibility(View.INVISIBLE);
+                btnAddUser.setVisibility(View.INVISIBLE);
                 break;
         }
         if(Common.getMode()==1){
-            if(Common.getDetailMode()==1){
+            if(Common.getDetailMode()==1 ||Common.getDetailMode()==4){
                 btnAddUser.setVisibility(View.INVISIBLE);
             }else{
                 btnAddUser.setVisibility(View.VISIBLE);
             }
             btnFeedback.setVisibility(View.INVISIBLE);
-            btnAddUser.setVisibility(View.VISIBLE);
         }else{
             btnFeedback.setVisibility(View.VISIBLE);
             btnAddUser.setVisibility(View.INVISIBLE);
@@ -704,7 +704,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                                             //get list user
                                             getDataUsers((int) Common.getTour().getMaTour());
                                         }else{
-                                            Toast.makeText(view.getContext(), "Account is available in the tour!", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(view.getContext(), "Member is available in the tour!", Toast.LENGTH_LONG).show();
                                         }
                                     } catch (JSONException e) {
                                         Log.i("e:",e.toString());

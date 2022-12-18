@@ -39,6 +39,8 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Kh
         holder.resImage.setImageResource(R.drawable.avatar);
         holder.resName.setText(resList.get(position).getTen());
         holder.phone.setText(resList.get(position).getSdt());
+        holder.date.setVisibility(View.INVISIBLE);
+        holder.price.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Kh
 
     public static class KhachHangViewHolder extends RecyclerView.ViewHolder {
         ImageView resImage;
-        TextView resName, phone;
+        TextView resName, phone,date,price;
 
         public KhachHangViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -56,6 +58,8 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Kh
             resImage = itemView.findViewById(R.id.shapeableImageView_image);
             resName = itemView.findViewById(R.id.textView_name);
             phone = itemView.findViewById(R.id.textView_res);
+            date =itemView.findViewById(R.id.textView_ngayBatDau);
+            price=itemView.findViewById(R.id.textView_price);
         }
     }
 }

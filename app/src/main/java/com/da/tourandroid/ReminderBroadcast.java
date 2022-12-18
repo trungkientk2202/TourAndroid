@@ -25,7 +25,7 @@ public class ReminderBroadcast extends BroadcastReceiver {
         if(tour==null){
             LichTrinh lichTrinh=Common.getLichTrinhs().poll();
             tour=lichTrinh.getTour();
-            content+="Ngày bắt đầu:"+lichTrinh.getThoiGianBatDau()+"\r\n"
+            content+="Thời gian bắt đầu:"+lichTrinh.getThoiGianBatDau()+"\r\n"
                     +"Địa điểm:"+lichTrinh.getDiaDiem().getTenDiaDiem()
                     +"\r\n"+lichTrinh.getDiaDiem().getMoTa();
         }else{
