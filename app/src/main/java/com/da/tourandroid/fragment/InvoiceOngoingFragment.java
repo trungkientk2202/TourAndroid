@@ -1,6 +1,11 @@
 package com.da.tourandroid.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,12 +15,14 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,9 +30,13 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.da.tourandroid.BuildConfig;
+import com.da.tourandroid.MainActivity;
+import com.da.tourandroid.NotifyBroadcast;
 import com.da.tourandroid.R;
+import com.da.tourandroid.ReminderBroadcast;
 import com.da.tourandroid.TourDetailsActivity;
 import com.da.tourandroid.model.KhachHang;
+import com.da.tourandroid.model.TaiKhoan;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -76,6 +87,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,6 +131,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
     private LatLng[] likelyPlaceLatLngs;
 
     ArrayList<ThamGiaTour> thamGiaTours;
+    ArrayList<QuanLyTour> quanLyTours;
     private RequestQueue requestQueue;
     SearchView searchView;
     private ListView listViewOngoing;
@@ -132,6 +145,8 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
     private String mParam1;
     private String mParam2;
     AppCompatButton btnDetail,btnDiemHen;
+    TextView noiDung,gioHen;
+    EditText txtNoiDung,txtGioHen;
     public InvoiceOngoingFragment() {
         // Required empty public constructor
     }
@@ -161,6 +176,20 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        createNotificationChannel();
+    }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "TourNotifyChannel";
+            String description = "Channel for Notify";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("notify", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager=getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
@@ -207,6 +236,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
         thamGiaTours = new ArrayList<>();
+        quanLyTours= new ArrayList<>();
 //        initAllLocaltion();
         // Get list localtion
         getLocationOngoing();
@@ -282,7 +312,8 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         try {
             for (ThamGiaTour tgtour:thamGiaTours) {
                 if(!tgtour.getVitri().equals("null")){
-                    String[] a =tgtour.getVitri().split(";");
+                    String[] a =new String[4];
+                    a=tgtour.getVitri().split(";");
                     LatLng pos = new LatLng(Double.parseDouble(a[0]), Double.parseDouble(a[1]));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos,13));
                     mMap.addMarker(new MarkerOptions()
@@ -290,14 +321,26 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                             .snippet(tgtour.getKhachHang().getSdt())
                             .position(pos));
                 }
-                if(!tgtour.getDiaDiemDon().equals("null")){
-                    String[] a =tgtour.getDiaDiemDon().split(";");
+                if(!tgtour.getDiemHen().equals("null")){
+                    String[] a =tgtour.getDiemHen().split(";");
                     LatLng pos = new LatLng(Double.parseDouble(a[0]), Double.parseDouble(a[1]));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos,13));
                     mMap.addMarker(new MarkerOptions()
                             .title("Điểm hẹn của: "+tgtour.getKhachHang().getTen())
-                            .snippet(tgtour.getKhachHang().getSdt())
+                            .snippet("Nội dung: "+a[2]+"\r\nThời gian:"+a[3])
                             .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.ic_baseline_location_on_24)))
+                            .position(pos));
+                }
+            }
+            for (QuanLyTour quanLyTour:quanLyTours) {
+                if(!quanLyTour.getDiemHen().equals("null")){
+                    String[] a =quanLyTour.getDiemHen().split(";");
+                    LatLng pos = new LatLng(Double.parseDouble(a[0]), Double.parseDouble(a[1]));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos,13));
+                    mMap.addMarker(new MarkerOptions()
+                            .title("Nội dung: "+a[2])
+                            .snippet("Thời gian: "+a[3])
+                            .icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.ic_baseline_flag_24)))
                             .position(pos));
                 }
             }
@@ -315,7 +358,15 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
 
         btnDetail=(AppCompatButton) view.findViewById(R.id.detail_tour);
         btnDiemHen=(AppCompatButton) view.findViewById(R.id.diemHen);
+        noiDung=view.findViewById(R.id.noiDung);
+        txtNoiDung=view.findViewById(R.id.txt_noiDung);
+        gioHen=view.findViewById(R.id.gioHen);
+        txtGioHen=view.findViewById(R.id.txt_gioHen);
         btnDiemHen.setVisibility(View.INVISIBLE);
+        noiDung.setVisibility(View.INVISIBLE);
+        txtNoiDung.setVisibility(View.INVISIBLE);
+        gioHen.setVisibility(View.INVISIBLE);
+        txtGioHen.setVisibility(View.INVISIBLE);
         requestQueue= Volley.newRequestQueue(view.getContext());
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -362,11 +413,6 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     if(addressList.size()==0){
                         return false;
                     }
-                    if(Common.getMode()==1){
-                        btnDiemHen.setVisibility(View.INVISIBLE);
-                    }else{
-                        btnDiemHen.setVisibility(View.VISIBLE);
-                    }
                     // on below line we are getting the location
                     // from our list a first position.
                     Address address = addressList.get(0);
@@ -378,50 +424,86 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     // on below line we are adding marker to that position.
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location).icon(BitmapDescriptorFactory.fromBitmap(getBitmap(R.drawable.ic_baseline_location_on_24))));
 
+                    btnDiemHen.setVisibility(View.VISIBLE);
+                    noiDung.setVisibility(View.VISIBLE);
+                    txtNoiDung.setVisibility(View.VISIBLE);
+                    gioHen.setVisibility(View.VISIBLE);
+                    txtGioHen.setVisibility(View.VISIBLE);
                     // below line is to animate camera to that position.
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                     btnDiemHen.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String diemHen=address.getLatitude()+";"+address.getLongitude();
-                            //them diem hen vao db
-                            String json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
-                                    +"\"sdt\":\""+Common.getKhachHang().getSdt()+"\","
-                                    +"\"diaDiemDon\":\""+diemHen+"\"}";
-                            String url = Common.getHost() + "tgtour/addDiemHen";
-                            try {
-                                JSONObject req=new JSONObject(json);
-                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
-                                        response -> {
-                                            try {
-                                                if(!response.get("id").equals(null)){
-                                                    //add thành công
-                                                    Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
-                                                    searchView.setQuery("",false);
-                                                    //get list user
-                                                    mMap.clear();
-                                                    getLocationOngoing();
-                                                }else{
-                                                    Toast.makeText(view.getContext(), "Member is available in the tour!", Toast.LENGTH_LONG).show();
+                            if(txtNoiDung.getText().length()<=0||txtGioHen.getText().length()<=0){
+                                Toast.makeText(view.getContext(),"Please enter enough information!",Toast.LENGTH_LONG).show();
+                            }else{
+                                String diemHen=address.getLatitude()+";"+address.getLongitude()+";"+txtNoiDung.getText().toString()+";"+txtGioHen.getText().toString();
+                                String json="",url="";
+                                if(Common.getMode()==1){
+                                    //them diem hen vao db
+                                    json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
+                                            +"\"sdt\":\""+Common.getTaiKhoan().getSdt()+"\","
+                                            +"\"diemHen\":\""+diemHen+"\"}";
+                                    url = Common.getHost() + "qltour/addDiemHen";
+                                }else{
+                                    //them diem hen vao db
+                                    json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
+                                            +"\"sdt\":\""+Common.getKhachHang().getSdt()+"\","
+                                            +"\"diemHen\":\""+diemHen+"\"}";
+                                    url = Common.getHost() + "tgtour/addDiemHen";
+                                }
+                                try {
+                                    JSONObject req=new JSONObject(json);
+                                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
+                                            response -> {
+                                                try {
+                                                    if(!response.get("id").equals(null)){
+                                                        //add thành công
+                                                        btnDiemHen.setVisibility(View.INVISIBLE);
+                                                        noiDung.setVisibility(View.INVISIBLE);
+                                                        txtNoiDung.setVisibility(View.INVISIBLE);
+                                                        gioHen.setVisibility(View.INVISIBLE);
+                                                        txtGioHen.setVisibility(View.INVISIBLE);
+                                                        if(Common.getMode()==1) {
+                                                            Common.setTitle("Thông báo từ Hướng dẫn viên:");
+                                                            Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
+                                                            Intent intent = new Intent(view.getContext(), ReminderBroadcast.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            PendingIntent pendingIntent;
+                                                            pendingIntent = PendingIntent.getBroadcast(
+                                                                    getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE
+                                                            );
+                                                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                                                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+                                                            Log.i("set notify success:","");
+                                                        }
+                                                        Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
+                                                        searchView.setQuery("",false);
+                                                        //get list user
+                                                        mMap.clear();
+                                                        getLocationOngoing();
+                                                    }else{
+                                                        Toast.makeText(view.getContext(), "Create rendezvous failure!", Toast.LENGTH_LONG).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    Log.i("e:",e.toString());
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (JSONException e) {
-                                                Log.i("e:",e.toString());
-                                                e.printStackTrace();
-                                            }
-                                        }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
-                                    /**
-                                     * Passing some request headers
-                                     */
-                                    @Override
-                                    public Map<String, String> getHeaders() throws AuthFailureError {
-                                        HashMap<String, String> headers = new HashMap<String, String>();
-                                        headers.put("Authorization", "Bearer " + Common.getToken());
-                                        return headers;
-                                    }
-                                };
-                                requestQueue.add(request);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                            }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                        /**
+                                         * Passing some request headers
+                                         */
+                                        @Override
+                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                            HashMap<String, String> headers = new HashMap<String, String>();
+                                            headers.put("Authorization", "Bearer " + Common.getToken());
+                                            return headers;
+                                        }
+                                    };
+                                    requestQueue.add(request);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     });
@@ -469,7 +551,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                         objID.getString("sdt")));
                                 Common.getThamGiaTour().setCheckIn(jsonObject.getBoolean("checkIn"));
                                 Common.getThamGiaTour().setGhiChu(jsonObject.getString("ghiChu"));
-                                Common.getThamGiaTour().setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                                Common.getThamGiaTour().setDiemHen(jsonObject.getString("diemHen"));
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
@@ -522,7 +604,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 quanLyTour.setId(new QuanLyTourID(objID.getInt("maTour"), objID.getString("sdt")));
-                                quanLyTour.setGhiChu(jsonObject.getString("ghiChu"));
+                                quanLyTour.setThongBao(jsonObject.getString("thongBao"));
 
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
@@ -579,7 +661,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                     objID.getString("sdt")));
                             thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                            thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                            thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                             thamGiaTour.setVitri(jsonObject.getString("vitri"));
 
                             JSONObject objTour = jsonObject.getJSONObject("tour");
@@ -610,6 +692,65 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                             thamGiaTour.setKhachHang(khachHang);
                             thamGiaTours.add(thamGiaTour);
                         } catch (JSONException | ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //lấy list quản lý tour bao gồm vị trí
+                    getListQuanLyTour();
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    public void getListQuanLyTour(){
+        if(Common.getTour()==null){
+            Toast.makeText(view.getContext(),"You are not currently participating in any tour!",Toast.LENGTH_LONG).show();
+            return;
+        }
+        //lấy list tham gia tour bao gồm vị trí
+        quanLyTours=new ArrayList<>();
+        String url = Common.getHost() + "qltour/findByMaTour/" +Common.getTour().getMaTour();
+        Log.i("url: ", url);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        QuanLyTour quanLyTour = new QuanLyTour();
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject objID = jsonObject.getJSONObject("id");
+                            quanLyTour.setId(new QuanLyTourID(objID.getInt("maTour"),
+                                    objID.getString("sdt")));
+                            quanLyTour.setThongBao(jsonObject.getString("thongBao"));
+                            quanLyTour.setDiemHen(jsonObject.getString("diemHen"));
+
+                            JSONObject objTour = jsonObject.getJSONObject("tour");
+                            Tour tour = new Tour();
+                            tour.setMaTour(objTour.getInt("maTour"));
+                            tour.setDiemDen(objTour.getString("diemDen"));
+                            //Log.i("Diem den: ", tour.getDiemDen());
+                            tour.setMoTa(objTour.getString("moTa"));
+                            tour.setDiemDi(objTour.getString("diemDi"));
+                            tour.setGia(objTour.getLong("gia"));
+                            tour.setTrangThai(objTour.getInt("trangThai"));
+                            tour.setImage(objTour.getString("image"));
+                            tour.setNgayBatDau(objTour.getString("ngayBatDau"));
+                            JSONObject object = objTour.getJSONObject("loaiTour");
+                            LoaiTour loaiTour = new LoaiTour(object.getInt("maLoaiTour"), object.getString("tenLoaiTour"), object.getString("moTa").equals("null") ? null : object.getString("moTa"));
+                            tour.setLoaiTour(loaiTour);
+                            Common.setTour(tour);
+                            quanLyTour.setTour(tour);
+
+                            quanLyTours.add(quanLyTour);
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }

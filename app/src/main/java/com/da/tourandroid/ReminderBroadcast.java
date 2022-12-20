@@ -35,11 +35,9 @@ public class ReminderBroadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder= new NotificationCompat.Builder(context,"notifyTour")
                 .setSmallIcon(R.drawable.icon_notify)
                 .setContentTitle("Tour của bạn: "+tour.getDiemDi()+" đến "+ tour.getDiemDen())
-//                .setContentText(content)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         NotificationManagerCompat notificationManagerCompat=NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(a,builder.build());
-        Log.i("done","");
    }
 }

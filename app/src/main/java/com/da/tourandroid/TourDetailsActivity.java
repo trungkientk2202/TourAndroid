@@ -264,7 +264,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                                     objID.getString("sdt")));
                             thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                            thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                            thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
 
                             JSONObject objKhachHang = jsonObject.getJSONObject("khachHang");
                             KhachHang khachHang=new KhachHang();

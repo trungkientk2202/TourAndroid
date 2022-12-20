@@ -29,8 +29,6 @@ import com.da.tourandroid.model.DiaDiem;
 import com.da.tourandroid.model.LichTrinh;
 import com.da.tourandroid.model.LichTrinhID;
 import com.da.tourandroid.model.LoaiTour;
-import com.da.tourandroid.model.PhanHoi;
-import com.da.tourandroid.model.PhanHoiID;
 import com.da.tourandroid.model.ThamGiaTour;
 import com.da.tourandroid.model.ThamGiaTourID;
 import com.da.tourandroid.model.Tour;
@@ -40,7 +38,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                                         objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                                 thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                                thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                                thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
@@ -225,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                             thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
                             thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                            thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                            thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                             JSONObject objTour = jsonObject.getJSONObject("tour");
                             Tour tour = new Tour();
                             tour.setMaTour(objTour.getInt("maTour"));
@@ -325,12 +322,12 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent =new Intent(MainActivity.this,ReminderBroadcast.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                             PendingIntent pendingIntent;
-                                pendingIntent = PendingIntent.getBroadcast(
-                                        getApplication(),
-                                        i,
-                                        intent,
-                                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
-                                );
+                            pendingIntent = PendingIntent.getBroadcast(
+                                    getApplication(),
+                                    i,
+                                    intent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+                            );
                             try {
                                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                                 //gửi thông báo trước 4h khởi hành

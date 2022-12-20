@@ -25,7 +25,11 @@ public class Common {
     public static QuanLyTour quanLyTour;
     public static int detailMode;
 //    public static final String host="https://7a5c-115-79-44-8.ap.ngrok.io";
-    public static final String host="http://192.168.0.110:8080/";
+    public static final String host="http://192.168.1.103:8080/";
+
+    public static String title;
+
+    public static String content;
 
     public Common() {
     }
@@ -112,5 +116,21 @@ public class Common {
 
     public static void setQuanLyTour(QuanLyTour quanLyTour) {
         Common.quanLyTour = quanLyTour;
+    }
+
+    public static String getTitle() {
+        return title;
+    }
+
+    public static void setTitle(String title) {
+        Common.title = title;
+    }
+
+    public static String getContent() {
+        return content;
+    }
+
+    public static void setContent(String content) {
+        Common.content = content;
     }
 }

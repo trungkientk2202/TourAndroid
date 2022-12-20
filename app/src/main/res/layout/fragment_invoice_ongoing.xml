@@ -29,6 +29,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
         <androidx.appcompat.widget.AppCompatButton
@@ -56,5 +58,41 @@
             android:text="Create rendezvous"
             android:layout_height="wrap_content">
         </androidx.appcompat.widget.AppCompatButton>
+        <TextView
+            android:id="@+id/noiDung"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Nội dung hẹn:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/gioHen">
+        </TextView>
+        <EditText
+            android:id="@+id/txt_noiDung"
+            android:layout_width="300dp"
+            android:hint="Content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@+id/noiDung"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/txt_gioHen">
+        </EditText>
+        <TextView
+            android:id="@+id/gioHen"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:text="Giờ hẹn:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_tour">
+        </TextView>
+        <EditText
+            android:id="@+id/txt_gioHen"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="yyyy-MM-dd hh:mm:ss"
+            app:layout_constraintLeft_toRightOf="@+id/gioHen"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_tour">
+        </EditText>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

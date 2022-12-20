@@ -34,25 +34,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="left"
+            android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_timeline_date"
-                android:textSize="12sp"
-                tools:text="24 JAN"/>
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:id="@+id/text_timeline_title"
-                android:textColor="@android:color/black"
-                tools:text="Order Successfully Completed"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text_timeline_date"
+                    android:textSize="12sp"
+                    tools:text="24 JAN"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/text_timeline_title"
+                    android:textColor="@android:color/black"
+                    tools:text="Order Successfully Completed"/>
+            </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="60dp"
+                    android:background="@drawable/ic_baseline_edit_24"
+                    android:layout_height="match_parent">
+                </Button>
 
         </LinearLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 

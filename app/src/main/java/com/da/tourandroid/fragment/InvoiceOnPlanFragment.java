@@ -121,7 +121,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                                 thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
                                 thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
                                 thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
-                                thamGiaTour.setDiaDiemDon(jsonObject.getString("diaDiemDon"));
+                                thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
                                 tour.setMaTour(objTour.getInt("maTour"));
@@ -169,7 +169,7 @@ public class InvoiceOnPlanFragment extends Fragment {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 quanLyTour.setId(new QuanLyTourID(objID.getInt("maTour"), objID.getString("sdt")));
-                                quanLyTour.setGhiChu(jsonObject.getString("ghiChu"));
+                                quanLyTour.setThongBao(jsonObject.getString("thongBao"));
 
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
                                 Tour tour = new Tour();
