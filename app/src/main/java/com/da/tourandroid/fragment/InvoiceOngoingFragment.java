@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.da.tourandroid.BuildConfig;
+import com.da.tourandroid.DienDanActivity;
 import com.da.tourandroid.MainActivity;
 import com.da.tourandroid.NotifyBroadcast;
 import com.da.tourandroid.R;
@@ -144,7 +145,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    AppCompatButton btnDetail,btnDiemHen;
+    AppCompatButton btnDetail,btnDiemHen,btnForum;
     TextView noiDung,gioHen;
     EditText txtNoiDung,txtGioHen;
     public InvoiceOngoingFragment() {
@@ -357,6 +358,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         searchView = view.findViewById(R.id.idSearchView);
 
         btnDetail=(AppCompatButton) view.findViewById(R.id.detail_tour);
+        btnForum=(AppCompatButton) view.findViewById(R.id.btndienDan);
         btnDiemHen=(AppCompatButton) view.findViewById(R.id.diemHen);
         noiDung=view.findViewById(R.id.noiDung);
         txtNoiDung=view.findViewById(R.id.txt_noiDung);
@@ -467,11 +469,11 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                                         if(Common.getMode()==1) {
                                                             Common.setTitle("Thông báo từ Hướng dẫn viên:");
                                                             Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
-                                                            Intent intent = new Intent(view.getContext(), ReminderBroadcast.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            Intent intent = new Intent(getContext(), NotifyBroadcast.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                             PendingIntent pendingIntent;
                                                             pendingIntent = PendingIntent.getBroadcast(
-                                                                    getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE
+                                                                    getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
                                                             );
                                                             AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                                                             alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
@@ -514,6 +516,15 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
+            }
+        });
+        btnForum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Common.getTour()!=null){
+                    Intent intent = new Intent(getContext(), DienDanActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         // at last we calling our map fragment to update.

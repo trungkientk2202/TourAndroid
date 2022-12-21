@@ -48,7 +48,7 @@ public class TourAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView img_tour;
         TextView txt_diemDen_tour, txtNgayBatDau, txt_diemDi_tour, txt_gia;
-        Button btn_feedback, btn_join,btn_preview,btn_setTT;
+        Button btn_feedback, btn_preview,btn_setTT;
     }
 
     @Override

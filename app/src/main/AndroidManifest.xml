@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -38,6 +38,9 @@
             android:name=".TourDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".DienDanActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true" >
 <!--            <intent-filter>-->
@@ -60,6 +63,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".ReminderBroadcast" />
+        <receiver android:name=".NotifyBroadcast" />
     </application>
 
 </manifest>
