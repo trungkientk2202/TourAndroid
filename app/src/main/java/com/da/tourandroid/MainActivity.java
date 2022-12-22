@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
                                         objID.getString("sdt")));
-                                thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                                thamGiaTour.setDiemDanh(jsonObject.getBoolean("diemDanh"));
                                 thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
                                 thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                             //Log.i("jsonObject", jsonObject.toString());
                             JSONObject objID = jsonObject.getJSONObject("id");
                             thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"), objID.getString("sdt")));
-                            thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                            thamGiaTour.setDiemDanh(jsonObject.getBoolean("diemDanh"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
                             thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                             JSONObject objTour = jsonObject.getJSONObject("tour");

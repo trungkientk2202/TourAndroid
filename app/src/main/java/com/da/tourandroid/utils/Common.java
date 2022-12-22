@@ -25,7 +25,7 @@ public class Common {
     public static QuanLyTour quanLyTour;
     public static int detailMode;
 //    public static final String host="https://7a5c-115-79-44-8.ap.ngrok.io";
-    public static final String host="http://192.168.1.103:8080/";
+    public static final String host="http://192.168.1.101:8080/";
 
     public static String title;
 

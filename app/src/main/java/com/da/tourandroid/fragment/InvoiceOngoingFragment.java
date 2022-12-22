@@ -259,6 +259,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         mLocationRequest.setInterval(300*1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
         LocationCallback mLocationCallback = null;
+        //update real time
         if (mLocationCallback == null)
             mLocationCallback = new LocationCallback() {
                 @Override
@@ -266,6 +267,8 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     if (locationResult == null) {
                         return;
                     }
+                    //call db,get data to push notify
+                    Log.i("Update realtime:","");
                     for (Location location : locationResult.getLocations()) {
                         if (location != null&&Common.getMode()==2&&Common.getTour()!=null) {
                             String json="{\"vitri\":\""+location.getLatitude()+";"+location.getLongitude()+"\"}";
@@ -560,7 +563,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                 JSONObject objID = jsonObject.getJSONObject("id");
                                 Common.getThamGiaTour().setId(new ThamGiaTourID(objID.getInt("maTour"),
                                         objID.getString("sdt")));
-                                Common.getThamGiaTour().setCheckIn(jsonObject.getBoolean("checkIn"));
+                                Common.getThamGiaTour().setDiemDanh(jsonObject.getBoolean("diemDanh"));
                                 Common.getThamGiaTour().setGhiChu(jsonObject.getString("ghiChu"));
                                 Common.getThamGiaTour().setDiemHen(jsonObject.getString("diemHen"));
                                 JSONObject objTour = jsonObject.getJSONObject("tour");
@@ -670,7 +673,7 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                             JSONObject objID = jsonObject.getJSONObject("id");
                             thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
                                     objID.getString("sdt")));
-                            thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                            thamGiaTour.setDiemDanh(jsonObject.getBoolean("diemDanh"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
                             thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
                             thamGiaTour.setVitri(jsonObject.getString("vitri"));

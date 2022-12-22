@@ -6,18 +6,20 @@ public class DienDan {
     private String sdt;
     private String noiDung;
     private String thoiGian;
-    private Boolean laHDV;
+    private boolean laHDV;
+    private boolean thongBaoTuHDV;
 
     public DienDan() {
     }
 
-    public DienDan(long id, long maTour, String sdt, String noiDung, String thoiGian, Boolean laHDV) {
+    public DienDan(long id, long maTour, String sdt, String noiDung, String thoiGian, boolean laHDV,boolean thongBaoTuHDV) {
         this.id = id;
         this.maTour = maTour;
         this.sdt = sdt;
         this.noiDung = noiDung;
         this.thoiGian = thoiGian;
         this.laHDV = laHDV;
+        this.thongBaoTuHDV= thongBaoTuHDV;
     }
 
     public long getId() {
@@ -60,11 +62,19 @@ public class DienDan {
         this.thoiGian = thoiGian;
     }
 
-    public Boolean getLaHDV() {
+    public void setLaHDV(boolean laHDV) {
+        this.laHDV = laHDV;
+    }
+
+    public boolean isLaHDV() {
         return laHDV;
     }
 
-    public void setLaHDV(Boolean laHDV) {
-        this.laHDV = laHDV;
+    public boolean isThongBaoTuHDV() {
+        return thongBaoTuHDV;
+    }
+
+    public void setThongBaoTuHDV(boolean thongBaoTuHDV) {
+        this.thongBaoTuHDV = thongBaoTuHDV;
     }
 }

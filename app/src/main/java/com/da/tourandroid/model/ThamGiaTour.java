@@ -3,7 +3,7 @@ package com.da.tourandroid.model;
 public class ThamGiaTour {
     private ThamGiaTourID id;
 
-    private boolean checkIn;
+    private boolean diemDanh;
 
     private String ghiChu;
 
@@ -13,9 +13,9 @@ public class ThamGiaTour {
     private KhachHang khachHang;
     private String vitri;
 
-    public ThamGiaTour(ThamGiaTourID id, boolean checkIn, String ghiChu, String diemHen,Tour tour,KhachHang khachHang,String vitri) {
+    public ThamGiaTour(ThamGiaTourID id, boolean diemDanh, String ghiChu, String diemHen,Tour tour,KhachHang khachHang,String vitri) {
         this.id = id;
-        this.checkIn = checkIn;
+        this.diemDanh = diemDanh;
         this.ghiChu = ghiChu;
         this.diemHen = diemHen;
         this.tour=tour;
@@ -34,12 +34,12 @@ public class ThamGiaTour {
         this.id = id;
     }
 
-    public boolean isCheckIn() {
-        return checkIn;
+    public boolean isDiemDanh() {
+        return diemDanh;
     }
 
-    public void setCheckIn(boolean checkIn) {
-        this.checkIn = checkIn;
+    public void setDiemDanh(boolean checkIn) {
+        this.diemDanh = checkIn;
     }
 
     public String getGhiChu() {

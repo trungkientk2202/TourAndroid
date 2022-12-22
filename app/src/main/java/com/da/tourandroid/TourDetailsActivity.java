@@ -73,6 +73,8 @@ public class TourDetailsActivity extends AppCompatActivity {
     AppCompatButton btnAddUser;
     AppCompatButton btnFeedback;
     AppCompatButton btnAction;
+    AppCompatButton btnRemind;
+    AppCompatButton btnDiemDanh;
 
     private RequestQueue requestQueue;
     @Override
@@ -102,6 +104,8 @@ public class TourDetailsActivity extends AppCompatActivity {
         feedbackRecycleView = findViewById(R.id.feedback_tour_recycler);
         rb = findViewById(R.id.ratingBar3);
         btnAction = findViewById(R.id.btnAction);
+        btnRemind=findViewById(R.id.btn_remind);
+        btnDiemDanh=findViewById(R.id.btn_diemDanh);
         txt_price = findViewById(R.id.txt_tour_price);
         relatedTourRecycle = findViewById(R.id.related_tour_recycler);
         imageViewBack = findViewById(R.id.imageView_back);
@@ -262,7 +266,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                             JSONObject objID = jsonObject.getJSONObject("id");
                             thamGiaTour.setId(new ThamGiaTourID(objID.getInt("maTour"),
                                     objID.getString("sdt")));
-                            thamGiaTour.setCheckIn(jsonObject.getBoolean("checkIn"));
+                            thamGiaTour.setDiemDanh(jsonObject.getBoolean("diemDanh"));
                             thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
                             thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
 
@@ -328,11 +332,15 @@ public class TourDetailsActivity extends AppCompatActivity {
         switch (Common.getDetailMode()){
             case 1:
                 btnAction.setVisibility(View.INVISIBLE);
+                btnRemind.setVisibility(View.INVISIBLE);
+                btnDiemDanh.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.INVISIBLE);
                 btnFeedback.setVisibility(View.INVISIBLE);
                 break;
             case 2:
                 btnAction.setVisibility(View.VISIBLE);
+                btnRemind.setVisibility(View.INVISIBLE);
+                btnDiemDanh.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.VISIBLE);
                 if(Common.getMode()==1) {
                     btnAction.setText("Start tour");
@@ -373,9 +381,25 @@ public class TourDetailsActivity extends AppCompatActivity {
                 }
                 break;
             case 3:
+                btnRemind.setVisibility(View.INVISIBLE);
+                btnDiemDanh.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.VISIBLE);
                 btnAction.setVisibility(View.VISIBLE);
                 if(Common.getMode()==1) {
+                    btnRemind.setVisibility(View.VISIBLE);
+                    btnDiemDanh.setVisibility(View.VISIBLE);
+                    btnRemind.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(view.getContext(),"Call Attendance reminder!",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    btnDiemDanh.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(view.getContext(),"Call Attendance!",Toast.LENGTH_LONG).show();
+                        }
+                    });
                     btnAction.setText("Finish tour");
                     btnAction.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -407,13 +431,14 @@ public class TourDetailsActivity extends AppCompatActivity {
                         }
                     });
                 }else{
-
-                    if(Common.getThamGiaTour().isCheckIn()){
-                        btnAction.setText("Checked in");
+                    btnRemind.setVisibility(View.INVISIBLE);
+                    btnDiemDanh.setVisibility(View.INVISIBLE);
+                    if(Common.getThamGiaTour().isDiemDanh()){
+                        btnAction.setText("Attended");
                         btnAction.setBackgroundColor(Color.GRAY);
                     }else {
                         btnAction.setBackgroundColor(Color.rgb(26,115,232));
-                        btnAction.setText("Check in");
+                        btnAction.setText("Attend");
                         btnAction.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -423,7 +448,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                                             try {
                                                 JSONObject objID = response.getJSONObject("id");
                                                 btnAction.setBackgroundColor(Color.GRAY);
-                                                Common.getThamGiaTour().setCheckIn(true);
+                                                Common.getThamGiaTour().setDiemDanh(true);
                                                 btnAction.setText("Checked in");
                                                 Toast.makeText(view.getContext(), "Check in successfully!", Toast.LENGTH_LONG).show();
 
@@ -448,6 +473,8 @@ public class TourDetailsActivity extends AppCompatActivity {
                 }
                 break;
             case 4:
+                btnRemind.setVisibility(View.INVISIBLE);
+                btnDiemDanh.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.INVISIBLE);
                 btnAction.setVisibility(View.INVISIBLE);
                 btnAddUser.setVisibility(View.INVISIBLE);

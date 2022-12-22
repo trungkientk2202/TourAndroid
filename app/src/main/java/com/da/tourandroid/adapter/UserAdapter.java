@@ -44,7 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.KhachHangViewH
         holder.resNgaySinh.setText(resList.get(position).getKhachHang().getNgaySinh()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(resList.get(position).getKhachHang().getNgaySinh()));
         if(Common.getDetailMode()==3){
             holder.resCheckIn.setVisibility(View.VISIBLE);
-            holder.resCheckIn.setText("Check in: "+resList.get(position).isCheckIn());
+            holder.resCheckIn.setText("Check in: "+resList.get(position).isDiemDanh());
         }else{
             holder.resCheckIn.setVisibility(View.INVISIBLE);
         }

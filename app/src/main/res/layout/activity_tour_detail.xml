@@ -128,7 +128,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_tour_recycler" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_user" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/related_tour_recycler"
@@ -241,6 +241,38 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView8" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_remind"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button1_bg"
+            android:lines="2"
+            android:text="Attendance reminder"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintEnd_toStartOf="@+id/btn_diemDanh"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_diemDanh"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button2_bg"
+            android:lines="2"
+            android:text="Attendance"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_user"
@@ -254,16 +286,17 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView10" />
+            app:layout_constraintTop_toBottomOf="@+id/user_tour_recycler" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAction"
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
-            android:text="Check In"
+            android:text="Attend"
             android:background="@drawable/button2_bg"
             app:layout_constraintBottom_toBottomOf="@+id/txt_tour_price"
             app:layout_constraintEnd_toEndOf="parent"
