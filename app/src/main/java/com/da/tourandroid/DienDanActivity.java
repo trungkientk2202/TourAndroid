@@ -48,7 +48,7 @@ public class DienDanActivity extends Activity {
     ImageView img_tour, imageViewBack;
     TextView txt_name_tour, txt_tour_price, thoiGianBatDau,textView_descDetails;
     RecyclerView lv_content;
-    AppCompatButton btnAddContent;
+    AppCompatButton btnAddContent,btnAlert;
     ArrayList<DienDan>dienDans;
     DienDanAdapter dienDanAdapter;
     RequestQueue requestQueue;
@@ -78,6 +78,7 @@ public class DienDanActivity extends Activity {
         lv_content = findViewById(R.id.lv_content);
         btnAddContent = findViewById(R.id.btnAddContent);
         editTextContent=findViewById(R.id.editTextContent);
+        btnAlert = findViewById(R.id.btnAlert);
     }
     private void dataInit() {
         dienDans=new ArrayList<>();
@@ -93,6 +94,11 @@ public class DienDanActivity extends Activity {
         lv_content.setLayoutManager(layoutManager1);
         getDataDienDan((int) Common.getTour().getMaTour());
         lv_content.setAdapter(dienDanAdapter);
+        if(Common.getMode()==1){
+            btnAlert.setVisibility(View.VISIBLE);
+        }else{
+            btnAlert.setVisibility(View.INVISIBLE);
+        }
         btnAddContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +117,8 @@ public class DienDanActivity extends Activity {
                                 +"\"laHDV\": "+false+",";
                     }
                     json+="\"noiDung\":\""+editTextContent.getText().toString()+"\","
-                            +"\"thoiGian\":\""+new SimpleDateFormat("yyyy-mm-dd HH:mm:ss").format(System.currentTimeMillis())+"\"}";
+                            +"\"thongBaoTuHDV\":true,"
+                            +"\"thoiGian\":\""+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\"}";
                     String url=Common.getHost()+"dienDan/add";
                     try {
                         JSONObject req=new JSONObject(json);
@@ -159,6 +166,71 @@ public class DienDanActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+        btnAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String json="{\"maTour\":\""+Common.getTour().getMaTour()+"\",";
+                if(Common.getMode()==1){
+                    //them diem hen vao db
+                    json +="\"sdt\":\""+Common.getTaiKhoan().getSdt()+"\","
+                            +"\"laHDV\": "+true+",";
+                }else{
+                    //them diem hen vao db
+                    json+="\"sdt\":\""+Common.getKhachHang().getSdt()+"\","
+                            +"\"laHDV\": "+false+",";
+                }
+                json+="\"noiDung\":\""+editTextContent.getText().toString()+"\","
+                        +"\"thongBaoTuHDV\":true,"
+                        +"\"thoiGian\":\""+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\"}";
+                String url = Common.getHost() + "dienDan/edit/" + Common.getTour().getMaTour();
+                try {
+                    JSONObject req=new JSONObject(json);
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, req,
+                            response -> {
+                                try {
+                                    if(!response.get("id").equals(null)){
+                                        //add thành công
+                                        editTextContent.setText("");
+                                        Toast.makeText(view.getContext(), "Add content successfully!", Toast.LENGTH_LONG).show();
+//                                            if(Common.getMode()==1) {
+//                                                Common.setTitle("Thông báo từ Hướng dẫn viên:");
+//                                                Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
+//                                                Intent intent = new Intent(view.getContext(), NotifyBroadcast.class);
+//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                                PendingIntent pendingIntent;
+//                                                pendingIntent = PendingIntent.getBroadcast(
+//                                                        getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
+//                                                );
+//                                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+//                                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+//                                                Log.i("set notify success:","");
+//                                            }
+//                                            Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
+                                        getDataDienDan((int) Common.getTour().getMaTour());
+                                    }else{
+                                        Toast.makeText(view.getContext(), "Add content failure!", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    Log.i("e:",e.toString());
+                                    e.printStackTrace();
+                                }
+                            }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                        /**
+                         * Passing some request headers
+                         */
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("Authorization", "Bearer " + Common.getToken());
+                            return headers;
+                        }
+                    };
+                    requestQueue.add(request);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });

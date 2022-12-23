@@ -36,6 +36,8 @@ import com.da.tourandroid.NotifyBroadcast;
 import com.da.tourandroid.R;
 import com.da.tourandroid.ReminderBroadcast;
 import com.da.tourandroid.TourDetailsActivity;
+import com.da.tourandroid.adapter.DienDanAdapter;
+import com.da.tourandroid.model.DienDan;
 import com.da.tourandroid.model.KhachHang;
 import com.da.tourandroid.model.TaiKhoan;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -60,6 +62,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -267,7 +271,13 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     if (locationResult == null) {
                         return;
                     }
-                    //call db,get data to push notify
+                    if(Common.getMode()==2){
+                        //call db,get data to push notify
+                        //listener event HDV push alertforum
+                        getAlertForum();
+                        //listener event Attendance
+                        getAttendance();
+                    }
                     Log.i("Update realtime:","");
                     for (Location location : locationResult.getLocations()) {
                         if (location != null&&Common.getMode()==2&&Common.getTour()!=null) {
@@ -302,6 +312,89 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         fusedLocationProviderClient =  LocationServices.getFusedLocationProviderClient(getContext());
         fusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper());
     }
+
+    private void getAlertForum() {
+        if(Common.getTour()==null){
+            return;
+        }
+        String url = Common.getHost() + "dienDan/findByMaTour/" + Common.getTour().getMaTour();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        DienDan dienDan=new DienDan();
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            dienDan.setId(jsonObject.getLong("id"));
+                            dienDan.setMaTour(jsonObject.getLong("maTour"));
+                            dienDan.setSdt(jsonObject.getString("sdt"));
+                            dienDan.setNoiDung(jsonObject.getString("noiDung"));
+                            dienDan.setThoiGian(jsonObject.getString("thoiGian"));
+                            dienDan.setLaHDV(jsonObject.getBoolean("laHDV"));
+                            if(dienDan.isLaHDV()&&dienDan.isThongBaoTuHDV()){
+                                Toast.makeText(view.getContext(), "Please attendance!", Toast.LENGTH_SHORT).show();
+                                // notify
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+    private void getAttendance() {
+        if(Common.getTour()==null){
+            Toast.makeText(view.getContext(),"Get attendance!",Toast.LENGTH_LONG).show();
+            return;
+        }
+        String url = Common.getHost() + "tgtour/findByMaTour/" +Common.getTour().getMaTour();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONObject jsonKhachHang=jsonObject.getJSONObject("khachHang");
+                            //check user is json.getUser
+                            if(!jsonObject.getBoolean("diemDanh")&&Common.getKhachHang().getSdt().equals(jsonKhachHang.getString("sdt"))) {
+                                if(!jsonObject.getBoolean("nhacDiemDanh")) {
+                                    Toast.makeText(view.getContext(), "Please attendance!", Toast.LENGTH_SHORT).show();
+                                    // normal notification
+                                }else{
+                                    Toast.makeText(view.getContext(), "Have to attendance!", Toast.LENGTH_SHORT).show();
+                                    // warning notification
+                                }
+                            }
+//                            thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
+//                            thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
+//                            thamGiaTour.setVitri(jsonObject.getString("vitri"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
     private Bitmap getBitmap(int drawableRes) {
         Drawable drawable = getResources().getDrawable(drawableRes);
         Canvas canvas = new Canvas();

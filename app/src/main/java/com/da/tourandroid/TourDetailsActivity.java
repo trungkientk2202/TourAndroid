@@ -391,13 +391,89 @@ public class TourDetailsActivity extends AppCompatActivity {
                     btnRemind.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(view.getContext(),"Call Attendance reminder!",Toast.LENGTH_LONG).show();
+                            String url = Common.getHost() + "tgtour/nhacDiemDanh/" + Common.getTour().getMaTour();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            if(!response.get("id").equals(null)){
+                                                Toast.makeText(view.getContext(), "Create attendance reminder successfully!", Toast.LENGTH_LONG).show();
+//                                            if(Common.getMode()==1) {
+//                                                Common.setTitle("Thông báo từ Hướng dẫn viên:");
+//                                                Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
+//                                                Intent intent = new Intent(view.getContext(), NotifyBroadcast.class);
+//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                                PendingIntent pendingIntent;
+//                                                pendingIntent = PendingIntent.getBroadcast(
+//                                                        getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
+//                                                );
+//                                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+//                                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+//                                                Log.i("set notify success:","");
+//                                            }
+//                                            Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
+                                            }else{
+                                                Toast.makeText(view.getContext(), "Create attendance reminder failure!", Toast.LENGTH_LONG).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.i("e:",e.toString());
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
                         }
                     });
                     btnDiemDanh.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(view.getContext(),"Call Attendance!",Toast.LENGTH_LONG).show();
+                            String url = Common.getHost() + "tgtour/taoDiemDanh/" + Common.getTour().getMaTour();
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    response -> {
+                                        try {
+                                            if(!response.get("id").equals(null)){
+                                                Toast.makeText(view.getContext(), "Create attendance successfully!", Toast.LENGTH_LONG).show();
+//                                            if(Common.getMode()==1) {
+//                                                Common.setTitle("Thông báo từ Hướng dẫn viên:");
+//                                                Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
+//                                                Intent intent = new Intent(view.getContext(), NotifyBroadcast.class);
+//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                                PendingIntent pendingIntent;
+//                                                pendingIntent = PendingIntent.getBroadcast(
+//                                                        getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
+//                                                );
+//                                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+//                                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+//                                                Log.i("set notify success:","");
+//                                            }
+//                                            Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
+                                            }else{
+                                                Toast.makeText(view.getContext(), "Create attendance failure!", Toast.LENGTH_LONG).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            Log.i("e:",e.toString());
+                                            e.printStackTrace();
+                                        }
+                                    }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                /**
+                                 * Passing some request headers
+                                 */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                    return headers;
+                                }
+                            };
+                            requestQueue.add(request);
                         }
                     });
                     btnAction.setText("Finish tour");
