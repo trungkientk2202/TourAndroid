@@ -87,7 +87,7 @@ public class DienDanActivity extends Activity {
 
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
-        txt_tour_price.setText(Common.getTour().getGia()+"");
+        txt_tour_price.setText(Common.getTour().getGia()+"đ");
 
         dienDanAdapter = new DienDanAdapter(this, R.layout.items_diendan, dienDans);
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

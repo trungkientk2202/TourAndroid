@@ -132,7 +132,7 @@ public class TourAdapter extends BaseAdapter {
         viewHolder.txt_diemDen_tour.setText(tour.getDiemDen());
         viewHolder.txtNgayBatDau.setText(tour.getNgayBatDau());
         viewHolder.txt_diemDi_tour.setText(tour.getDiemDi());
-        viewHolder.txt_gia.setText(String.valueOf(tour.getGia()));
+        viewHolder.txt_gia.setText(tour.getGia() +"đ");
         Glide.with(context)
                 .load(tour.getImage())
                 .into(viewHolder.img_tour);

@@ -599,7 +599,7 @@ public class TourDetailsActivity extends AppCompatActivity {
 
         thoiGianBatDau.setText(Common.getTour().getNgayBatDau());
         textView_descDetails.setText(Common.getTour().getMoTa());
-        txt_price.setText(Common.getTour().getGia()+"");
+        txt_price.setText(Common.getTour().getGia()+"đ");
 
         //Set timeline info
         timelineAdapter = new TimelineAdapter(this, R.layout.items_timeline, listTimeline);

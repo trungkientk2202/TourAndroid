@@ -74,7 +74,7 @@ public class SearchAdapter extends BaseAdapter {
         viewHolder.textViewName.setText("Điểm đến:"+ tour.getDiemDen());
         viewHolder.textViewRes.setText(tour.getMoTa().equals("null")?"":tour.getMoTa());
         viewHolder.textViewNgayBD.setText(tour.getNgayBatDau().equals("null")?"":tour.getNgayBatDau());
-        viewHolder.textViewPrice.setText(tour.getGia()+"");
+        viewHolder.textViewPrice.setText(tour.getGia()+"đ");
         //viewHolder.imageView.setImageResource(food.getImage());
 
         viewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
