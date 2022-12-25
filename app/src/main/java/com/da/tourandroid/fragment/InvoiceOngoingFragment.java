@@ -15,6 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.AudioAttributes;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -86,6 +88,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -187,11 +191,14 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
 
     private void createNotificationChannel() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Uri sound=Uri.parse("android.resource://" + this.getContext().getPackageName()+"/"+R.raw.sound_notify_custom);
+            AudioAttributes audioAttributes=new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
             CharSequence name = "TourNotifyChannel";
             String description = "Channel for Notify";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("notify", name, importance);
             channel.setDescription(description);
+            channel.setSound(sound,audioAttributes);
 
             NotificationManager notificationManager=getActivity().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
@@ -271,12 +278,14 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                     if (locationResult == null) {
                         return;
                     }
-                    if(Common.getMode()==2){
+                    if(Common.getMode()==2 && Common.getKhachHang().getSdt()!=null){
                         //call db,get data to push notify
                         //listener event HDV push alertforum
                         getAlertForum();
                         //listener event Attendance
                         getAttendance();
+                        //listener event HDV create rendezvous
+                        getRendezvous();
                     }
                     Log.i("Update realtime:","");
                     for (Location location : locationResult.getLocations()) {
@@ -317,23 +326,18 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         if(Common.getTour()==null){
             return;
         }
-        String url = Common.getHost() + "dienDan/findByMaTour/" + Common.getTour().getMaTour();
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        String url = Common.getHost() + "dienDan/thongBao/" + Common.getTour().getMaTour();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     for (int i = 0; i < response.length(); i++) {
                         DienDan dienDan=new DienDan();
                         try {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            dienDan.setId(jsonObject.getLong("id"));
-                            dienDan.setMaTour(jsonObject.getLong("maTour"));
-                            dienDan.setSdt(jsonObject.getString("sdt"));
-                            dienDan.setNoiDung(jsonObject.getString("noiDung"));
-                            dienDan.setThoiGian(jsonObject.getString("thoiGian"));
-                            dienDan.setLaHDV(jsonObject.getBoolean("laHDV"));
-                            if(dienDan.isLaHDV()&&dienDan.isThongBaoTuHDV()){
-                                Toast.makeText(view.getContext(), "Please attendance!", Toast.LENGTH_SHORT).show();
-                                // notify
-                            }
+                            int id=response.getInt("id");
+                            Log.i("Time stamp",Timestamp.valueOf(response.getString("thoiGian"))+"");
+                            Log.i("long: ",Timestamp.valueOf(response.getString("thoiGian")).getTime()+"");
+                            // notify
+                            Common.getNotify().offer(3);
+                            pushNotify();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -353,7 +357,6 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
     }
     private void getAttendance() {
         if(Common.getTour()==null){
-            Toast.makeText(view.getContext(),"Get attendance!",Toast.LENGTH_LONG).show();
             return;
         }
         String url = Common.getHost() + "tgtour/findByMaTour/" +Common.getTour().getMaTour();
@@ -366,16 +369,54 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                             //check user is json.getUser
                             if(!jsonObject.getBoolean("diemDanh")&&Common.getKhachHang().getSdt().equals(jsonKhachHang.getString("sdt"))) {
                                 if(!jsonObject.getBoolean("nhacDiemDanh")) {
-                                    Toast.makeText(view.getContext(), "Please attendance!", Toast.LENGTH_SHORT).show();
+                                    Log.i("push notify: ","diem danh");
                                     // normal notification
+                                        pushNotify();
+                                    Common.getNotify().offer(1);
                                 }else{
-                                    Toast.makeText(view.getContext(), "Have to attendance!", Toast.LENGTH_SHORT).show();
+                                    Log.i("push notify: ","nhac diem danh");
                                     // warning notification
+                                    pushNotify();
+                                    Common.getNotify().offer(2);
                                 }
                             }
 //                            thamGiaTour.setGhiChu(jsonObject.getString("ghiChu"));
 //                            thamGiaTour.setDiemHen(jsonObject.getString("diemHen"));
 //                            thamGiaTour.setVitri(jsonObject.getString("vitri"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, error -> Log.i("err:", error.toString())) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Bearer " + Common.getToken());
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+    private void getRendezvous(){
+        if(Common.getTour()==null){
+            return;
+        }
+        String url = Common.getHost() + "qltour/findByMaTour/" +Common.getTour().getMaTour();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            if(!jsonObject.get("diemHen").toString().equals("null")){
+                                Log.i("push notify: ","HDV danh dau vi tri");
+                                Common.getNotify().offer(4);
+                                pushNotify();
+                            }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -446,6 +487,18 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
         }
     }
 
+    private void pushNotify(){
+        Log.i("Push notify:","");
+        Intent intent = new Intent(getContext().getApplicationContext(), NotifyBroadcast.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent;
+        pendingIntent = PendingIntent.getBroadcast(
+                getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
+        );
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        //set time
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -563,17 +616,38 @@ public class InvoiceOngoingFragment extends Fragment implements OnMapReadyCallba
                                                         gioHen.setVisibility(View.INVISIBLE);
                                                         txtGioHen.setVisibility(View.INVISIBLE);
                                                         if(Common.getMode()==1) {
-                                                            Common.setTitle("Thông báo từ Hướng dẫn viên:");
-                                                            Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
-                                                            Intent intent = new Intent(getContext(), NotifyBroadcast.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                            PendingIntent pendingIntent;
-                                                            pendingIntent = PendingIntent.getBroadcast(
-                                                                    getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
-                                                            );
-                                                            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                                                            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
-                                                            Log.i("set notify success:","");
+                                                            //add notify 3
+                                                            try {
+                                                                String json1="{\"noiDung\":\""+txtNoiDung.getText().toString()+"\","
+                                                                    +"\"thoiGian\":\""+txtGioHen.getText().toString()+"\"}";
+                                                                String url1= Common.getHost()+"thongBao/edit/"+Common.getTour().getMaTour()+"/3";
+                                                                JSONObject req1=new JSONObject(json1);
+                                                                JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.POST, url1, req1,
+                                                                        response1 -> {
+                                                                            try {
+                                                                                if(!response1.get("id").equals(null)){
+                                                                                    Log.i("Push thong bao tap hop","ok");
+                                                                                }
+                                                                            } catch (JSONException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+                                                                        }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                                                    /**
+                                                                     * Passing some request headers
+                                                                     */
+                                                                    @Override
+                                                                    public Map<String, String> getHeaders() throws AuthFailureError {
+                                                                        HashMap<String, String> headers = new HashMap<String, String>();
+                                                                        headers.put("Authorization", "Bearer " + Common.getToken());
+                                                                        return headers;
+                                                                    }
+                                                                };
+                                                                requestQueue.add(request1);
+
+                                                                }catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
                                                         }
                                                         Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
                                                         searchView.setQuery("",false);

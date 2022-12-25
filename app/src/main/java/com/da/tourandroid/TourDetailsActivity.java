@@ -394,30 +394,41 @@ public class TourDetailsActivity extends AppCompatActivity {
                             String url = Common.getHost() + "tgtour/nhacDiemDanh/" + Common.getTour().getMaTour();
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                                     response -> {
+                                        //add notify 1
                                         try {
-                                            if(!response.get("id").equals(null)){
-                                                Toast.makeText(view.getContext(), "Create attendance reminder successfully!", Toast.LENGTH_LONG).show();
-//                                            if(Common.getMode()==1) {
-//                                                Common.setTitle("Thông báo từ Hướng dẫn viên:");
-//                                                Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
-//                                                Intent intent = new Intent(view.getContext(), NotifyBroadcast.class);
-//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                                PendingIntent pendingIntent;
-//                                                pendingIntent = PendingIntent.getBroadcast(
-//                                                        getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
-//                                                );
-//                                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-//                                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
-//                                                Log.i("set notify success:","");
-//                                            }
-//                                            Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
-                                            }else{
-                                                Toast.makeText(view.getContext(), "Create attendance reminder failure!", Toast.LENGTH_LONG).show();
-                                            }
-                                        } catch (JSONException e) {
-                                            Log.i("e:",e.toString());
+                                            String json1="{\"noiDung\":\"Khẩn cấp, hãy điểm danh tour: "+Common.getTour().getDiemDen()+"\","
+                                                    +"\"thoiGian\":\""+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\"}";
+                                            String url1= Common.getHost()+"thongBao/edit/"+Common.getTour().getMaTour()+"/1";
+                                            Log.i("json tb",json1);
+                                            Log.i("url tb",url1);
+                                            JSONObject req1=new JSONObject(json1);
+                                            JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.POST, url1, req1,
+                                                    response1 -> {
+                                                        try {
+                                                            Log.i("response tb",response1.toString());
+                                                            if(!response1.get("id").equals(null)){
+                                                                Log.i("Push thong bao","diem danh");
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                                /**
+                                                 * Passing some request headers
+                                                 */
+                                                @Override
+                                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                                    return headers;
+                                                }
+                                            };
+                                            requestQueue.add(request1);
+
+                                        }catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                        Toast.makeText(view.getContext(), "Create attendance reminder successfully!", Toast.LENGTH_LONG).show();
                                     }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
                                 /**
                                  * Passing some request headers
@@ -438,30 +449,42 @@ public class TourDetailsActivity extends AppCompatActivity {
                             String url = Common.getHost() + "tgtour/taoDiemDanh/" + Common.getTour().getMaTour();
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                                     response -> {
+                                        Log.i("response diem danh",response.toString());
+                                        //add notify 1
                                         try {
-                                            if(!response.get("id").equals(null)){
-                                                Toast.makeText(view.getContext(), "Create attendance successfully!", Toast.LENGTH_LONG).show();
-//                                            if(Common.getMode()==1) {
-//                                                Common.setTitle("Thông báo từ Hướng dẫn viên:");
-//                                                Common.setContent("Nội dung: "+txtNoiDung.getText().toString()+"\r\nThời gian: "+txtGioHen.getText().toString());
-//                                                Intent intent = new Intent(view.getContext(), NotifyBroadcast.class);
-//                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                                PendingIntent pendingIntent;
-//                                                pendingIntent = PendingIntent.getBroadcast(
-//                                                        getContext(), new Random().nextInt(), intent, PendingIntent.FLAG_MUTABLE| PendingIntent.FLAG_MUTABLE
-//                                                );
-//                                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-//                                                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
-//                                                Log.i("set notify success:","");
-//                                            }
-//                                            Toast.makeText(view.getContext(), "Create rendezvous successfully", Toast.LENGTH_LONG).show();
-                                            }else{
-                                                Toast.makeText(view.getContext(), "Create attendance failure!", Toast.LENGTH_LONG).show();
-                                            }
-                                        } catch (JSONException e) {
-                                            Log.i("e:",e.toString());
+                                            String json1="{\"noiDung\":\"Vui lòng điểm danh tour: "+Common.getTour().getDiemDen()+"\","
+                                                    +"\"thoiGian\":\""+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())+"\"}";
+                                            String url1= Common.getHost()+"thongBao/edit/"+Common.getTour().getMaTour()+"/1";
+                                            Log.i("json tb",json1);
+                                            Log.i("url tb",url1);
+                                            JSONObject req1=new JSONObject(json1);
+                                            JsonObjectRequest request1 = new JsonObjectRequest(Request.Method.POST, url1, req1,
+                                                    response1 -> {
+                                                        try {
+                                                            Log.i("response tb",response1.toString());
+                                                            if(!response1.get("id").equals(null)){
+                                                                Log.i("Push thong bao ","nhac nho");
+                                                            }
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
+                                                /**
+                                                 * Passing some request headers
+                                                 */
+                                                @Override
+                                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                                    headers.put("Authorization", "Bearer " + Common.getToken());
+                                                    return headers;
+                                                }
+                                            };
+                                            requestQueue.add(request1);
+
+                                        }catch (JSONException e) {
                                             e.printStackTrace();
                                         }
+                                        Toast.makeText(view.getContext(), "Create attendance successfully!", Toast.LENGTH_LONG).show();
                                     }, error -> Toast.makeText(view.getContext(), "Server error!", Toast.LENGTH_LONG).show()) {
                                 /**
                                  * Passing some request headers
@@ -525,7 +548,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                                                 JSONObject objID = response.getJSONObject("id");
                                                 btnAction.setBackgroundColor(Color.GRAY);
                                                 Common.getThamGiaTour().setDiemDanh(true);
-                                                btnAction.setText("Checked in");
+                                                btnAction.setText("Attended");
                                                 Toast.makeText(view.getContext(), "Check in successfully!", Toast.LENGTH_LONG).show();
 
                                             } catch (JSONException e) {
