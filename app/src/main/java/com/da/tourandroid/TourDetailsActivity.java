@@ -811,7 +811,7 @@ public class TourDetailsActivity extends AppCompatActivity {
                     }
                    String json="{\"maTour\":\""+Common.getTour().getMaTour()+"\","
                            +"\"sdt\":\""+khachHang.getSdt()+"\","
-                           +"\"checkIn\":false,"
+                           +"\"diemDanh\":false,"
                            +"\"ghiChu\":\"add new member\","
                            +"\"diaDiemDon\":\"\","
                            +"\"vitri\":\"\"}";
